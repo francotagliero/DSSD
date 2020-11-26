@@ -1,0 +1,13 @@
+{
+    "name": "lucas/app-bonita",
+    "authors": [
+        {
+            "name": "Lucas",
+            "email": "lucasgustavo8830@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "2.0",
+        "guzzlehttp/guzzle": "7.0"
+    }
+}
