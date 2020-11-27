@@ -1,0 +1,34 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+	| Protocolos
+{% endblock %}
+
+{% block main %}
+	<section class="container">
+		
+    <h1>Protocolos</h1>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Titulo</th>
+      <th scope="col">Fecha Inicio</th>
+      <th scope="col">Fecha Fin</th>
+      <th scope="col">Accion</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for protocolo in protocolos %}
+    <tr>
+        <td>{{protocolo.nombre}}</td>
+        <td>{{protocolo.fecha_inicio}}</td>
+        <td>{{protocolo.fecha_fin}}</td>
+        <td> <button type="button" class="btn btn-primary btn-sm">Ejecutar</button> </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+</section>
+{% endblock %}

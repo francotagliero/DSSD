@@ -14,10 +14,9 @@ class ProtocoloRepository extends PDORepository{
 
     public function getProtocolos(){
         
-        $protocolos = "SELECT * FROM protocolos";
-        $usuarios = $this->query($query);
-
-        return $protocolos;
+        $query = "SELECT * FROM protocolos";
+        $protocolos = $this->query($query);
+        return $protocolos->fetchAll();
     }
 
    
