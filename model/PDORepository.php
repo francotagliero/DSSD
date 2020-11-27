@@ -18,9 +18,9 @@ abstract class PDORepository {
         return $connection;
     }
 
-    public function query(){
+    public function query($query){
         $connection = $this->getConnection();
-        $query = "SELECT * FROM usuario";
+        
 
         $stmt = $connection->prepare($query);
         $stmt->execute();

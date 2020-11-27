@@ -28,8 +28,6 @@ class BaseController {
         
         $arr = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        var_dump($arr);
-
         $view->show(array(
             'hola' => $arr['username']
         ));

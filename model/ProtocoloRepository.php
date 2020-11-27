@@ -1,6 +1,6 @@
 <?php
 
-class UsuarioRepository extends PDORepository{
+class ProtocoloRepository extends PDORepository{
     private static $instance;
 
     public static function getInstance(){
@@ -12,12 +12,12 @@ class UsuarioRepository extends PDORepository{
         return self::$instance;
     }
 
-    public function usuarios(){
+    public function getProtocolos(){
         
-        $query = "SELECT * FROM usuario";
+        $protocolos = "SELECT * FROM protocolos";
         $usuarios = $this->query($query);
 
-        return $usuarios;
+        return $protocolos;
     }
 
    
