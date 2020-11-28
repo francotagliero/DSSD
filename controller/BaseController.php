@@ -17,7 +17,7 @@ class BaseController {
     }
 
     private function __construct() {
-       
+
     }
 
     public function home(){
@@ -68,22 +68,17 @@ class BaseController {
     }
 
     public function tipoUsuario(){
-        if ($this->isAdmin()) {
-            return "admin";
-        }else if ($this->isGestion()) {
-            return "gestion";
+        if ($this->isJefeProyecto()) {
+            return "Jefe de proyecto";
         }else{
-            return "online";
+            return "Responsable protocolo";
         }
     }
 
-    public function isAdmin() {
-        return LoginSystem::getInstance()->isAdmin();
+    public function isJefeProyecto() {
+        return LoginSystem::getInstance()->isJefeProyecto();
     }
 
-    public function isGestion() {
-        return LoginSystem::getInstance()->isGestion();
-    }
 
     /*
     ** LOGIN:

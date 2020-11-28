@@ -27,12 +27,16 @@ class LoginSystem extends PDORepository {
         return ($session->state == "logged");
     }
 
-    public function isAdmin() {
+    public function isJefeProyecto() {
         $session = Session::getInstance();
-        return ($session->rol[0][0] == "1");
+        if (isset($session->rol[0][0])) {
+            return ($session->rol[0][0] == "1");
+        }else{
+            return false;
+        }
     }
 
-    public function isAdminUser($user, $pass) {
+    public function isJefeProyectoUser($user, $pass) {
         $mapper=function($row){};
         $rol = 1;
         $answer = $this->queryList("SELECT * FROM usuario WHERE username=? AND password=? AND rol_id=?;", [$user, $pass, $rol], $mapper);
@@ -42,27 +46,25 @@ class LoginSystem extends PDORepository {
     public function exist($user, $pass) {
         $mapper=function($row){};
         $answer = $this->queryList("SELECT * FROM usuario WHERE username=? AND password=?;", [$user, $pass], $mapper);
-        print_r($answer);die();
         return (count($answer) > 0);
     }
 
 
-    public function isGestion() {
+    public function isResponsableProtocolo() {
         $session = Session::getInstance();
-        return ($session->rol[0][0] == "2");
-    }
-
-    public function isOnline() {
-        $session = Session::getInstance();
-        return ($session->rol[0][0] == "3");
+        if (isset($session->rol[0][0])) {
+            return ($session->rol[0][0] == "2");
+        }else{
+            return false;
+        }
     }
 
     public function logear($user, $pass) {
         $mapper = function($row) {
-            return $row['usuario'];
+            return $row['username'];
         };
 
-        $answer = $this->queryList("SELECT * FROM usuario WHERE usuario=? AND clave=?;", [$user, $pass], $mapper);
+        $answer = $this->queryList("SELECT * FROM usuario WHERE username=? AND password=?;", [$user, $pass], $mapper);
         if (count($answer) > 0) {
             $session = Session::getInstance();
             $session->state = "logged";
@@ -77,7 +79,7 @@ class LoginSystem extends PDORepository {
 
     public function login($user, $pass) {
         if ($this->exist($user,$pass)){
-            if ($this->isAdminUser($user, $pass)){
+            if ($this->isJefeProyectoUser($user, $pass)){
                 if ($this->logear($user, $pass)) {
                     return 1;
                 } else {

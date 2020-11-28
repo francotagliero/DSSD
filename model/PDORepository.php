@@ -35,10 +35,8 @@ abstract class PDORepository {
         $stmt->execute($args);
         $list = [];
         while($element = $stmt->fetch()){
-            print_r($element);
             $list[] = $mapper($element);
         }
-        print_r($list); die();
         return $list;
     }
 
