@@ -6,12 +6,13 @@
 
 {% block main %}
 	<section class="container">
-		<form name="form1" id="form1" method="post" action="./?action=login">
+		<form method="POST" name="login" action="./?action=login_system">
 			<div class="form-group" id="formUsername">
 				<label for="nameUser">Nombre de Usuario</label>
 				<div class="input-group">
 					<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
 					<input type="text" class="form-control" name="username" id="username" value="{{ hola }}" required="required">
+					<input type="hidden" id="habilitado" name="habilitado" value="1" >
 				</div>
 			</div>
 			<div class="form-group" id="formPassword">
@@ -21,9 +22,9 @@
 					<input type="password" class="form-control" name="password" id="password" placeholder="Password" required="required">
 				</div>
 			</div>
-		
-			<input class="btn btn-success" type="submit" name="enviar" id="enviar" value="Enviar"><br><br>
-			
+
+			<input class="btn btn-success" type="submit" name="enviar" id="enviar" value="Login"><br><br>
+
 		</form>
 	</section>
 {% endblock %}

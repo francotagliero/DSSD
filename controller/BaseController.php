@@ -29,7 +29,9 @@ class BaseController {
         $arr = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $view->show(array(
-            'hola' => $arr['username']
+            'hola' => $arr['username'],
+            'isLogged' => $this->isLogged(),
+            'tipoUsuario'=> $this->tipoUsuario()
         ));
         
     }
@@ -57,6 +59,68 @@ class BaseController {
         $ok = $obj->{"token"}; 
 
         echo $ok;
+    }
+
+
+    // Retorna true si el usuario esta logeado, false en caso contrario.
+    public function isLogged() {
+        return LoginSystem::getInstance()->isLogged();
+    }
+
+    public function tipoUsuario(){
+        if ($this->isAdmin()) {
+            return "admin";
+        }else if ($this->isGestion()) {
+            return "gestion";
+        }else{
+            return "online";
+        }
+    }
+
+    public function isAdmin() {
+        return LoginSystem::getInstance()->isAdmin();
+    }
+
+    public function isGestion() {
+        return LoginSystem::getInstance()->isGestion();
+    }
+
+    /*
+    ** LOGIN:
+    */
+    public function login($args) {
+        if (!LoginSystem::getInstance()->isLogged()) {
+            $view = new Login();
+            $view->show($args);
+        } else {
+            $this->home();
+        }
+    }
+
+
+    public function login_system() {
+        if (!LoginSystem::getInstance()->isLogged()) {
+            if (isset($_POST['username']) AND isset($_POST['password'])) {
+                $user = $_POST['username'];
+                $pass = $_POST['password'];
+
+                $login = LoginSystem::getInstance()->login($user, $pass);
+            } else {
+                $this->login(Message::getMessage(1));
+            }
+            switch ($login) {
+                case "1": $this->home(Message::getMessage(2)); break;
+                case "2": $this->login(Message::getMessage(1)); break;
+                case "3": $this->login(Message::getMessage(19)); break;
+                case "4": $this->login(Message::getMessage(20)); break;
+                default : $this->home();;
+            }
+        }
+    }
+
+    public function logout_system() {
+        LoginSystem::getInstance()->logout();
+        $this->home(Message::getMessage(5));
     }
 
 

@@ -24,20 +24,30 @@
 
 <body>
 
+	<header>
+		{% if titulo != "" %}
+			<h1>{{ titulo }}</h1>
+		{% endif %}
+	</header>
+
+	{% if message %}
+		<div id="message">
+			{{ message }}
+		</div>
+	{% endif %}
+
 	<section class="container">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
   			<a class="navbar-brand" href="index.php?action=home">Login</a>
     		<a class="navbar-brand" href="index.php?action=protocolos">Protocolos</a>
-    </div>
-  </div>
-</nav>
+		</nav>
 	</section>
 
 	{% block contentPage %}
 	{% endblock %}
+
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-
 	{% block scripts %}
 	{% endblock %}
 </body>

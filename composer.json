@@ -8,6 +8,7 @@
     ],
     "require": {
         "twig/twig": "2.0",
-        "guzzlehttp/guzzle": "7.0"
+        "guzzlehttp/guzzle": "7.0",
+        "twbs/bootstrap": "^4.5"
     }
 }

@@ -28,6 +28,20 @@ abstract class PDORepository {
         return $stmt;
     }
 
+    protected function queryList($sql, $args, $mapper)
+    {
+        $connection = $this->getConnection();
+        $stmt = $connection->prepare($sql);
+        $stmt->execute($args);
+        $list = [];
+        while($element = $stmt->fetch()){
+            print_r($element);
+            $list[] = $mapper($element);
+        }
+        print_r($list); die();
+        return $list;
+    }
+
     
 }
 
