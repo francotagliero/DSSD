@@ -20,7 +20,7 @@ class BaseController {
 
     }
 
-    public function home(){
+    public function home($args = []){
         
         $view = new Login();
 
@@ -106,8 +106,6 @@ class BaseController {
             switch ($login) {
                 case "1": $this->home(Message::getMessage(2)); break;
                 case "2": $this->login(Message::getMessage(1)); break;
-                case "3": $this->login(Message::getMessage(19)); break;
-                case "4": $this->login(Message::getMessage(20)); break;
                 default : $this->home();;
             }
         }

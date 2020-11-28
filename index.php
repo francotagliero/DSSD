@@ -9,12 +9,14 @@ error_reporting(-1);
 /* CONTROLLER */
 require_once('controller/BaseController.php');
 require_once('controller/ProtocoloController.php');
+require_once('controller/ProyectoController.php');
 require_once('controller/GuzzleController.php');
 
 /* MODEL */
 require_once('model/PDORepository.php');
 require_once('model/UsuarioRepository.php');
 require_once('model/ProtocoloRepository.php');
+require_once('model/ProyectoRepository.php');
 require_once('model/LoginSystem.php');
 require_once('model/Usuario.php');
 require_once('model/Session.php');
@@ -24,6 +26,7 @@ require_once('model/Message.php');
 require_once('view/TwigView.php');
 require_once('view/Login.php');
 require_once('view/Protocolo.php');
+require_once('view/Proyecto.php');
 
 if (isset($_GET["action"])){
     switch($_GET['action']){
@@ -38,6 +41,9 @@ if (isset($_GET["action"])){
 
         /* PROTOCOLO */
         case 'protocolos': { ProtocoloController::getInstance()->getProtocolos(); break; }
+
+        /* PROYECTO */
+        case 'proyectos': { ProyectoController::getInstance()->getProyectos(); break; }
 
         case 'token': { BaseController::getInstance()->conexion(); break; }
 

@@ -1,0 +1,40 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    | Configuracion de los protocolos
+{% endblock %}
+
+{% block main %}
+    {% include 'aside.html.twig' %}
+    <section id="ancho_parcial">
+        <article>
+            <h1>Configuracion de los protocolos</h1>
+            <form enctype="multipart/form-data" method="POST" id="configuracion_protocolo" name="configuracion_protocolo" action="./?action=configuracion_protocolo">
+                <input type="hidden" value="{{token}}" name="token">
+                <h3>Proveedor:</h3>
+                <input type="text" name="proveedor" id="proveedor" placeholder="Proveedor" maxlength="100" required autofocus>
+                <h3>CUIT del proveedor:</h3>
+                <input type="text" name="cuit" id="cuit" placeholder="CUIT" maxlength="15" required>
+                <h3>Factura escaneada:</h3>
+                <input type="file" name="factura" id="factura" placeholder="Seleccionar archivo">
+                <h3>Productos:</h3>
+                <button type="button" id="sumarProd" class="buttonDatalistCompra">Agregar Producto</button>
+                <div id="listaProductos">
+                    <div id="1">
+                        <input id="productoCompra" class="datalistCompra" list="productos" name="producto1" placeholder="Buscar producto por nombre" maxlength="100" required>
+                        <datalist id="productos">
+                            {% for p in products %}
+                            <option value="{{ p.nombre }}">
+                                {% endfor %}
+                        </datalist>
+                        <input id="cantidadProducto" class="inputDatalistCompra" type="number" name="cantidad1" placeholder="Cantidad" min="1" required>
+                        <input id="precioProducto" class="inputDatalistCompra" type="number" name="precio1" placeholder="Precio" min="0.01" step="0.01" required>
+                    </div>
+                </div>
+                <input id="cantProductos" name="cantProductos" type="hidden" value="1">
+                <input type="submit" value="Dar de alta" id="confirmarCompra">
+                <input type="reset" value="Restablecer">
+            </form>
+        </article>
+    </section>
+{% endblock %}

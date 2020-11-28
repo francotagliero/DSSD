@@ -1,0 +1,52 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    | Proyectos
+{% endblock %}
+
+{% block main %}
+    <section class="container">
+
+        {% if proyectos %}
+            <h1>Proyectos</h1>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Fecha Inicio</th>
+                    <th scope="col">Fecha Fin</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Accion</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for proyecto in proyectos %}
+                    <tr>
+                        <td>{{proyecto.nombre}}</td>
+                        <td>{{proyecto.fecha_inicio}}</td>
+                        <td>{{proyecto.fecha_fin}}</td>
+                        <td> {% if proyecto.es_local == 1 %}
+                                <span class="label label-primary">Local</span>
+                            {% else %}
+                                <span class="label label-warning">Remoto</span>
+                            {% endif %}</td>
+                        <td>
+                            {% if proyecto.puntaje == 0 %}
+                                <button type="button" class="btn btn-primary btn-sm">Ejecutar</button>
+                            {% else %}
+                                <a href="#" class="btn btn-primary btn-sm disabled" role="button" aria-disabled="true">Ejecutado</a>
+                            {% endif %}</td>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-success" role="alert">
+                No hay proyectos cargados.
+            </div>
+        {% endif %}
+
+
+    </section>
+{% endblock %}
