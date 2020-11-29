@@ -1,9 +1,8 @@
 <?php
-require_once('BaseController.php');
 
 class ProtocoloController{
     private static $instance;
-    private $configuracion;
+    
     private $sesion;
 
     public static function getInstance() {
@@ -16,21 +15,21 @@ class ProtocoloController{
     }
 
     private function __construct() {
-       
+        $this->sesion = SesionController::getInstance();
     }
 
     public function getProtocolos(){
         
         $view = new Protocolo();
 
-        $stmt = ProtocoloRepository::getInstance()->getProtocolos();
-        $view->show(array('protocolos' => $stmt, 'isLogged' => $this->isLogged()));
-        
-    }
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
 
-    // Retorna true si el usuario esta logeado, false en caso contrario.
-    public function isLogged() {
-        return LoginSystem::getInstance()->isLogged();
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'hecho'=> $this->sesion->getSesion('id_proceso'),
+            'protocolos' => $protocolos
+        ));
+        
     }
 }
 

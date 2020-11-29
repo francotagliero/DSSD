@@ -1,6 +1,54 @@
 {% extends 'estructura_html.html.twig' %}
 
 {% block contentPage %}
+	<header>
+		<nav class="navbar navbar-inverse navbar-static-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navegacion-lu">
+						<span class="sr-only">Desplegar / Ocultar Menu</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="./?action=home" class="navbar-brand">AppWEB</a>
+				</div>
+				<!-- Inicia Menu -->
+				<div class="collapse navbar-collapse nav-lu" id="navegacion-lu">
+					<ul class="nav navbar-nav navbar-left">
+						{% block navLeft %}
+							
+						{% endblock %}
+					</ul>
+
+					<ul class="nav navbar-nav navbar-right">
+						{% block navRight %}
+							{% if username is empty %}
+								<li><a href="./?action=login">Iniciar Sesión</a></li>
+							{% else %}
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="dropdown-menu-lu">
+										{{ username }}
+										<span class="glyphicon glyphicon-user"></span>
+									</a>
+									<ul class="dropdown-menu">
+										<li><a href="./?action=backend">Backend</a></li>
+										<li><a href="./?action=logout">Cerrar sesión</a></li>
+									</ul>
+								</li>
+							{% endif %}
+						{% endblock %}
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	{% if (hecho is not empty) %}
+		<section class="alert alert-success" role="alert">
+			<h4><span class="glyphicon glyphicon-ok-circle"></span> {{ hecho }}</h4>
+		</section>
+	{% endif %}
 
 	<main>
 		{% block main %}

@@ -12,12 +12,14 @@ class ProyectoRepository extends PDORepository{
         return self::$instance;
     }
 
-    public function getProyectos(){
+    public function setIdCase($nombre_proyecto, $id_case){
+        
+        $query = "UPDATE proyectos SET case_id = :case_id WHERE nombre = :nombre";
 
-        $query = "SELECT * FROM proyectos";
-        $proyectos = $this->query($query);
-        return $proyectos->fetchAll();
+        $args= array('nombre' => $nombre_proyecto, 'case_id' => $id_case);
+
+        $this->queryArgs($query, $args);
     }
 
-
+   
 }

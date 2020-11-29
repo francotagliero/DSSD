@@ -46,7 +46,20 @@
         No hay protocolos cargados.
       </div>
   {% endif %}
+  </section>
+  <section class="container">
+    <form method="POST" name="instanciacion" action="./?action=instanciacion">
+        <div class="form-group" id="formNombreProyecto">
+          <label for="nameProyecto">Nombre del Proyecto</label>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
+            <input type="text" class="form-control" name="name_proyecto" id="name_proyecto" required="required">
+          </div>
+        </div>
 
+        <input class="btn btn-success" type="submit" name="instanciar" id="instanciar" value="Instanciar"><br><br>
 
-</section>
+      </form>
+  </section>
+
 {% endblock %}
