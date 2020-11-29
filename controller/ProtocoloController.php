@@ -31,6 +31,22 @@ class ProtocoloController{
         ));
         
     }
+
+    public function configurarProtocolos(){
+        $view = new ConfiguracionProtocolos();
+
+        $proyecto = ProyectoRepository::getInstance()->getIdProyecto($this->sesion->getSesion('id_user_bd'));
+
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
+        
+        
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'hecho'=> $proyecto[0]->getIdProyecto(),
+            'protocolos' => $protocolos
+        ));
+    }
+
 }
 
 ?>

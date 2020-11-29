@@ -36,6 +36,7 @@ abstract class PDORepository {
         $stmt->execute($args);
     }
 
+
     protected function queryList($sql, $args, $mapper)
     {
         $connection = $this->getConnection();
@@ -43,10 +44,10 @@ abstract class PDORepository {
         $stmt->execute($args);
         $list = [];
         while($element = $stmt->fetch()){
-            //print_r($element);
+        
             $list[] = $mapper($element);
         }
-        //print_r($list); die();
+       
         return $list;
     }
 

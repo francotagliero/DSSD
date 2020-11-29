@@ -1,0 +1,59 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+	| Configuracion de los protocolos
+{% endblock %}
+
+{% block main %}
+	<section class="container">
+
+		{% if protocolos %}
+        <h1>Configuracion de los protocolos</h1>
+        <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre del protocolo</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+      
+        {% for protocolo in protocolos %}
+        <tr>
+            <td>{{protocolo.nombre}}</td>
+
+            <td>
+                <span class="label label-warning">{{protocolo.estado}}</span>
+            </td>
+
+            <td>
+              <button type="button" class="btn btn-primary btn-sm">Editar</button>
+            </td>
+        
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <div class="alert alert-success" role="alert">
+        No hay protocolos cargados.
+      </div>
+  {% endif %}
+  </section>
+  <section class="container">
+    <form method="POST" name="instanciacion" action="./?action=instanciacion">
+        <div class="form-group" id="formNombreProyecto">
+          <label for="nameProyecto">Nombre del Proyecto</label>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
+            <input type="text" class="form-control" name="name_proyecto" id="name_proyecto" required="required">
+          </div>
+        </div>
+
+        <input class="btn btn-success" type="submit" name="instanciar" id="instanciar" value="Instanciar"><br><br>
+
+      </form>
+  </section>
+
+{% endblock %}

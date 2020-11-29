@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 29-11-2020 a las 15:29:37
+-- Tiempo de generación: 29-11-2020 a las 18:19:53
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -110,21 +110,26 @@ CREATE TABLE IF NOT EXISTS `protocolos` (
   `es_local` bit(1) NOT NULL,
   `puntaje` int(11) NOT NULL,
   `id_proyecto` int(11) NOT NULL,
+  `estado` varchar(255) NOT NULL,
   PRIMARY KEY (`id_protocolo`),
   KEY `protocolo_responsable` (`id_responsable`),
   KEY `protocolo_proyecto` (`id_proyecto`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `protocolos`
 --
 
-INSERT INTO `protocolos` (`id_protocolo`, `nombre`, `id_responsable`, `fecha_inicio`, `fecha_fin`, `orden`, `es_local`, `puntaje`, `id_proyecto`) VALUES
-(1, 'protocolo_a', 4, '2020-12-01', '2020-12-02', 1, b'0', 0, 5),
-(2, 'protocolo_b', 2, '2020-12-02', '2020-12-03', 2, b'0', 0, 5),
-(3, 'protocolo_c', 3, '2020-12-03', '2020-12-04', 3, b'1', 0, 5),
-(4, 'protocolo_d', 2, '2020-12-04', '2020-12-05', 1, b'0', 0, 5),
-(5, 'protocolo_e', 2, '2020-12-04', '2020-12-05', 1, b'1', 0, 5);
+INSERT INTO `protocolos` (`id_protocolo`, `nombre`, `id_responsable`, `fecha_inicio`, `fecha_fin`, `orden`, `es_local`, `puntaje`, `id_proyecto`, `estado`) VALUES
+(1, 'protocolo_a', 4, '2020-12-01', '2020-12-02', 1, b'0', 0, 5, 'pendiente'),
+(2, 'protocolo_b', 2, '2020-12-02', '2020-12-03', 2, b'0', 0, 5, 'pendiente'),
+(3, 'protocolo_c', 3, '2020-12-03', '2020-12-04', 3, b'1', 0, 5, 'pendiente'),
+(4, 'protocolo_d', 2, '2020-12-04', '2020-12-05', 1, b'0', 0, 5, 'pendiente'),
+(5, 'protocolo_e', 2, '2020-12-04', '2020-12-05', 1, b'1', 0, 5, 'pendiente'),
+(6, 'protocolo_a', 3, '2020-12-06', '2020-12-07', 1, b'0', 0, 7, 'pendiente'),
+(7, 'protocolo_b', 3, '2020-12-07', '2020-12-08', 2, b'0', 0, 7, 'pendiente'),
+(8, 'protocolo_c', 3, '2020-12-08', '2020-12-09', 1, b'1', 0, 7, 'pendiente'),
+(9, 'protocolo_d', 4, '2020-12-09', '2020-12-12', 1, b'1', 0, 7, 'pendiente');
 
 -- --------------------------------------------------------
 
@@ -142,14 +147,15 @@ CREATE TABLE IF NOT EXISTS `proyectos` (
   `case_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_proyecto`),
   KEY `proyecto_responsable` (`id_responsable`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `proyectos`
 --
 
 INSERT INTO `proyectos` (`id_proyecto`, `nombre`, `fecha_inicio`, `fecha_fin`, `id_responsable`, `case_id`) VALUES
-(5, 'vacuna_covid', '2020-12-01', '2020-12-05', 5, 5005);
+(5, 'vacuna_covid', '2020-12-01', '2020-12-05', 5, 5005),
+(7, 'vacuna_sarampion', '2020-12-06', '2020-12-12', 1, NULL);
 
 -- --------------------------------------------------------
 

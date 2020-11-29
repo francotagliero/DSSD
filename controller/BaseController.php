@@ -77,6 +77,7 @@ class BaseController {
             $this->sesion->setSesion('password_bonita', $password);
             $this->sesion->setSesion('base_uri_bonita', 'http://localhost:12310/bonita/');
             $this->sesion->setSesion('X-Bonita-API-Token', $token->getValue());
+            $this->sesion->setSesion('id_user_bd', $resultado[0]->getId() );
 
             #Busco el id del proceso a traves del nombre. 
         

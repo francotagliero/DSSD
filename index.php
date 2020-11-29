@@ -16,6 +16,7 @@ require_once('controller/SesionController.php');
 
 /* CLASS */
 require_once('class/Usuario.php');
+require_once('class/Proyecto.php');
 
 /* MODEL */
 require_once('model/PDORepository.php');
@@ -27,6 +28,8 @@ require_once('model/ProyectoRepository.php');
 require_once('view/TwigView.php');
 require_once('view/Login.php');
 require_once('view/Protocolo.php');
+require_once('view/ConfiguracionProtocolos.php');
+
 
 if (isset($_GET["action"])){
     switch($_GET['action']){
@@ -47,6 +50,8 @@ if (isset($_GET["action"])){
         case 'logout': { BaseController::getInstance()->logout(); break; }
 
         case 'instanciacion': { BaseController::getInstance()->instanciacion(); break; }
+
+        case 'configuracion_protocolos': { ProtocoloController::getInstance()->configurarProtocolos(); break; }
 
         default: { BaseController::getInstance()->home(); break; }
     }

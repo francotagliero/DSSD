@@ -19,5 +19,7 @@ class ProtocoloRepository extends PDORepository{
         return $protocolos->fetchAll();
     }
 
+    
+
    
 }
