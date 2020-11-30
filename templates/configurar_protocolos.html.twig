@@ -1,5 +1,9 @@
 {% extends 'layout.html.twig' %}
 
+{% block scripts %}
+<script src="js/configuracionProtocolo.js"></script>
+{% endblock %}
+
 {% block title %}
 	| Configuracion de los protocolos
 {% endblock %}
@@ -12,36 +16,82 @@
         {% for proyecto in proyectos %}
           <table class="table">
             <caption>{{ proyecto.proyecto.getNombre }}</caption>
-            <thead>
-              <tr>
-                <th scope="col">Nombre del protocolo</th>
-                <th scope="col">Id del responsable</th>
-                <th scope="col">Fecha de inicio</th>
-                <th scope="col">Fecha de fin</th>
-                <th scope="col">Orden</th>
-                <th scope="col">Es local (valor = 1)</th>
-                <th scope="col">Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for protocolo in proyecto.protocolos %}
+            {% for protocolo in proyecto.protocolos %}
+              <thead>
                 {% if protocolo.getIdResponsable == null %}
                   <tr>
-                    <td>{{ protocolo.getNombre }}</td>
+                    <th scope="col">Nombre del protocolo</th>
+                    <th scope="col">Configurar</th>
                   </tr>
                   {% else %}
+                  <tr>
+                    <th scope="col">Nombre del protocolo</th>
+                    <th scope="col">Id del responsable</th>
+                    <th scope="col">Fecha de inicio</th>
+                    <th scope="col">Fecha de fin</th>
+                    <th scope="col">Orden</th>
+                    <th scope="col">Es local (valor = 1)</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                {% endif %}
+              </thead>
+              <tbody>
+                
+                  {% if protocolo.getIdResponsable == null %}
                     <tr>
                       <td>{{ protocolo.getNombre }}</td>
-                      <td>{{ protocolo.getIdResponsable }}</td>
-                      <td>{{ protocolo.getFechaInicio }}</td>
-                      <td>{{ protocolo.getFechaFin }}</td>
-                      <td>{{ protocolo.getOrden }}</td>
-                      <td>{{ protocolo.getEsLocal }}</td>
-                      <td>{{ protocolo.getEstado }}</td>
+                      <td><form class="" method="post" id="formConfiguracionProtocolo" name="formConfiguracionProtocolo" onsubmit="return false;"> <!-- Configuracion Protocolo -->
+                            <div class="form-group" id="formIdResponsable">
+                              <label for="forIdResponsable">Responsable del Protocolo</label>
+                              <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <input id="idResponsable" type="text" autofocus required title="Responsable" name="idResponsable" class="form-control" value="1">
+                              </div>
+                            </div>
+                            <div class="form-group" id="formFechaInicio">
+                              <label for="forFechaInicio">Fecha Inicio</label>
+                              <div class="input-group ">
+                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <input id="fechaInicio" type="date" autofocus required title="Solo puede ingresar fechas." name="fechaInicio" class="form-control">
+                              </div>
+                            </div>
+                            <div class="form-group" id="formFechaFin">
+                              <label for="forFechaFin">Fecha Fin</label>
+                              <div class="input-group ">
+                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <input id="fechaFin" type="date" autofocus required title="Solo puede ingresar fechas." name="fechaFin" class="form-control">
+                              </div>
+                            </div>
+                            <div class="form-group" id="formOrden">
+                              <label for="forOrden">Orden del protocolo</label>
+                              <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <input id="orden" type="text" autofocus required title="Orden de ejecucion" name="orden" class="form-control" value="1">
+                              </div>
+                            </div>
+                            <div class="form-group" id="formEsLocal">
+                              <label for="">Es local (value = 1)</label>
+                              <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <input id="esLocal" type="text" autofocus required title="1 si la ejecucion es local" name="esLocal" class="form-control" value="1">
+                              </div>
+                            </div>
+                            <input class="btn btn-success" type="submit" name="configurar_protocolo" id="configurar_protocolo" value="Configurar">
+                          </form></td>
                     </tr>
-                {% endif %}
-              {% endfor %}
-            </tbody>
+                    {% else %}
+                      <tr>
+                        <td>{{ protocolo.getNombre }}</td>
+                        <td>{{ protocolo.getIdResponsable }}</td>
+                        <td>{{ protocolo.getFechaInicio }}</td>
+                        <td>{{ protocolo.getFechaFin }}</td>
+                        <td>{{ protocolo.getOrden }}</td>
+                        <td>{{ protocolo.getEsLocal }}</td>
+                        <td>{{ protocolo.getEstado }}</td>
+                      </tr>
+                  {% endif %}
+                {% endfor %}
+              </tbody>
           </table>
         {% endfor %}
         
