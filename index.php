@@ -57,7 +57,7 @@ if (isset($_GET["action"])){
 
         case 'configuracion_protocolos': { ProtocoloController::getInstance()->configurarProtocolos(); break; }
 
-        default: { BaseController::getInstance()->home(); break; }
+        default: { BaseController::getInstance()->login(); break; }
     }
 } else {
     BaseController::getInstance()->home();

@@ -96,7 +96,7 @@ class BaseController {
             $id_proceso = $response['data'][0]->id; #Obtengo id del proceso
             $this->sesion->setSesion('id_proceso', $id_proceso);
 
-            header("Location:./?action=protocolos");
+            header("Location:./?action=configuracion_protocolos");
 
 
 

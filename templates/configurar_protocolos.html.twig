@@ -36,50 +36,54 @@
                   {% if protocolo.getIdResponsable == null %}
                     <tr>
                       <td>{{ protocolo.getNombre }}</td>
-                      <td><form class="" method="post" id="formConfiguracionProtocolo{{ protocolo.getIdProtocolo }}" name="formConfiguracionProtocolo" onsubmit="return false;"> <!-- Configuracion Protocolo -->
-                            <input type="hidden" name="id_protocolo" value="{{ protocolo.getIdProtocolo }}" id="id_protocolo">
-                            <div class="form-group" id="formIdResponsable">
-                              <label for="forIdResponsable">Responsable del Protocolo</label>
-                              <div class="input-group">
-                                  <select class="" aria-label="Responsable" name="id_responsable" id="id_responsable">
-                                      {% for responsable in responsables %}
-                                        <option value={{ responsable.getId }}>{{ responsable.getUsername }}</option>
-                                      {% endfor %}
-                                  </select>
+                      <td>
+                        <form class="" method="post" id="formConfiguracionProtocolo{{ protocolo.getIdProtocolo }}" name="formConfiguracionProtocolo" onsubmit="return false;"> <!-- Configuracion Protocolo -->
+                              <input type="hidden" name="id_protocolo" value="{{ protocolo.getIdProtocolo }}" id="id_protocolo">
+                              <div class="form-group" id="formIdResponsable">
+                                <label for="forIdResponsable">Responsable del Protocolo</label>
+                                <div class="input-group">
+                                    <select class="" aria-label="Responsable" name="id_responsable" id="id_responsable">
+                                        {% for responsable in responsables %}
+                                          <option value={{ responsable.getId }}>{{ responsable.getUsername }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                               </div>
-                            </div>
-                            <div class="form-group" id="formFechaInicio">
-                              <label for="forFechaInicio">Fecha Inicio</label>
-                              <div class="input-group ">
-                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
-                                <input id="fecha_inicio" type="date" autofocus required title="Solo puede ingresar fechas." name="fecha_inicio" class="form-control">
+                              <div class="form-group" id="formFechaInicio">
+                                <label for="forFechaInicio">Fecha Inicio</label>
+                                <div class="input-group ">
+                                  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+                                  <input id="fecha_inicio" type="date" autofocus required title="Solo puede ingresar fechas." name="fecha_inicio" class="form-control">
+                                </div>
                               </div>
-                            </div>
-                            <div class="form-group" id="formFechaFin">
-                              <label for="forFechaFin">Fecha Fin</label>
-                              <div class="input-group ">
-                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
-                                <input id="fecha_fin" type="date" autofocus required title="Solo puede ingresar fechas." name="fecha_fin" class="form-control">
+                              <div class="form-group" id="formFechaFin">
+                                <label for="forFechaFin">Fecha Fin</label>
+                                <div class="input-group ">
+                                  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+                                  <input id="fecha_fin" type="date" autofocus required title="Solo puede ingresar fechas." name="fecha_fin" class="form-control">
+                                </div>
                               </div>
-                            </div>
-                            <div class="form-group" id="formOrden">
-                              <label for="forOrden">Orden del protocolo</label>
-                              <div class="input-group">
-                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
-                                <input id="orden" type="text" autofocus required title="Orden de ejecucion" name="orden" class="form-control" value="1">
+                              <div class="form-group" id="formOrden">
+                                <label for="forOrden">Orden del protocolo</label>
+                                <div class="input-group">
+                                  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+                                  <input id="orden" type="text" autofocus required title="Orden de ejecucion" name="orden" class="form-control" value="1">
+                                </div>
                               </div>
-                            </div>
-                            <div class="form-group" id="formEsLocal">
-                              <label for="">Es local (value = 1)</label>
-                              <div class="input-group">
-                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
-                                <input id="es_local" type="text" autofocus required title="1 si la ejecucion es local" name="es_local" class="form-control" value="1">
+                              <div class="form-group" id="formEsLocal">
+                                <label for="">Es local (value = 1)</label>
+                                <div class="input-group">
+                                  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+                                  <input id="es_local" type="text" autofocus required title="1 si la ejecucion es local" name="es_local" class="form-control" value="1">
+                                </div>
                               </div>
-                            </div>
-                            <div id="{{ protocolo.getIdProtocolo }}">
-                              <input class="btn btn-success conf" type="submit" name="configurar_protocolo" id="configurar_protocolo" value="Configurar">
-                            </div>
-                          </form></td>
+                              <div id="{{ protocolo.getIdProtocolo }}">
+                                <input class="btn btn-success conf" type="submit" name="configurar_protocolo" id="configurar_protocolo" value="Configurar">
+                              </div>
+                        </form>
+                        <p class="hidden" id="textoExito{{ protocolo.getIdProtocolo }}"><strong><span class="glyphicon glyphicon-ok"></span> Protocolo configurado exitosamente!</strong></p><br><br>
+                        
+                      </td>
                     </tr>
                     {% else %}
                       <tr>

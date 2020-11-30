@@ -4,6 +4,7 @@ $('.conf').click(function(event){
     //console.log(dato);
     var id_submit = $(this).parent().attr('id');
     var id_form = '#formConfiguracionProtocolo' + id_submit;
+    var id_textoExito = '#textoExito' + id_submit;
     console.log(id_form);
     
     $.ajax({
@@ -13,17 +14,9 @@ $('.conf').click(function(event){
         data: $(id_form).serialize(),
         success: function (respuesta) {
           if(respuesta.valor == 'protocoloActualizado'){
-              /*
-              $('#cartelError').addClass('hidden');
-              $("html, body").animate({ scrollTop: 0 }, 0);
-              $('#cartelExito').removeClass('hidden');
-              $(':input','#form-historia')
-               .not(':button, :submit, :reset, :hidden')
-               .val('');
-              //$('#apellido').focus();
-              $('.form-group').removeClass('has-success');
-              */
-                alert(respuesta.id_protocolo + 'hola' + respuesta.id_responsable);
+            $(id_form).addClass("hidden");
+            $(id_textoExito).removeClass('hidden');
+            console.log(respuesta.id_protocolo + 'hola' + respuesta.id_responsable);
             } else{
                //$("html, body").animate({ scrollTop: 0 }, 0);
                //$('#cartelError').removeClass('hidden');
