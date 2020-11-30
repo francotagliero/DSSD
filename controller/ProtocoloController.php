@@ -20,7 +20,7 @@ class ProtocoloController{
 
     public function getProtocolos(){
         
-        $view = new Protocolo();
+        $view = new Protocolos();
 
         $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
 
@@ -35,15 +35,27 @@ class ProtocoloController{
     public function configurarProtocolos(){
         $view = new ConfiguracionProtocolos();
 
-        $proyecto = ProyectoRepository::getInstance()->getIdProyecto($this->sesion->getSesion('id_user_bd'));
+        $proyectos = ProyectoRepository::getInstance()->getProyectos($this->sesion->getSesion('id_user_bd'));
 
-        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
-        
-        
+        //var_dump($proyectos);
+        $array_proyectos_protocolos = [];
+
+        foreach ($proyectos as $proyecto) {
+            $protocolos = ProtocoloRepository::getInstance()->getProtocolosProyecto($proyecto->getIdProyecto() );
+            
+            $miObjeto = array(
+                'proyecto' => $proyecto,
+                'protocolos' => $protocolos
+            );
+            $ss = (object)$miObjeto;
+
+            $array_proyectos_protocolos[] = $ss;
+        }
+
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
-            'hecho'=> $proyecto[0]->getIdProyecto(),
-            'protocolos' => $protocolos
+            'proyectos' => $array_proyectos_protocolos,
+            'hecho' => $proyectos[0]->getFechaInicio()
         ));
     }
 

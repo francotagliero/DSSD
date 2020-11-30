@@ -17,6 +17,8 @@ require_once('controller/SesionController.php');
 /* CLASS */
 require_once('class/Usuario.php');
 require_once('class/Proyecto.php');
+require_once('class/Actividades.php');
+require_once('class/Protocolo.php');
 
 /* MODEL */
 require_once('model/PDORepository.php');
@@ -27,7 +29,7 @@ require_once('model/ProyectoRepository.php');
 /* VIEW */
 require_once('view/TwigView.php');
 require_once('view/Login.php');
-require_once('view/Protocolo.php');
+require_once('view/Protocolos.php');
 require_once('view/ConfiguracionProtocolos.php');
 
 

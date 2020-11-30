@@ -7,37 +7,47 @@
 {% block main %}
 	<section class="container">
 
-		{% if protocolos %}
+		{% if proyectos %}
         <h1>Configuracion de los protocolos</h1>
-        <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Nombre del protocolo</th>
-          <th scope="col">Estado</th>
-          <th scope="col">Accion</th>
-        </tr>
-      </thead>
-      <tbody>
-      
-        {% for protocolo in protocolos %}
-        <tr>
-            <td>{{protocolo.nombre}}</td>
-
-            <td>
-                <span class="label label-warning">{{protocolo.estado}}</span>
-            </td>
-
-            <td>
-              <button type="button" class="btn btn-primary btn-sm">Editar</button>
-            </td>
-        
-        </tr>
+        {% for proyecto in proyectos %}
+          <table class="table">
+            <caption>{{ proyecto.proyecto.getNombre }}</caption>
+            <thead>
+              <tr>
+                <th scope="col">Nombre del protocolo</th>
+                <th scope="col">Id del responsable</th>
+                <th scope="col">Fecha de inicio</th>
+                <th scope="col">Fecha de fin</th>
+                <th scope="col">Orden</th>
+                <th scope="col">Es local (valor = 1)</th>
+                <th scope="col">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for protocolo in proyecto.protocolos %}
+                {% if protocolo.getIdResponsable == null %}
+                  <tr>
+                    <td>{{ protocolo.getNombre }}</td>
+                  </tr>
+                  {% else %}
+                    <tr>
+                      <td>{{ protocolo.getNombre }}</td>
+                      <td>{{ protocolo.getIdResponsable }}</td>
+                      <td>{{ protocolo.getFechaInicio }}</td>
+                      <td>{{ protocolo.getFechaFin }}</td>
+                      <td>{{ protocolo.getOrden }}</td>
+                      <td>{{ protocolo.getEsLocal }}</td>
+                      <td>{{ protocolo.getEstado }}</td>
+                    </tr>
+                {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
         {% endfor %}
-      </tbody>
-    </table>
+        
     {% else %}
       <div class="alert alert-success" role="alert">
-        No hay protocolos cargados.
+        No hay proyectos cargados.
       </div>
   {% endif %}
   </section>

@@ -21,7 +21,7 @@ class ProyectoRepository extends PDORepository{
         $this->queryArgs($query, $args);
     }
 
-    public function getIdProyecto($id_usuario){
+    public function getProyectos($id_usuario){
         $consulta = "SELECT * FROM proyectos WHERE id_responsable = :id_responsable";
 
         $args = array('id_responsable' => $id_usuario);

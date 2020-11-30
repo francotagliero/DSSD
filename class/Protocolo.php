@@ -65,7 +65,7 @@
         }
 
         public function setEsLocal($es_local){
-            $this->estado = $es_local;
+            $this->es_local = $es_local;
         }
 
         public function getPuntaje(){
@@ -91,14 +91,15 @@
             $this->estado = $estado;
         }
 
-		public function __construct($id_protocolo, $nombre, $id_responsable, $fecha_fin, $fecha_inicio, $orden, $puntaje, $id_proyecto, $estado){
-            $this->setProtocolo($id_protocolo);
+		public function __construct($id_protocolo, $nombre, $id_responsable, $fecha_fin, $fecha_inicio, $orden, $es_local, $puntaje, $id_proyecto, $estado){
+            $this->setIdProtocolo($id_protocolo);
             $this->setNombre($nombre);
             $this->setIdResponsable($id_responsable);
             $this->setFechaFin($fecha_fin);
             $this->setFechaInicio($fecha_inicio);	
             $this->setIdProyecto($id_proyecto);
             $this->setOrden($orden);
+            $this->setEsLocal($es_local);
             $this->setPuntaje($puntaje);
             $this->setEstado($estado);
         }
