@@ -53,6 +53,8 @@ if (isset($_GET["action"])){
 
         case 'instanciacion': { BaseController::getInstance()->instanciacion(); break; }
 
+        case 'configurarProtocoloBD': { ProtocoloController::getInstance()->configurarProtocoloBD(); break; }
+
         case 'configuracion_protocolos': { ProtocoloController::getInstance()->configurarProtocolos(); break; }
 
         default: { BaseController::getInstance()->home(); break; }

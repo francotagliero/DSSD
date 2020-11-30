@@ -36,7 +36,7 @@ class ProtocoloController{
         $view = new ConfiguracionProtocolos();
 
         $proyectos = ProyectoRepository::getInstance()->getProyectos($this->sesion->getSesion('id_user_bd'));
-
+        $responsables = UsuarioRepository::getInstance()->responsablesProtocolo();
         //var_dump($proyectos);
         $array_proyectos_protocolos = [];
 
@@ -55,8 +55,14 @@ class ProtocoloController{
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
             'proyectos' => $array_proyectos_protocolos,
-            'hecho' => $proyectos[0]->getFechaInicio()
+            'responsables' => $responsables
         ));
+    }
+
+    public function configurarProtocoloBD(){
+        
+        ProtocoloRepository::getInstance()->actualizarProtocolo($_POST);
+        echo json_encode(array('valor' => 'protocoloActualizado', 'id_protocolo' => $_POST['id_protocolo'], 'id_responsable' => $_POST['id_responsable']) );
     }
 
 }

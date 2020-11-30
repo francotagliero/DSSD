@@ -41,5 +41,27 @@ class UsuarioRepository extends PDORepository{
         return $lista;
     }
 
+    public function responsablesProtocolo(){
+        $consulta = "SELECT * FROM usuario WHERE roles = :roles";
+
+        $args = array('roles' => 'responsable');
+
+        $mapper = function($elemento) {
+            $usuario = new Usuario(
+            $elemento['id'],
+            $elemento['username'],
+            $elemento['password'],
+            $elemento['email'],
+            $elemento['is_active'],
+            $elemento['roles']
+            );
+
+            return $usuario;
+        };
+        $lista= $this->queryList($consulta, $args, $mapper);
+
+        return $lista;
+    }
+
    
 }

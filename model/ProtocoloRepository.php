@@ -46,6 +46,14 @@ class ProtocoloRepository extends PDORepository{
         return $lista;
     }
 
+    public function actualizarProtocolo($datos){
+        $query = "UPDATE protocolos SET id_responsable = :id_responsable, fecha_inicio = :fecha_inicio, fecha_fin = :fecha_fin, orden = :orden, es_local = :es_local WHERE id_protocolo = :id_protocolo";
+
+        $args = array('id_responsable' => $datos['id_responsable'], 'fecha_inicio' => $datos['fecha_inicio'], 'fecha_fin' => $datos['fecha_fin'], 'orden' => $datos['orden'], 'es_local' => $datos['es_local'], 'id_protocolo' => $datos['id_protocolo']);
+
+        $this->queryArgs($query, $args);
+    }
+
 
 
    
