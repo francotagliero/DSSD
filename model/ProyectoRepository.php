@@ -44,5 +44,11 @@ class ProyectoRepository extends PDORepository{
         return $lista;
     }
 
+    public function getIdCase($id){
+        $query = "SELECT case_id FROM proyectos WHERE id_proyecto = ".$id;
+        $protocolos = $this->query($query);
+        return $protocolos->fetchAll();
+    }
+
    
 }

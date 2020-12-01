@@ -91,7 +91,7 @@
             $this->estado = $estado;
         }
 
-		public function __construct($id_protocolo, $nombre, $id_responsable, $fecha_fin, $fecha_inicio, $orden, $es_local, $puntaje, $id_proyecto, $estado){
+		public function __construct($id_protocolo = null, $nombre = null, $id_responsable = null, $fecha_fin = null, $fecha_inicio = null, $orden = null, $es_local = null, $puntaje = null, $id_proyecto = null, $estado = null){
             $this->setIdProtocolo($id_protocolo);
             $this->setNombre($nombre);
             $this->setIdResponsable($id_responsable);

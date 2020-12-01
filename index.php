@@ -29,7 +29,7 @@ require_once('model/ProyectoRepository.php');
 /* VIEW */
 require_once('view/TwigView.php');
 require_once('view/Login.php');
-require_once('view/Protocolos.php');
+require_once('view/ProtocoloView.php');
 require_once('view/ConfiguracionProtocolos.php');
 
 
@@ -42,6 +42,8 @@ if (isset($_GET["action"])){
 
         /* PROTOCOLO */
         case 'protocolos': { ProtocoloController::getInstance()->getProtocolos(); break; }
+
+        case 'ejecutar': { ProtocoloController::getInstance()->ejecutarProtocolo($_GET["n"]); break; }
 
         case 'token': { BaseController::getInstance()->conexion(); break; }
 

@@ -2,7 +2,7 @@
 
 
 
-class Protocolo extends TwigView {
+class ProtocoloView extends TwigView {
     
     public function show($arg) {
         

@@ -65,6 +65,35 @@ class ProtocoloController{
         echo json_encode(array('valor' => 'protocoloActualizado', 'id_protocolo' => $_POST['id_protocolo'], 'id_responsable' => $_POST['id_responsable']) );
     }
 
+    public function ejecutarProtocolo($id){
+
+        ProtocoloRepository::getInstance()->ejecutarProtocolo($id);
+
+        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($id);
+
+        $idProyecto = $protocolo[0]['id_proyecto'];
+
+        $case = ProyectoRepository::getInstance()->getIdCase($idProyecto);
+        $caseId = $case[0]['case_id'];
+        $uri = 'API/bpm/task?f=caseId='.$caseId;
+        $request = RequestController::doTheRequest('GET', $uri);
+
+        $taskId = $request['data'][0]->id;
+        $uri = 'API/bpm/userTask/'.$taskId.'/execution';
+        $request = RequestController::doTheRequest('POST', $uri);
+
+        $view = new Protocolo();
+
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
+
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'hecho'=> $this->sesion->getSesion('id_proceso'),
+            'protocolos' => $protocolos
+        ));
+
+    }
+
 }
 
 ?>

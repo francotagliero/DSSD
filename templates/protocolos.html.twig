@@ -12,11 +12,12 @@
         <table class="table">
       <thead>
         <tr>
-          <th scope="col">Titulo</th>
-          <th scope="col">Fecha Inicio</th>
-          <th scope="col">Fecha Fin</th>
-          <th scope="col">Estado</th>
-          <th scope="col">Accion</th>
+            <th scope="col">Titulo</th>
+            <th scope="col">Fecha Inicio</th>
+            <th scope="col">Fecha Fin</th>
+            <th scope="col">Modo ejecucion</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Accion</th>
         </tr>
       </thead>
       <tbody>
@@ -29,13 +30,15 @@
                     <span class="label label-primary">Local</span>
                 {% else %} 
                     <span class="label label-warning">Remoto</span>
-                {% endif %}</td>
+                {% endif %}
+            </td>
+            <td>{{protocolo.estado}}</td>
             <td>
               {% if protocolo.puntaje == 0 %}
-                <button type="button" class="btn btn-primary btn-sm">Ejecutar</button>
+                <a href="./?action=ejecutar&n={{ protocolo.id_protocolo }}" type="button" class="btn btn-primary btn-sm">Ejecutar</a>
               {% else %} 
                     <a href="#" class="btn btn-primary btn-sm disabled" role="button" aria-disabled="true">Ejecutado</a>
-              {% endif %}</td>
+              {% endif %}
             </td>
         </tr>
         {% endfor %}

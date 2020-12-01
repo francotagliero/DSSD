@@ -54,6 +54,19 @@ class ProtocoloRepository extends PDORepository{
         $this->queryArgs($query, $args);
     }
 
+    public function getProtocolo($id){
+
+        $query = "SELECT * FROM protocolos WHERE id_protocolo = ".$id;
+        $protocolos = $this->query($query);
+        return $protocolos->fetchAll();
+    }
+
+    public function ejecutarProtocolo($id){
+        $query = ("UPDATE protocolos SET estado = 'ejecutado' WHERE id_protocolo = ".$id);
+        $this->query($query);
+        return true;
+    }
+
 
 
    
