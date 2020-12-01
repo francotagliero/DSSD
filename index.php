@@ -45,6 +45,8 @@ if (isset($_GET["action"])){
 
         case 'ejecutar': { ProtocoloController::getInstance()->ejecutarProtocolo($_GET["n"]); break; }
 
+        case 'determinar_resultado': { ProtocoloController::getInstance()->determinarResultado($_GET["n"]); break; }
+
         case 'token': { BaseController::getInstance()->conexion(); break; }
 
         case 'gateway': { BaseController::getInstance()->getProcessId(); break; }

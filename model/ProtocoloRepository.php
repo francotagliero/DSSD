@@ -67,6 +67,13 @@ class ProtocoloRepository extends PDORepository{
         return true;
     }
 
+    public function setPuntaje($id, $puntaje){
+        $query = ("UPDATE protocolos SET estado = 'finalizado', puntaje = :puntaje WHERE id_protocolo = :id_protocolo");
+        $args = array('puntaje' => $puntaje, 'id_protocolo' => $id);
+        $this->queryArgs($query, $args);
+        return true;
+    }
+
 
 
    

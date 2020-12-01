@@ -17,6 +17,7 @@
             <th scope="col">Fecha Fin</th>
             <th scope="col">Modo ejecucion</th>
             <th scope="col">Estado</th>
+            <th scope="col">Puntaje</th>
             <th scope="col">Accion</th>
         </tr>
       </thead>
@@ -33,12 +34,13 @@
                 {% endif %}
             </td>
             <td>{{protocolo.estado}}</td>
+            <td>{{protocolo.puntaje}}</td>
             <td>
-              {% if protocolo.puntaje == 0 %}
-                <a href="./?action=ejecutar&n={{ protocolo.id_protocolo }}" type="button" class="btn btn-primary btn-sm">Ejecutar</a>
-              {% else %} 
-                    <a href="#" class="btn btn-primary btn-sm disabled" role="button" aria-disabled="true">Ejecutado</a>
-              {% endif %}
+                {% if protocolo.estado == 'pendiente' %}
+                    <a href="./?action=ejecutar&n={{ protocolo.id_protocolo }}" type="button" class="btn btn-primary btn-sm">Ejecutar</a>
+                {% elseif protocolo.puntaje == 0 %}
+                    <a href="./?action=determinar_resultado&n={{ protocolo.id_protocolo }}" type="button" class="btn btn-primary btn-sm">Determinar resultado</a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}

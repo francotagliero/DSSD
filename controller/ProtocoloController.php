@@ -20,7 +20,7 @@ class ProtocoloController{
 
     public function getProtocolos(){
         
-        $view = new Protocolos();
+        $view = new ProtocoloView();
 
         $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
 
@@ -83,6 +83,24 @@ class ProtocoloController{
         $request = RequestController::doTheRequest('POST', $uri);
 
         $view = new Protocolo();
+
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
+
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'hecho'=> $this->sesion->getSesion('id_proceso'),
+            'protocolos' => $protocolos
+        ));
+
+    }
+
+    public function determinarResultado($id){
+
+        $puntaje = rand(1, 10);
+
+        ProtocoloRepository::getInstance()->setPuntaje($id, $puntaje);
+
+        $view = new ProtocoloView();
 
         $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
 
