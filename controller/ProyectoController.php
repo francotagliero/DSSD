@@ -32,6 +32,16 @@ class ProyectoController{
     public function isLogged() {
         return LoginSystem::getInstance()->isLogged();
     }
+
+    public function cancelarProyecto($id) {
+        $view = new ProtocoloView();
+        if(ProtocoloController::getInstance()->esJefe()){
+            ProyectoRepository::getInstance()->cancelarProyecto($id);
+            $mensaje='Proyecto cancelado.';
+            ProtocoloController::getInstance()->mostrarProtocolos($mensaje);
+        }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
+    }
+
 }
 
 ?>

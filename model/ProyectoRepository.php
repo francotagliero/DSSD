@@ -14,7 +14,7 @@ class ProyectoRepository extends PDORepository{
 
     public function setIdCase($nombre_proyecto, $id_case){
         
-        $query = "UPDATE proyectos SET case_id = :case_id WHERE nombre = :nombre";
+        $query = "UPDATE proyectos SET case_id = :case_id WHERE nombre = :nombre and borrado = 0";
 
         $args = array('nombre' => $nombre_proyecto, 'case_id' => $id_case);
 
@@ -22,7 +22,7 @@ class ProyectoRepository extends PDORepository{
     }
 
     public function getProyectos($id_usuario){
-        $consulta = "SELECT * FROM proyectos WHERE id_responsable = :id_responsable";
+        $consulta = "SELECT * FROM proyectos WHERE id_responsable = :id_responsable and borrado = 0";
 
         $args = array('id_responsable' => $id_usuario);
 
@@ -33,7 +33,8 @@ class ProyectoRepository extends PDORepository{
             $elemento['fecha_inicio'],
             $elemento['fecha_fin'],
             $elemento['id_responsable'],
-            $elemento['case_id']
+            $elemento['case_id'],
+            $elemento['borrado']
             );
 
             return $proyecto;
@@ -48,6 +49,13 @@ class ProyectoRepository extends PDORepository{
         $query = "SELECT case_id FROM proyectos WHERE id_proyecto = ".$id;
         $protocolos = $this->query($query);
         return $protocolos->fetchAll();
+    }
+
+    public function cancelarProyecto($id){ 
+        $query = "UPDATE proyectos SET borrado = :borrado WHERE id_proyecto = :id_proyecto";
+
+        $args = array('borrado' => 1, 'id_proyecto' => $id);
+        return $this->queryArgs($query, $args);
     }
 
    

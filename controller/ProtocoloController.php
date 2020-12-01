@@ -112,6 +112,59 @@ class ProtocoloController{
 
     }
 
+    public function esJefe(){
+        $rol = UsuarioRepository::getInstance()->getRol($this->sesion->getSesion('id_user_bd'));
+        $view = new ProtocoloView();
+        if($rol[0]['roles'] == 'jefe'){
+            return true;
+        }else return false;
+    }
+
+    public function TomarDecision(){
+        $view = new ProtocoloView();
+
+        if($this->getInstance()->esJefe()){
+
+            $protocolos = ProtocoloRepository::getInstance()->getProtocolosDesaprobados($this->sesion->getSesion('id_user_bd'));
+            $array = array('username' => $this->sesion->getSesion('user_bonita'),'protocolos' => $protocolos);
+
+            $view->TomarDecision($array);
+            
+            }
+            else{ $view->mensaje(array('mensaje' => 'No tiene permiso')); }
+        
+    }
+
+    public function reiniciarProtocolo($id){
+        if($this->getInstance()->esJefe()){
+            ProtocoloRepository::getInstance()->reiniciarProtocolo($id);
+            $mensaje='Protocolo reiniciado.';
+            $this->mostrarProtocolos($mensaje);
+        }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
+    }
+
+    public function reiniciarProyecto($id){
+        if($this->getInstance()->esJefe()){
+            ProtocoloRepository::getInstance()->reiniciarProyecto($id);
+            $mensaje='Proyecto reiniciado.';
+            $this->mostrarProtocolos($mensaje);
+        }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
+    }
+
+    public function terminarProtocolo($id){
+        if($this->getInstance()->esJefe()){
+            ProtocoloRepository::getInstance()->terminarProtocolo($id);
+            $mensaje='Protocolo terminado.';
+            $this->mostrarProtocolos($mensaje);
+        }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
+    }
+
+    public function mostrarProtocolos($mensaje){
+        $view = new ProtocoloView();
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolosDesaprobados($this->sesion->getSesion('id_user_bd'));
+        $array = array('username' => $this->sesion->getSesion('user_bonita'),'protocolos' => $protocolos, 'mensaje' => $mensaje);
+        $view->TomarDecision($array);
+    }
 }
 
 ?>

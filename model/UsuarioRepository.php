@@ -63,5 +63,11 @@ class UsuarioRepository extends PDORepository{
         return $lista;
     }
 
+    public function getRol($id){
+        $query = "SELECT roles FROM usuario WHERE id='$id'";
+        $rol = $this->query($query);
+        return $rol->fetchAll();
+    }
+
    
 }

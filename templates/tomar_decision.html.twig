@@ -1,0 +1,54 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+	| Protocolos
+{% endblock %}
+
+{% block main %}
+	<section class="container">
+
+		{% if protocolos %}
+      <h1>Protocolos</h1>
+        <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre del protocolo</th>
+          <th scope="col">Proyecto</th> 
+          <th scope="col">Puntaje</th>
+          <th scope="col">Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for protocolo in protocolos %}
+        <tr>
+            <td>{{protocolo.nombre}}</td>
+            <td>{{protocolo.proyecto}}</td>
+            <td> {{protocolo.puntaje}}</td>
+            <td> <a class="btn btn-primary" href="index.php?action=reiniciarProyecto&id={{protocolo.id_proyecto}}" role="button">Reiniciar proyecto</a>
+                <a class="btn btn-primary" href="index.php?action=reiniciarProtocolo&id={{protocolo.id_protocolo}}" role="button">Reiniciar protocolo</a>
+                <a class="btn btn-primary" href="index.php?action=cancelarProyecto&id={{protocolo.id_proyecto}}" role="button">Cancelar proyecto</a>
+                <a class="btn btn-primary" href="index.php?action=terminarProtocolo&id={{protocolo.id_protocolo}}" role="button">Continuar</a>
+            </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <div class="alert alert-success" role="alert">
+        No hay protocolos sobre cual decidir.
+      </div>
+  {% endif %}
+    {% if mensaje %}
+      <div class="alert alert-success" role="alert">
+        <button class="close" data-dismiss="alert" id="cerrarMensaje">&times;</button>
+        <strong>{{ mensaje }}
+
+      </div>
+    {% endif %}
+  </section>
+  
+
+{% endblock %}
+{% block scripts %}
+<script src="js/tomar_decision.js"></script>
+{% endblock %}

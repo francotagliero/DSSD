@@ -11,6 +11,7 @@
         private $puntaje;
         private $id_proyecto;
         private $estado;
+        private $borrado;
 
         public function getIdProtocolo(){
 			return $this->id_protocolo;
@@ -91,7 +92,15 @@
             $this->estado = $estado;
         }
 
-		public function __construct($id_protocolo = null, $nombre = null, $id_responsable = null, $fecha_fin = null, $fecha_inicio = null, $orden = null, $es_local = null, $puntaje = null, $id_proyecto = null, $estado = null){
+        public function getBorrado(){
+            return $this->estado;
+        }
+
+        public function setBorrado($borrado){
+            $this->borrado = $borrado;
+        }
+
+		public function __construct($id_protocolo, $nombre, $id_responsable, $fecha_fin, $fecha_inicio, $orden, $es_local, $puntaje, $id_proyecto, $estado, $borrado){
             $this->setIdProtocolo($id_protocolo);
             $this->setNombre($nombre);
             $this->setIdResponsable($id_responsable);
@@ -102,6 +111,7 @@
             $this->setEsLocal($es_local);
             $this->setPuntaje($puntaje);
             $this->setEstado($estado);
+            $this->setBorrado($borrado);
         }
 
 	}

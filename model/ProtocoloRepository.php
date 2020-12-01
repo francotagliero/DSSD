@@ -20,7 +20,7 @@ class ProtocoloRepository extends PDORepository{
     }
 
     public function getProtocolosProyecto($id_proyecto){
-        $consulta = "SELECT * FROM protocolos WHERE id_proyecto = :id_proyecto";
+        $consulta = "SELECT * FROM protocolos WHERE id_proyecto = :id_proyecto and borrado = 0";
 
         $args = array('id_proyecto' => $id_proyecto);
 
@@ -35,7 +35,8 @@ class ProtocoloRepository extends PDORepository{
             $elemento['es_local'],
             $elemento['puntaje'],
             $elemento['id_proyecto'],
-            $elemento['estado']
+            $elemento['estado'],
+            $elemento['borrado']
             );
 
             return $protocolo;
@@ -47,7 +48,7 @@ class ProtocoloRepository extends PDORepository{
     }
 
     public function actualizarProtocolo($datos){
-        $query = "UPDATE protocolos SET id_responsable = :id_responsable, fecha_inicio = :fecha_inicio, fecha_fin = :fecha_fin, orden = :orden, es_local = :es_local WHERE id_protocolo = :id_protocolo";
+        $query = "UPDATE protocolos SET id_responsable = :id_responsable, fecha_inicio = :fecha_inicio, fecha_fin = :fecha_fin, orden = :orden, es_local = :es_local WHERE id_protocolo = :id_protocolo and borrado = 0";
 
         $args = array('id_responsable' => $datos['id_responsable'], 'fecha_inicio' => $datos['fecha_inicio'], 'fecha_fin' => $datos['fecha_fin'], 'orden' => $datos['orden'], 'es_local' => $datos['es_local'], 'id_protocolo' => $datos['id_protocolo']);
 
@@ -74,6 +75,36 @@ class ProtocoloRepository extends PDORepository{
         return true;
     }
 
+    public function getProtocolosDesaprobados($idJefe){
+        
+        $query = "SELECT  protocolos.nombre, protocolos.id_protocolo, protocolos.id_proyecto, proyectos.nombre AS proyecto, protocolos.puntaje FROM proyectos INNER JOIN protocolos ON proyectos.id_proyecto = protocolos.id_proyecto WHERE proyectos.id_responsable = '$idJefe' AND protocolos.puntaje > 0 AND protocolos.puntaje <= 6 AND protocolos.borrado <> 1 AND proyectos.borrado <> 1 AND protocolos.estado = 'completado'";
+        $protocolos = $this->query($query);
+
+        return $protocolos->fetchAll();
+        }
+
+        public function reiniciarProtocolo($id){
+            $query = "UPDATE protocolos SET estado = :estado, puntaje = :puntaje WHERE id_protocolo = :id_protocolo";
+     
+             $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_protocolo' => $id);
+              return $this->queryArgs($query, $args);
+             
+         }
+     
+         public function terminarProtocolo($id){
+             $query = "UPDATE protocolos SET estado = :estado WHERE id_protocolo = :id_protocolo";
+     
+             $args = array('estado' => 'terminado', 'id_protocolo' => $id);
+             return $this->queryArgs($query, $args);
+         }
+     
+         public function reiniciarProyecto($idProyecto){
+            $query = "UPDATE protocolos SET estado = :estado, puntaje = :puntaje WHERE id_proyecto = :id_proyecto";
+     
+             $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_proyecto' => $idProyecto);
+             return $this->queryArgs($query, $args);
+         
+         }
 
 
    

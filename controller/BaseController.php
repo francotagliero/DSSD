@@ -57,7 +57,7 @@ class BaseController {
             $cookieJar = new SessionCookieJar('MiCookie', true);
             $client = new Client([
                 // Base URI is used with relative requests
-                'base_uri' => 'http://localhost:8080/bonita/',
+                'base_uri' => 'http://localhost:12310/bonita/',
                 // You can set any number of default request options.
                 'timeout'  => 4.0,
                 'cookies' => $cookieJar
@@ -112,7 +112,7 @@ class BaseController {
         $cookieJar = new SessionCookieJar('MiCookie', true);
         $client = new Client([
             // Base URI is used with relative requests
-            'base_uri' => 'http://localhost:8080/bonita/',
+            'base_uri' => 'http://localhost:12310/bonita/',
             // You can set any number of default request options.
             'timeout'  => 4.0,
             'cookies' => $cookieJar
@@ -136,7 +136,7 @@ class BaseController {
 
         $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
 
-        $view = new Protocolo();
+        $view = new ProtocoloView();
 
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
@@ -240,7 +240,7 @@ class BaseController {
 
         $user = 'walter.bates';
         $password = 'bpm';
-        $base_uri = 'http://localhost:8080/bonita/';
+        $base_uri = 'http://localhost:12310/bonita/';
 
         
             //Creo una cookie jar para almacenar las cookies que me va a devolver Bonita luego del request del loginservice

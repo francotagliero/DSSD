@@ -13,6 +13,7 @@ require_once('controller/GuzzleController.php');
 require_once('controller/AccessController.php');
 require_once('controller/RequestController.php');
 require_once('controller/SesionController.php');
+require_once('controller/ProyectoController.php');
 
 /* CLASS */
 require_once('class/Usuario.php');
@@ -60,6 +61,16 @@ if (isset($_GET["action"])){
         case 'configurarProtocoloBD': { ProtocoloController::getInstance()->configurarProtocoloBD(); break; }
 
         case 'configuracion_protocolos': { ProtocoloController::getInstance()->configurarProtocolos(); break; }
+
+        case 'tomar_decision': { ProtocoloController::getInstance()->tomarDecision(); break; }
+        
+        case 'reiniciarProtocolo': { ProtocoloController::getInstance()->reiniciarProtocolo($_GET['id']);break;}
+
+        case 'terminarProtocolo': { ProtocoloController::getInstance()->terminarProtocolo($_GET['id']); break; }
+
+        case 'reiniciarProyecto': { ProtocoloController::getInstance()->reiniciarProyecto($_GET['id']); break; }
+
+        case 'cancelarProyecto': { ProyectoController::getInstance()->cancelarProyecto($_GET['id']); break;}
 
         default: { BaseController::getInstance()->login(); break; }
     }
