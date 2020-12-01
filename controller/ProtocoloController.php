@@ -82,7 +82,7 @@ class ProtocoloController{
         $uri = 'API/bpm/userTask/'.$taskId.'/execution';
         $request = RequestController::doTheRequest('POST', $uri);
 
-        $view = new Protocolo();
+        $view = new ProtocoloView();
 
         $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
 
