@@ -35,12 +35,8 @@ class BaseController {
     public function login(){
 
         if(empty($_POST) ){
-
             $view = new Login();
-            $view->show(array(
-                'hola' => 'hola'
-            ));
-
+            $view->show();
         }
         else{
             $usuario = $_POST["username"];
@@ -94,7 +90,7 @@ class BaseController {
             $id_proceso = $response['data'][0]->id; #Obtengo id del proceso
             $this->sesion->setSesion('id_proceso', $id_proceso);
 
-            header("Location:./?action=configuracion_protocolos");
+            header("Location:./?action=proyectos");
 
 
 

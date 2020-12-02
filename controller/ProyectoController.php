@@ -36,7 +36,7 @@ class ProyectoController{
             $client = GuzzleController::getGuzzleClient();
 
             $idProceso = $this->sesion->getSesion('id_proceso');
-            
+
             /*
              * Instancio el proceso y obtengo el case_id del nuevo proyecto
              * http://localhost:8080/bonita/API/bpm/process/5149425974540291037/instantiation
