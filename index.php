@@ -31,6 +31,7 @@ require_once('model/ProyectoRepository.php');
 require_once('view/TwigView.php');
 require_once('view/Login.php');
 require_once('view/ProtocoloView.php');
+require_once('view/ProyectoView.php');
 require_once('view/ConfiguracionProtocolos.php');
 
 
@@ -52,8 +53,6 @@ if (isset($_GET["action"])){
 
         case 'gateway': { BaseController::getInstance()->getProcessId(); break; }
 
-        case 'login': { BaseController::getInstance()->login(); break; }
-
         case 'logout': { BaseController::getInstance()->logout(); break; }
 
         case 'instanciacion': { BaseController::getInstance()->instanciacion(); break; }
@@ -68,7 +67,15 @@ if (isset($_GET["action"])){
 
         case 'terminarProtocolo': { ProtocoloController::getInstance()->terminarProtocolo($_GET['id']); break; }
 
-        case 'reiniciarProyecto': { ProtocoloController::getInstance()->reiniciarProyecto($_GET['id']); break; }
+
+        /* PROYECTO */
+        case 'proyectos': { ProyectoController::getInstance()->getProyectos(); break;}
+
+        case 'nuevoProyecto': { ProyectoController::getInstance()->nuevoProyecto(); break;}
+
+        case 'nuevoProyectoAction': { ProyectoController::getInstance()->nuevoProyectoAction(); break;}
+
+        case 'reiniciarProyecto': { ProyectoController::getInstance()->reiniciarProyecto($_GET['id']); break; }
 
         case 'cancelarProyecto': { ProyectoController::getInstance()->cancelarProyecto($_GET['id']); break;}
 

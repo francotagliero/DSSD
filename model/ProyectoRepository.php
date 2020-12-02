@@ -58,5 +58,12 @@ class ProyectoRepository extends PDORepository{
         return $this->queryArgs($query, $args);
     }
 
+    public function altaProyecto($idResponsable, $nombre, $fechaInicio, $fechaFin, $caseId){
+        $query = "INSERT INTO proyectos (nombre, fecha_inicio, fecha_fin, id_responsable, case_id, `borrado`) VALUES (?, ?, ?, ?, ?, ?);";
+
+        $args = array($nombre, $fechaInicio, $fechaFin, $idResponsable, $caseId, 0);
+        return $this->queryArgs($query, $args);
+    }
+
    
 }

@@ -26,14 +26,9 @@ class BaseController {
 
     public function home(){
 
-        $view = new ProtocoloView();
+        $view = new Login();
 
-        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
-
-        $view->show(array(
-            'username' => $this->sesion->getSesion('user_bonita'),
-            'protocolos' => $protocolos
-        ));
+        $view->show(array());
 
     }
 
@@ -57,7 +52,7 @@ class BaseController {
             $cookieJar = new SessionCookieJar('MiCookie', true);
             $client = new Client([
                 // Base URI is used with relative requests
-                'base_uri' => 'http://localhost:12310/bonita/',
+                'base_uri' => 'http://localhost:8080/bonita/',
                 // You can set any number of default request options.
                 'timeout'  => 4.0,
                 'cookies' => $cookieJar
@@ -79,6 +74,8 @@ class BaseController {
             $this->sesion->setSesion('base_uri_bonita', 'http://localhost:8080/bonita/');
             $this->sesion->setSesion('X-Bonita-API-Token', $token->getValue());
             $this->sesion->setSesion('id_user_bd', $resultado[0]->getId() );
+            $this->sesion->setSesion('logged', true);
+            $this->sesion->setSesion('rol', $resultado[0]->getRoles());
 
             #Busco el id del proceso a traves del nombre. 
         
@@ -112,7 +109,7 @@ class BaseController {
         $cookieJar = new SessionCookieJar('MiCookie', true);
         $client = new Client([
             // Base URI is used with relative requests
-            'base_uri' => 'http://localhost:12310/bonita/',
+            'base_uri' => 'http://localhost:8080/bonita/',
             // You can set any number of default request options.
             'timeout'  => 4.0,
             'cookies' => $cookieJar
@@ -240,7 +237,7 @@ class BaseController {
 
         $user = 'walter.bates';
         $password = 'bpm';
-        $base_uri = 'http://localhost:12310/bonita/';
+        $base_uri = 'http://localhost:8080/bonita/';
 
         
             //Creo una cookie jar para almacenar las cookies que me va a devolver Bonita luego del request del loginservice

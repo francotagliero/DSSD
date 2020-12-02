@@ -7,6 +7,8 @@
 {% block main %}
     <section class="container">
 
+        <a href="./?action=nuevoProyecto" type="button" class="btn btn-success btn-sm">Nuevo proyecto</a>
+
         {% if proyectos %}
             <h1>Proyectos</h1>
             <table class="table">
@@ -15,7 +17,6 @@
                     <th scope="col">Titulo</th>
                     <th scope="col">Fecha Inicio</th>
                     <th scope="col">Fecha Fin</th>
-                    <th scope="col">Estado</th>
                     <th scope="col">Accion</th>
                 </tr>
                 </thead>
@@ -23,19 +24,10 @@
                 {% for proyecto in proyectos %}
                     <tr>
                         <td>{{proyecto.nombre}}</td>
-                        <td>{{proyecto.fecha_inicio}}</td>
-                        <td>{{proyecto.fecha_fin}}</td>
-                        <td> {% if proyecto.es_local == 1 %}
-                                <span class="label label-primary">Local</span>
-                            {% else %}
-                                <span class="label label-warning">Remoto</span>
-                            {% endif %}</td>
+                        <td>{{proyecto.fechaInicio}}</td>
+                        <td>{{proyecto.fechaFin}}</td>
                         <td>
-                            {% if proyecto.puntaje == 0 %}
-                                <button type="button" class="btn btn-primary btn-sm">Ejecutar</button>
-                            {% else %}
-                                <a href="#" class="btn btn-primary btn-sm disabled" role="button" aria-disabled="true">Ejecutado</a>
-                            {% endif %}</td>
+                            <button type="button" class="btn btn-primary btn-sm">Ver</button>
                         </td>
                     </tr>
                 {% endfor %}

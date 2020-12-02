@@ -114,10 +114,10 @@ class ProtocoloController{
 
     public function esJefe(){
         $rol = UsuarioRepository::getInstance()->getRol($this->sesion->getSesion('id_user_bd'));
-        $view = new ProtocoloView();
         if($rol[0]['roles'] == 'jefe'){
             return true;
-        }else return false;
+        }
+        return  false;
     }
 
     public function TomarDecision(){
@@ -130,33 +130,32 @@ class ProtocoloController{
 
             $view->TomarDecision($array);
             
-            }
-            else{ $view->mensaje(array('mensaje' => 'No tiene permiso')); }
+        } else {
+            $view->mensaje(array('mensaje' => 'No tiene permiso'));
+        }
         
     }
 
     public function reiniciarProtocolo($id){
+        $view = new ProtocoloView();
         if($this->getInstance()->esJefe()){
             ProtocoloRepository::getInstance()->reiniciarProtocolo($id);
             $mensaje='Protocolo reiniciado.';
             $this->mostrarProtocolos($mensaje);
-        }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
-    }
-
-    public function reiniciarProyecto($id){
-        if($this->getInstance()->esJefe()){
-            ProtocoloRepository::getInstance()->reiniciarProyecto($id);
-            $mensaje='Proyecto reiniciado.';
-            $this->mostrarProtocolos($mensaje);
-        }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
+        } else {
+            $view->mensaje(array('mensaje' => 'No tiene permiso'));
+        }
     }
 
     public function terminarProtocolo($id){
+        $view = new ProtocoloView();
         if($this->getInstance()->esJefe()){
             ProtocoloRepository::getInstance()->terminarProtocolo($id);
             $mensaje='Protocolo terminado.';
             $this->mostrarProtocolos($mensaje);
-        }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
+        } else {
+            $view->mensaje(array('mensaje' => 'No tiene permiso'));
+        }
     }
 
     public function mostrarProtocolos($mensaje){

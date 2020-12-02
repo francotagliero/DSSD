@@ -16,21 +16,72 @@ class ProyectoController{
     }
 
     private function __construct() {
-
-    }
-
-    public function getProyectos(){
-
-        $view = new Proyecto();
-
-        $stmt = ProyectoRepository::getInstance()->getProyectos();
-        $view->show(array('proyectos' => $stmt, 'isLogged' => $this->isLogged()));
-
+        $this->sesion = SesionController::getInstance();
     }
 
     // Retorna true si el usuario esta logeado, false en caso contrario.
     public function isLogged() {
-        return LoginSystem::getInstance()->isLogged();
+        return $this->sesion->getSesion('logged');
+    }
+
+    public function nuevoProyecto(){
+        $view = new ProyectoView();
+
+        $view->nuevo(array());
+    }
+
+    public function nuevoProyectoAction(){
+        if ($this->isLogged()) {
+
+            $client = GuzzleController::getGuzzleClient();
+
+            $idProceso = $this->sesion->getSesion('id_proceso');
+            
+            /*
+             * Instancio el proceso y obtengo el case_id del nuevo proyecto
+             * http://localhost:8080/bonita/API/bpm/process/5149425974540291037/instantiation
+            */
+            $caseId = RequestController::instanciarProceso($client, $idProceso);
+
+            /*
+             * Guardo el proyecto junto con el case_id unico por cada proyecto
+             */
+            ProyectoRepository::getInstance()->altaProyecto($this->sesion->getSesion('id_user_bd'), $_POST['nombre'], $_POST['fechaInicio'], $_POST['fechaFin'],$caseId);
+
+            /*
+             * Obtengo la tarea actual del proyecto
+             * http://localhost:8080/bonita/API/bpm/task?f=caseId=9
+             */
+            $idTask = RequestController::obtenerTarea($client, $caseId);
+
+            /*
+             * Busco el usuario al cual le voy asignar la tarea
+             */
+            $idUser = RequestController::getUserId($client);
+
+            /*
+             * Asigno a la actividad ($idTask) el usuario que la va a ejecutar
+             * http://localhost:8080/bonita/API/bpm/userTask/idTask
+             */
+            $request = RequestController::asignarTarea($client, $idTask, $idUser);
+
+            $this->getProyectos();
+        } else {
+            BaseController::getInstance()->home();
+        }
+    }
+
+    public function getProyectos(){
+        $view = new ProyectoView();
+
+        $stmt = ProyectoRepository::getInstance()->getProyectos($this->sesion->getSesion('id_user_bd'));
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'rol' => $this->sesion->getSesion('rol'),
+            'proyectos' => $stmt,
+            'isLogged' => $this->isLogged())
+        );
+
     }
 
     public function cancelarProyecto($id) {
@@ -39,7 +90,20 @@ class ProyectoController{
             ProyectoRepository::getInstance()->cancelarProyecto($id);
             $mensaje='Proyecto cancelado.';
             ProtocoloController::getInstance()->mostrarProtocolos($mensaje);
-        }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
+        } else {
+            $view->mensaje(array('mensaje' => 'No tiene permiso'));
+        }
+    }
+
+    public function reiniciarProyecto($id){
+        $view = new ProtocoloView();
+        if(ProtocoloController::getInstance()->esJefe()){
+            ProtocoloRepository::getInstance()->reiniciarProyecto($id);
+            $mensaje='Proyecto reiniciado.';
+            ProtocoloController::getInstance()->mostrarProtocolos($mensaje);
+        } else {
+            $view->mensaje(array('mensaje' => 'No tiene permiso'));
+        }
     }
 
 }
