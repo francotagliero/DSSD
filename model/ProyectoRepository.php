@@ -65,5 +65,11 @@ class ProyectoRepository extends PDORepository{
         return $this->queryArgs($query, $args);
     }
 
+    public function getProyecto($id){
+        $query = "SELECT * FROM proyectos WHERE id_proyecto = ".$id;
+        $protocolos = $this->query($query);
+        return $protocolos->fetchAll()[0];
+    }
+
    
 }
