@@ -88,11 +88,10 @@ class ProyectoController{
         $view = new ProtocoloView();
         if(ProtocoloController::getInstance()->esJefe()){
             ProyectoRepository::getInstance()->cancelarProyecto($id);
+            ProtocoloRepository::getInstance()->cancelarProtocolos($id);
             $mensaje='Proyecto cancelado.';
             ProtocoloController::getInstance()->mostrarProtocolos($mensaje);
-        } else {
-            $view->mensaje(array('mensaje' => 'No tiene permiso'));
-        }
+        }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
     }
 
     public function reiniciarProyecto($id){

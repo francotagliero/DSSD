@@ -106,6 +106,14 @@ class ProtocoloRepository extends PDORepository{
          
          }
 
+        public function cancelarProtocolos($idProyecto){
+        $query = "UPDATE protocolos SET borrado = :borrado WHERE id_proyecto = :id_proyecto";
+
+        $args = array('borrado' => 1, 'id_proyecto' => $idProyecto);
+        return $this->queryArgs($query, $args);
+
+    }
+
 
    
 }
