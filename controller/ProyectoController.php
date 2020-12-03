@@ -105,6 +105,48 @@ class ProyectoController{
         }
     }
 
+    public function agregarProtocolo($idProyecto){
+        $view = new ProyectoView();
+
+        $proyecto = ProyectoRepository::getInstance()->getProyecto($idProyecto);
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolosProyecto($idProyecto);
+        $usuarios = UsuarioRepository::getInstance()->usuarios();
+
+        $view->agregarProtocolo(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'rol' => $this->sesion->getSesion('rol'),
+            'proyecto' => $proyecto,
+            'protocolos' => $protocolos,
+            'usuarios' => $usuarios,
+            'id_proyecto' => $idProyecto,
+            'isLogged' => $this->isLogged()
+        ));
+    }
+
+    public function agregarProtocoloAction(){
+
+        $view = new ProyectoView();
+
+        /*
+         * Guardo el protocolo
+         */
+        ProtocoloRepository::getInstance()->altaProtocolo($_POST['nombre'], $_POST['responsable'], $_POST['fechaInicio'], $_POST['fechaFin'], $_POST['idProyecto'], $_POST['esLocal']);
+
+
+        $proyecto = ProyectoRepository::getInstance()->getProyecto($_POST['idProyecto']);
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolosProyecto($_POST['idProyecto']);
+        $usuarios = UsuarioRepository::getInstance()->usuarios();
+
+        $view->agregarProtocolo(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'rol' => $this->sesion->getSesion('rol'),
+            'proyecto' => $proyecto,
+            'protocolos' => $protocolos,
+            'usuarios' => $usuarios,
+            'isLogged' => $this->isLogged()
+        ));
+    }
+
 }
 
 ?>

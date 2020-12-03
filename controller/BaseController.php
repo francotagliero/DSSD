@@ -25,10 +25,22 @@ class BaseController {
     }
 
     public function home(){
+        if(empty($this->sesion->getSesion('user_bonita') ) ){
 
-        $view = new Login();
+            $view = new Login();
 
-        $view->show(array());
+            $view->show(array());
+
+        }
+        else{
+
+            $view = new Backend();
+            $view->show(array(
+                'rol' => $this->sesion->getSesion('rol'),
+                'username' => $this->sesion->getSesion('user_bonita')
+            ));
+        }
+
 
     }
 
@@ -337,6 +349,25 @@ class BaseController {
     
             
             
+    }
+
+    public function backend(){
+        if(empty($this->sesion->getSesion('user_bonita') ) ){
+
+            $view = new Login();
+            $view->show(array(
+                'hecho'=>'Debe iniciar sesión para poder entrar a este sector.'
+            ));
+
+        }
+        else{
+
+            $view = new Backend();
+            $view->show(array(
+                'rol' => $this->sesion->getSesion('rol'),
+                'username' => $this->sesion->getSesion('user_bonita')
+            ));
+        }
     }
 
 }

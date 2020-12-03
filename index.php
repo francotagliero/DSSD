@@ -33,6 +33,7 @@ require_once('view/Login.php');
 require_once('view/ProtocoloView.php');
 require_once('view/ProyectoView.php');
 require_once('view/ConfiguracionProtocolos.php');
+require_once('view/Backend.php');
 
 
 if (isset($_GET["action"])){
@@ -45,27 +46,19 @@ if (isset($_GET["action"])){
         /* PROTOCOLO */
         case 'protocolos': { ProtocoloController::getInstance()->getProtocolos(); break; }
 
-        case 'ejecutar': { ProtocoloController::getInstance()->ejecutarProtocolo($_GET["n"]); break; }
-
-        case 'determinar_resultado': { ProtocoloController::getInstance()->determinarResultado($_GET["n"]); break; }
-
-        case 'token': { BaseController::getInstance()->conexion(); break; }
-
-        case 'gateway': { BaseController::getInstance()->getProcessId(); break; }
-
-        case 'logout': { BaseController::getInstance()->logout(); break; }
-
-        case 'instanciacion': { BaseController::getInstance()->instanciacion(); break; }
-
         case 'configurarProtocoloBD': { ProtocoloController::getInstance()->configurarProtocoloBD(); break; }
 
         case 'configuracion_protocolos': { ProtocoloController::getInstance()->configurarProtocolos(); break; }
 
         case 'tomar_decision': { ProtocoloController::getInstance()->tomarDecision(); break; }
-        
+
         case 'reiniciarProtocolo': { ProtocoloController::getInstance()->reiniciarProtocolo($_GET['id']);break;}
 
         case 'terminarProtocolo': { ProtocoloController::getInstance()->terminarProtocolo($_GET['id']); break; }
+
+        case 'ejecutar': { ProtocoloController::getInstance()->ejecutarProtocolo($_GET["n"]); break; }
+
+        case 'determinar_resultado': { ProtocoloController::getInstance()->determinarResultado($_GET["n"]); break; }
 
 
         /* PROYECTO */
@@ -78,6 +71,21 @@ if (isset($_GET["action"])){
         case 'reiniciarProyecto': { ProyectoController::getInstance()->reiniciarProyecto($_GET['id']); break; }
 
         case 'cancelarProyecto': { ProyectoController::getInstance()->cancelarProyecto($_GET['id']); break;}
+
+        case 'agregarProtocolo': { ProyectoController::getInstance()->agregarProtocolo($_GET['p']); break;}
+
+        case 'agregarProtocoloAction': { ProyectoController::getInstance()->agregarProtocoloAction(); break;}
+
+        /* BACKEND */
+        case 'token': { BaseController::getInstance()->conexion(); break; }
+
+        case 'gateway': { BaseController::getInstance()->getProcessId(); break; }
+
+        case 'logout': { BaseController::getInstance()->logout(); break; }
+
+        case 'instanciacion': { BaseController::getInstance()->instanciacion(); break; }
+
+        case 'backend': { BaseController::getInstance()->backend(); break; }
 
         default: { BaseController::getInstance()->login(); break; }
     }

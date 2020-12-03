@@ -28,6 +28,7 @@
                         <td>{{proyecto.fechaFin}}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-sm">Configurar</button>
+                            <a href="./?action=agregarProtocolo&p={{ proyecto.idProyecto }}" type="button" class="btn btn-success btn-sm">Agregar protocolo</a>
                         </td>
                     </tr>
                 {% endfor %}

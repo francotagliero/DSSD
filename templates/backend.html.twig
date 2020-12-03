@@ -1,0 +1,39 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    | Backend
+{% endblock %}
+
+{% block navLeft %}
+    {% if rol == 'jefe' %}
+        <li>           
+            <a href="./?action=configuracion_protocolos">
+                Configuracion de los protocolos
+            </a>
+        </li>
+        <li>
+            <a href="./?action=tomar_decision">
+                Tomar decision
+            </a>
+        </li>
+    {% else %}
+        <li>           
+            <a href="#">
+                Determinar protocolo a ejecutar
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                Determinar resultado
+            </a>
+        </li>
+    {% endif %}			
+{% endblock %}
+
+{% block main %}
+    <section id="ancho_parcial">
+        <article>
+            <h1>Backend del {{ rol }}</h1>
+        </article>
+    </section>
+{% endblock %}

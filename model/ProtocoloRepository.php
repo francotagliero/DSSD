@@ -91,20 +91,26 @@ class ProtocoloRepository extends PDORepository{
              
          }
      
-         public function terminarProtocolo($id){
-             $query = "UPDATE protocolos SET estado = :estado WHERE id_protocolo = :id_protocolo";
-     
-             $args = array('estado' => 'terminado', 'id_protocolo' => $id);
-             return $this->queryArgs($query, $args);
-         }
-     
-         public function reiniciarProyecto($idProyecto){
+        public function terminarProtocolo($id){
+            $query = "UPDATE protocolos SET estado = :estado WHERE id_protocolo = :id_protocolo";
+
+            $args = array('estado' => 'terminado', 'id_protocolo' => $id);
+        return $this->queryArgs($query, $args);
+        }
+
+        public function reiniciarProyecto($idProyecto){
             $query = "UPDATE protocolos SET estado = :estado, puntaje = :puntaje WHERE id_proyecto = :id_proyecto";
-     
-             $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_proyecto' => $idProyecto);
-             return $this->queryArgs($query, $args);
-         
-         }
+
+            $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_proyecto' => $idProyecto);
+        return $this->queryArgs($query, $args);
+
+        }
+
+    public function altaProtocolo($nombre, $responsable, $fechaInicio, $fechaFin, $idProyecto, $esLocal){
+        $query = "INSERT INTO protocolos (nombre, id_responsable, fecha_inicio, fecha_fin, orden, puntaje, id_proyecto, estado, es_local, borrado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        $args = array($nombre, $responsable, $fechaInicio, $fechaFin, 1, 0, $idProyecto, 'pendiente', $esLocal, 0);
+        return $this->queryArgs($query, $args);
+    }
 
         public function cancelarProtocolos($idProyecto){
         $query = "UPDATE protocolos SET borrado = :borrado WHERE id_proyecto = :id_proyecto";
