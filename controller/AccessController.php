@@ -33,7 +33,7 @@ class AccessController
 
         $client = new Client([
             // Base URI is used with relative requests
-            'base_uri' => 'http://localhost:8080/bonita/',
+            'base_uri' => 'http://localhost:12310/bonita/',
             // You can set any number of default request options.
             'timeout'  => 1.0,
             'cookies' => $cookieJar

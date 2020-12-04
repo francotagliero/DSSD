@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 01-12-2020 a las 22:56:10
+-- Tiempo de generación: 03-12-2020 a las 23:08:27
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `proyectos` (
   `borrado` int(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_proyecto`),
   KEY `proyecto_responsable` (`id_responsable`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `proyectos`
@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `proyectos` (
 INSERT INTO `proyectos` (`id_proyecto`, `nombre`, `fecha_inicio`, `fecha_fin`, `id_responsable`, `case_id`, `borrado`) VALUES
 (5, 'vacuna_covid', '2020-12-01', '2020-12-05', 5, 6002, 0),
 (7, 'vacuna_sarampion', '2020-12-06', '2020-12-12', 1, NULL, 0),
-(8, 'vacuna_ebola', '2020-12-13', '2020-12-19', 5, NULL, 1);
+(8, 'vacuna_ebola', '2020-12-13', '2020-12-19', 5, NULL, 0);
 
 -- --------------------------------------------------------
 
