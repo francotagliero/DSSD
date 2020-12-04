@@ -106,10 +106,20 @@ class ProtocoloRepository extends PDORepository{
 
         }
 
-    public function altaProtocolo($nombre, $responsable, $fechaInicio, $fechaFin, $idProyecto, $esLocal){
+    public function altaProtocolo($nombre, $responsable, $fechaInicio, $fechaFin, $orden, $idProyecto, $esLocal){
         $query = "INSERT INTO protocolos (nombre, id_responsable, fecha_inicio, fecha_fin, orden, puntaje, id_proyecto, estado, es_local, borrado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        $args = array($nombre, $responsable, $fechaInicio, $fechaFin, 1, 0, $idProyecto, 'pendiente', $esLocal, 0);
+        $args = array($nombre, $responsable, $fechaInicio, $fechaFin, $orden, 0, $idProyecto, 'pendiente', $esLocal, 0);
+        $this->queryArgs($query, $args);
+
+        $sql = "SELECT MAX(id_protocolo) AS id FROM protocolos";
+        return $this->ultimoId($sql);
+    }
+
+    public function altaActividad($nombre, $idProtocolo){
+        $query = "INSERT INTO actividades (id_protocolo, nombre) VALUES (?, ?);";
+        $args = array($idProtocolo, $nombre);
         return $this->queryArgs($query, $args);
+
     }
 
         public function cancelarProtocolos($idProyecto){

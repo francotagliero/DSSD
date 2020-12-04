@@ -7,6 +7,7 @@
 		private $fecha_fin;
         private $id_responsable;
 		private $case_id;
+        private $estado;
 		private $borrado;
 
 		public function getIdProyecto(){
@@ -65,6 +66,14 @@
             $this->borrado = $borrado;
         }
 
+        public function getEstado(){
+            return $this->estado;
+        }
+
+        public function setEstado($estado){
+            $this->estado = $estado;
+        }
+
 		public function __construct($id_proyecto, $nombre, $fecha_inicio, $fecha_fin, $id_responsable, $case_id, $borrado){
             $this->setIdProyecto($id_proyecto);
             $this->setNombre($nombre);
@@ -73,6 +82,7 @@
 			$this->setIdResponsable($id_responsable);
 			$this->setCaseId($case_id);
 			$this->setBorrado($borrado);
+			$this->setEstado('configuracion');
 			
 		}
 

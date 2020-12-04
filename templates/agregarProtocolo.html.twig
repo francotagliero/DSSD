@@ -6,9 +6,9 @@
 
 {% block main %}
     <div class="row">
-        <div class="col-md-10 offset-md-1">
+        <div class="col-md-8 offset-md-2">
             {% if protocolos %}
-                <h4>Protocolos del proyecto "{{ proyecto.nombre }}"</h4>
+                <h4 class="text-center" style="margin-bottom: 40px" >Protocolos del proyecto "{{ proyecto.nombre }}"</h4>
                 <table class="table">
                     <thead>
                         <tr>
@@ -16,6 +16,7 @@
                             <th scope="col">Fecha Inicio</th>
                             <th scope="col">Fecha Fin</th>
                             <th scope="col">Modo ejecucion</th>
+                            <th scope="col">Orden</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Puntaje</th>
                         </tr>
@@ -33,6 +34,7 @@
                                         <span class="label label-warning">Remoto</span>
                                     {% endif %}
                                 </td>
+                                <td>{{protocolo.orden}}</td>
                                 <td>{{protocolo.estado}}</td>
                                 <td>{{protocolo.puntaje}}</td>
                             </tr>
@@ -45,69 +47,26 @@
                 </div>
             {% endif %}
 
-            <button type="submit" class="btn btn-success botonAgregarProtocolo">Agregar protocolo</button>
+            <div style="margin-top: 40px">
+                <a href="./?action=proyectos" type="button" class="btn btn-secondary" data-dismiss="modal">Volver</a>
+                <a href="./?action=finalizar_configuracion" type="button" class="btn btn-success" data-dismiss="modal" style="float: right; margin-left: 10px">Finalizar configuracion</a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style="float: right;">Agregar protocolo</button>
+
+            </div>
+
+            {% include 'agregarProtocoloModal.html.twig' %}
+
         </div>
 
 
 
-        <div class="col-md-6 offset-md-3 agregarProtocolo">
-            <h4>Agregar protocolo</h4>
-            <form method="POST" name="agregar_protocolo" action="./?action=agregarProtocoloAction">
-
-                <input type="hidden" name="idProyecto" id="idProyecto" value="{{ proyecto.id_proyecto }}">
-                <div class="form-group row">
-                    <label for="nombre" class="col-sm-3 col-form-label">Nombre del protocolo:</label>
-                    <div class="col-sm-6">
-                        <input type="nombre" class="form-control" name="nombre" id="nombre" placeholder="Ingrese el nombre del protocolo" required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="esLocal" class="col-sm-3 col-form-label">Es local?</label>
-                    <div class="col-sm-6">
-                        <select class="custom-select" name="esLocal">
-                            <option value="1" selected>Si</option>
-                            <option value="2">No</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="fechaInicio" class="col-sm-3 col-form-label">Fecha inicio:</label>
-                    <div class="col-sm-6">
-                        <input type="date" class="form-control" name="fechaInicio" id="fechaInicio" placeholder="Ingrese la fecha de inicio del proyecto" required>
-                    </div>
-                </div>
 
 
-                <div class="form-group row">
-                    <label for="fechaFin" class="col-sm-3 col-form-label">Fecha fin:</label>
-                    <div class="col-sm-6">
-                        <input type="date" class="form-control" name="fechaFin" id="fechaFin" placeholder="Ingrese la fecha de fin del proyecto" required>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="fechaFin" class="col-sm-3 col-form-label">Seleccione un responsable:</label>
-                    <div class="col-sm-6">
-                        {% for user in usuarios %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="responsable" id="{{ user.username }}" value="{{ user.id }}" checked>
-                                <label class="form-check-label" for="{{ user.username }}">
-                                    {{ user.username }}
-                                </label>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-success">Agregar protocolo</button>
-            </form>
-        </div>
     </div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="js/agregarProtocolo.js"></script>
+    <script src="web/js/agregarProtocolo.js"></script>
 {% endblock %}
 
 

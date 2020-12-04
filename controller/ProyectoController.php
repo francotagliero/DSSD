@@ -125,13 +125,18 @@ class ProyectoController{
 
     public function agregarProtocoloAction(){
 
+
         $view = new ProyectoView();
 
         /*
          * Guardo el protocolo
          */
-        ProtocoloRepository::getInstance()->altaProtocolo($_POST['nombre'], $_POST['responsable'], $_POST['fechaInicio'], $_POST['fechaFin'], $_POST['idProyecto'], $_POST['esLocal']);
+        $idProtocolo = ProtocoloRepository::getInstance()->altaProtocolo($_POST['nombre'], $_POST['responsable'], $_POST['fechaInicio'], $_POST['fechaFin'], $_POST['orden'], $_POST['idProyecto'], $_POST['esLocal']);
 
+        $actividades = $_POST['actividad'];
+        foreach ($actividades as $actividad) {
+            ProtocoloRepository::getInstance()->altaActividad($actividad, $idProtocolo);
+        }
 
         $proyecto = ProyectoRepository::getInstance()->getProyecto($_POST['idProyecto']);
         $protocolos = ProtocoloRepository::getInstance()->getProtocolosProyecto($_POST['idProyecto']);

@@ -34,6 +34,7 @@ class ProyectoRepository extends PDORepository{
             $elemento['fecha_fin'],
             $elemento['id_responsable'],
             $elemento['case_id'],
+            $elemento['estado'],
             $elemento['borrado']
             );
 
@@ -59,9 +60,9 @@ class ProyectoRepository extends PDORepository{
     }
 
     public function altaProyecto($idResponsable, $nombre, $fechaInicio, $fechaFin, $caseId){
-        $query = "INSERT INTO proyectos (nombre, fecha_inicio, fecha_fin, id_responsable, case_id, `borrado`) VALUES (?, ?, ?, ?, ?, ?);";
+        $query = "INSERT INTO proyectos (nombre, fecha_inicio, fecha_fin, id_responsable, case_id, estado, borrado) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-        $args = array($nombre, $fechaInicio, $fechaFin, $idResponsable, $caseId, 0);
+        $args = array($nombre, $fechaInicio, $fechaFin, $idResponsable, $caseId, 'configuracion', 0);
         return $this->queryArgs($query, $args);
     }
 

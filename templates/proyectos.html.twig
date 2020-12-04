@@ -6,9 +6,7 @@
 
 {% block main %}
     <section class="container">
-
-        <a href="./?action=nuevoProyecto" type="button" class="btn btn-success btn-sm">Nuevo proyecto</a>
-
+        <a style="float:right; padding: 12px" href="./?action=nuevoProyecto" type="button" class="btn btn-success btn-sm">Nuevo proyecto</a>
         {% if proyectos %}
             <h1>Proyectos</h1>
             <table class="table">
@@ -17,6 +15,7 @@
                     <th scope="col">Titulo</th>
                     <th scope="col">Fecha Inicio</th>
                     <th scope="col">Fecha Fin</th>
+                    <th scope="col">Estado</th>
                     <th scope="col">Accion</th>
                 </tr>
                 </thead>
@@ -26,9 +25,11 @@
                         <td>{{proyecto.nombre}}</td>
                         <td>{{proyecto.fechaInicio}}</td>
                         <td>{{proyecto.fechaFin}}</td>
+                        <td>{{proyecto.estado}}</td>
                         <td>
-                            <button type="button" class="btn btn-primary btn-sm">Configurar</button>
-                            <a href="./?action=agregarProtocolo&p={{ proyecto.idProyecto }}" type="button" class="btn btn-success btn-sm">Agregar protocolo</a>
+                            {% if proyecto.estado == 'configuracion' %}
+                                <a href="./?action=agregarProtocolo&p={{ proyecto.idProyecto }}" type="button" class="btn btn-primary btn-sm">Configurar</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -38,8 +39,8 @@
             <div class="alert alert-success" role="alert">
                 No hay proyectos cargados.
             </div>
+            <a style="float:right; padding: 12px" href="./?action=nuevoProyecto" type="button" class="btn btn-success btn-sm">Nuevo proyecto</a>
         {% endif %}
-
 
     </section>
 {% endblock %}

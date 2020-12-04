@@ -51,6 +51,14 @@ abstract class PDORepository {
         return $list;
     }
 
+    protected function ultimoId($sql)
+    {
+        $connection = $this->getConnection();
+        $stmt = $connection->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetch()[0];
+    }
+
 
     
 }

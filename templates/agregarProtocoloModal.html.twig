@@ -1,0 +1,86 @@
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar protocolo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" name="agregar_protocolo" id="form-protocolo" action="./?action=agregarProtocoloAction">
+
+                    <input type="hidden" name="idProyecto" id="idProyecto" value="{{ proyecto.id_proyecto }}">
+
+                    <div class="form-group row">
+                        <label for="nombre" class="col-sm-3 col-form-label">Nombre del protocolo:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Ingrese el nombre del protocolo" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="esLocal" class="col-sm-3 col-form-label">Es local?</label>
+                        <div class="col-sm-6">
+                            <select class="custom-select" id="esLocal" name="esLocal">
+                                <option value="1" selected>Si</option>
+                                <option value="2">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="orden" class="col-sm-3 col-form-label">Orden:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="orden" id="orden" placeholder="Ingrese el orgen" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="fechaInicio" class="col-sm-3 col-form-label">Fecha inicio:</label>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control" name="fechaInicio" id="fechaInicio" placeholder="Ingrese la fecha de inicio del proyecto" required>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="fechaFin" class="col-sm-3 col-form-label">Fecha fin:</label>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control" name="fechaFin" id="fechaFin" placeholder="Ingrese la fecha de fin del proyecto" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="actividad_1" class="col-sm-3 col-form-label">Actividades:</label>
+                        <div class="col-sm-5 actividad">
+                            <input type="text" class="form-control" name="actividad[1]" id="actividad_1" placeholder="Ingrese una actividad" required>
+                        </div>
+                        <div class="col-sm-1 borrar">
+                            <a type="button" class="btn btn-success agregarActividad"><i class="fas fa-plus fa-xs"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="responsable" class="col-sm-3 col-form-label">Seleccione un responsable:</label>
+                        <div class="col-sm-6">
+                            <select class="custom-select" id="responsable" name="responsable"  required>
+                                <option value="" selected>Seleccione un responsable </option>
+                                {% for user in usuarios %}
+                                    <option value="{{ user.id }}">{{ user.username }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success">Agregar protocolo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
