@@ -78,6 +78,27 @@ class RequestController {
         return $idUser;
     }
 
+    public static function getUserIdDos($client, $username){
+
+        $request = $client->request('GET', 'API/identity/user??p=0&c=10&o=lastname%20ASC&s='.$username.'&f=enabled%3dtrue',
+            [
+                'headers' => [
+                    'X-Bonita-API-Token' => GuzzleController::getToken()
+                ],
+
+            ]);
+        $body = $request->getBody();
+        $json = json_decode($body);
+
+        $response['success'] = true;
+        $response['data'] = json_decode($body);
+
+        $idUser = $response['data'][0]->id; #Obtengo el id del usuario
+
+        return $idUser;
+
+    }
+
     public static function instanciarProceso($client, $idProceso){
         $request = $client->request('POST', 'API/bpm/process/'.$idProceso.'/instantiation',
             [

@@ -9,6 +9,7 @@
 		private $case_id;
         private $borrado;
 		private $estado;
+		private $orden;
 
 		public function getIdProyecto(){
 			return $this->id_proyecto;
@@ -72,9 +73,19 @@
 
         public function setEstado($estado){
             $this->estado = $estado;
+		}
+		
+		public function getOrden(){
+            return $this->orden;
         }
 
-		public function __construct($id_proyecto, $nombre, $fecha_inicio, $fecha_fin, $id_responsable, $case_id, $borrado, $estado){
+        public function setOrden($orden){
+            $this->orden = $orden;
+		}
+		
+
+
+		public function __construct($id_proyecto, $nombre, $fecha_inicio, $fecha_fin, $id_responsable, $case_id, $borrado, $estado, $orden){
             $this->setIdProyecto($id_proyecto);
             $this->setNombre($nombre);
 			$this->setFechaInicio($fecha_inicio);
@@ -83,6 +94,7 @@
 			$this->setCaseId($case_id);
 			$this->setBorrado($borrado);
 			$this->setEstado($estado);
+			$this->setOrden($orden);
 			
 		}
 

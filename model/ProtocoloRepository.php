@@ -131,7 +131,7 @@ class ProtocoloRepository extends PDORepository{
     }
 
     public function getProtocolosResponsable($idResponsable){
-        $consulta = "SELECT protocolos.id_protocolo, protocolos.nombre, protocolos.id_responsable, protocolos.fecha_inicio, protocolos.fecha_fin, protocolos.orden, protocolos.es_local, protocolos.puntaje, protocolos.id_proyecto, protocolos.estado, protocolos.borrado FROM protocolos INNER JOIN proyectos ON proyectos.id_proyecto = protocolos.id_proyecto WHERE protocolos.id_responsable = :idResponsable AND protocolos.borrado <> 1 AND proyectos.borrado <> 1 AND proyectos.case_id IS NOT NULL";
+        $consulta = "SELECT protocolos.id_protocolo, protocolos.nombre, protocolos.id_responsable, protocolos.fecha_inicio, protocolos.fecha_fin, protocolos.orden, protocolos.es_local, protocolos.puntaje, protocolos.id_proyecto, protocolos.estado, protocolos.borrado FROM protocolos INNER JOIN proyectos ON proyectos.id_proyecto = protocolos.id_proyecto AND proyectos.orden = protocolos.orden WHERE protocolos.id_responsable = :idResponsable AND protocolos.borrado <> 1 AND proyectos.borrado <> 1 AND proyectos.case_id IS NOT NULL";
 
         $args = array('idResponsable' => $idResponsable);
 

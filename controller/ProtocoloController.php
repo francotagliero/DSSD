@@ -19,7 +19,14 @@ class ProtocoloController{
     }
 
     public function getProtocolos(){
-        
+        //ESTO ES EL DETERMINAR PROTOCOLO A EJECUTAR!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        //$proyecto = ProyectoRepository::getInstance()->getProyecto($idProyecto);
+
+        //$caseId = $proyecto['case_id'];
+
+        //$idTask = RequestController::obtenerTarea($client, $caseId);
+
         $view = new ProtocoloView();
 
         $protocolos = ProtocoloRepository::getInstance()->getProtocolosResponsable($this->sesion->getSesion('id_user_bd') );

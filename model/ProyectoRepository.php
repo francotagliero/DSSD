@@ -35,7 +35,8 @@ class ProyectoRepository extends PDORepository{
             $elemento['id_responsable'],
             $elemento['case_id'],
             $elemento['borrado'],
-            $elemento['estado']
+            $elemento['estado'],
+            $elemento['orden']
             );
 
             return $proyecto;
