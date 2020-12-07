@@ -27,7 +27,9 @@ class ProyectoController{
     public function nuevoProyecto(){
         $view = new ProyectoView();
 
-        $view->nuevo(array());
+        $view->nuevo(array(
+            'username' => $this->sesion->getSesion('user_bonita')
+        ));
     }
 
     public function nuevoProyectoAction(){

@@ -1,0 +1,66 @@
+#message{
+    margin: auto;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    background-color: #ffc40d;
+    font-weight: bold;
+}
+
+#container{
+    margin: auto;
+    margin-bottom: 2px;
+    width: 100%;
+    overflow: auto;
+}
+@media (min-width: 1001px) {
+    #container{
+        max-width: 1200px;
+    }
+
+    #ancho_parcial{
+        width: 77%;
+    }
+
+    #ancho_total{
+        width: 100%;
+    }
+
+    section{
+        float: right;
+    }
+
+    .acciones{
+        width: 38%;
+    }
+
+    .accionesVenta{
+        width: 30%;
+    }
+
+    #message{
+        width: 100%;
+        padding: 10px;
+        min-width: 980px;
+        max-width: 1180px;
+        border-radius: 5px;
+    }
+
+    tbody th {
+        width: 31%;
+    }
+}
+
+@media (max-width: 1000px) {
+    body{
+        zoom: 160%;
+    }
+
+    th, td {
+        display: block;
+    }
+
+    #message{
+        width: 96%;
+        padding: 2%;
+    }
+}
