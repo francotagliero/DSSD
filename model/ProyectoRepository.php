@@ -34,8 +34,8 @@ class ProyectoRepository extends PDORepository{
             $elemento['fecha_fin'],
             $elemento['id_responsable'],
             $elemento['case_id'],
-            $elemento['estado'],
-            $elemento['borrado']
+            $elemento['borrado'],
+            $elemento['estado']
             );
 
             return $proyecto;
@@ -70,6 +70,13 @@ class ProyectoRepository extends PDORepository{
         $query = "SELECT * FROM proyectos WHERE id_proyecto = ".$id;
         $protocolos = $this->query($query);
         return $protocolos->fetchAll()[0];
+    }
+
+    public function cambiarEstado($id){
+        $query = "UPDATE proyectos SET estado = :estado WHERE id_proyecto = :id_proyecto";
+
+        $args = array('estado' => 'ejecucion', 'id_proyecto' => $id);
+        return $this->queryArgs($query, $args);
     }
 
    

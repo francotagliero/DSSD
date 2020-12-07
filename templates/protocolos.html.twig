@@ -25,21 +25,21 @@
         {% for protocolo in protocolos %}
         <tr>
             <td>{{protocolo.nombre}}</td>
-            <td>{{protocolo.fecha_inicio}}</td>
-            <td>{{protocolo.fecha_fin}}</td>
-            <td> {% if protocolo.es_local == 1 %} 
+            <td>{{protocolo.getFechaInicio}}</td>
+            <td>{{protocolo.getFechaFin}}</td>
+            <td> {% if protocolo.getEsLocal == 1 %} 
                     <span class="label label-primary">Local</span>
                 {% else %} 
                     <span class="label label-warning">Remoto</span>
                 {% endif %}
             </td>
-            <td>{{protocolo.estado}}</td>
-            <td>{{protocolo.puntaje}}</td>
+            <td>{{protocolo.getEstado}}</td>
+            <td>{{protocolo.getPuntaje}}</td>
             <td>
-                {% if protocolo.estado == 'pendiente' %}
-                    <a href="./?action=ejecutar&n={{ protocolo.id_protocolo }}" type="button" class="btn btn-primary btn-sm">Ejecutar</a>
-                {% elseif protocolo.puntaje == 0 %}
-                    <a href="./?action=determinar_resultado&n={{ protocolo.id_protocolo }}" type="button" class="btn btn-primary btn-sm">Determinar resultado</a>
+                {% if protocolo.getEstado == 'pendiente' %}
+                    <a href="./?action=ejecutar&n={{ protocolo.getIdProtocolo }}" type="button" class="btn btn-primary btn-sm">Ejecutar</a>
+                {% elseif protocolo.getPuntaje == 0 %}
+                    <a href="./?action=determinar_resultado&n={{ protocolo.getIdProtocolo }}" type="button" class="btn btn-primary btn-sm">Determinar resultado</a>
                 {% endif %}
             </td>
         </tr>

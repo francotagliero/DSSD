@@ -125,4 +125,20 @@ class RequestController {
         return ($response['data'][0]->id);
     }
 
+    public static function ejecutarTarea($client, $idTask){
+        $request = $client->request('POST', '/bonita/API/bpm/userTask/'.$idTask.'/execution',
+            [
+                'headers' => [
+                    'X-Bonita-API-Token' => GuzzleController::getToken()
+                ],
+
+            ]);
+
+        $body = $request->getBody();
+        $response['data'] = json_decode($body);
+        return $response;
+    }
+
+
+
 }

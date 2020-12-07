@@ -102,7 +102,13 @@ class BaseController {
             $id_proceso = $response['data'][0]->id; #Obtengo id del proceso
             $this->sesion->setSesion('id_proceso', $id_proceso);
 
-            header("Location:./?action=backend");
+            if($resultado[0]->getRoles() == 'jefe'){
+                header("Location:./?action=proyectos");
+            }else{
+                header("Location:./?action=protocolos");
+            }
+
+            
 
 
 

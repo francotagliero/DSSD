@@ -76,6 +76,8 @@ if (isset($_GET["action"])){
 
         case 'agregarProtocoloAction': { ProyectoController::getInstance()->agregarProtocoloAction(); break;}
 
+        case 'finalizar_configuracion': { ProyectoController::getInstance()->finalizar_configuracion($_GET['p']); break;}
+
         /* BACKEND */
         case 'token': { BaseController::getInstance()->conexion(); break; }
 

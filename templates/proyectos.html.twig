@@ -22,13 +22,15 @@
                 <tbody>
                 {% for proyecto in proyectos %}
                     <tr>
-                        <td>{{proyecto.nombre}}</td>
-                        <td>{{proyecto.fechaInicio}}</td>
-                        <td>{{proyecto.fechaFin}}</td>
-                        <td>{{proyecto.estado}}</td>
+                        <td>{{ proyecto.nombre }}</td>
+                        <td>{{ proyecto.fechaInicio }}</td>
+                        <td>{{ proyecto.fechaFin }}</td>
+                        <td>{{ proyecto.estado }}</td>
                         <td>
                             {% if proyecto.estado == 'configuracion' %}
                                 <a href="./?action=agregarProtocolo&p={{ proyecto.idProyecto }}" type="button" class="btn btn-primary btn-sm">Configurar</a>
+                                {% else %}
+                                <a href="#" type="button" class="btn btn-primary btn-sm">Tomar decision</a>
                             {% endif %}
                         </td>
                     </tr>

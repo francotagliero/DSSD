@@ -22,7 +22,7 @@ class ProtocoloController{
         
         $view = new ProtocoloView();
 
-        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolosResponsable($this->sesion->getSesion('id_user_bd') );
 
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
@@ -67,7 +67,7 @@ class ProtocoloController{
 
     public function ejecutarProtocolo($id){
 
-        ProtocoloRepository::getInstance()->ejecutarProtocolo($id);
+        ProtocoloRepository::getInstance()->ejecutarProtocolo($id); //cambia el estado a ejecutado, del protocoloo
 
         $protocolo = ProtocoloRepository::getInstance()->getProtocolo($id);
 

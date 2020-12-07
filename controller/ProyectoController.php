@@ -154,6 +154,22 @@ class ProyectoController{
         ));
     }
 
+    public function finalizar_configuracion($idProyecto){
+        ProyectoRepository::getInstance()->cambiarEstado($idProyecto);
+
+        $proyecto = ProyectoRepository::getInstance()->getProyecto($idProyecto);
+
+        $caseId = $proyecto['case_id'];
+        
+        
+        $client = GuzzleController::getGuzzleClient();
+
+        $idTask = RequestController::obtenerTarea($client, $caseId);
+
+        $request = RequestController::ejecutarTarea($client, $idTask);
+    
+    }
+
 }
 
 ?>
