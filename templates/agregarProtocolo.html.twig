@@ -5,8 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
+    <section class="container">
             {% if protocolos %}
                 <h4 class="text-center" style="margin-bottom: 40px" >Protocolos del proyecto "{{ proyecto.nombre }}"</h4>
                 <table class="table">
@@ -56,13 +55,7 @@
 
             {% include 'agregarProtocoloModal.html.twig' %}
 
-        </div>
-
-
-
-
-
-    </div>
+       </section>
 {% endblock %}
 
 {% block scripts %}
