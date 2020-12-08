@@ -1,0 +1,47 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+	| Actividades
+{% endblock %}
+
+{% block main %}
+	<section class="container">
+
+        {% if actividades %}
+      <h1>Actividades</h1>
+        <table class="table">
+      <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for actividad in actividades %}
+        <tr>
+            <td>{{actividad.nombre}}</td>
+            
+            <td>
+                <a class="btn btn-primary" href="index.php?action=aprobarActividad&id={{actividad.id_actividad}}" role="button">Aprobar Actividad</a>
+                <a class="btn btn-danger" href="index.php?action=desaprobarActividad&id={{actividad.id_actividad}}" role="button">Desaprobar Actividad</a>
+            </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <div class="alert alert-success" role="alert">
+        No hay actividades cargados.
+      </div>
+  {% endif %}
+
+  {% if mensaje %}
+      <div class="alert alert-success" role="alert">
+        <button class="close" data-dismiss="alert" id="cerrarMensaje">&times;</button>
+        <strong>{{ mensaje }}
+
+      </div>
+    {% endif %}
+  </section>
+
+{% endblock %}

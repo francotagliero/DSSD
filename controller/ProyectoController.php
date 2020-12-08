@@ -136,6 +136,9 @@ class ProyectoController{
         $idProtocolo = ProtocoloRepository::getInstance()->altaProtocolo($_POST['nombre'], $_POST['responsable'], $_POST['fechaInicio'], $_POST['fechaFin'], $_POST['orden'], $_POST['idProyecto'], $_POST['esLocal']);
 
         $actividades = $_POST['actividad'];
+
+        //var_dump($actividades);
+
         foreach ($actividades as $actividad) {
             ProtocoloRepository::getInstance()->altaActividad($actividad, $idProtocolo);
         }

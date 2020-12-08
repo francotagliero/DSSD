@@ -78,6 +78,43 @@ class ProtocoloController{
 
     }
 
+    public function resolverActividades($idProtocolo){
+        $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
+
+        //var_dump($actividades);
+        $view = new ActividadView();
+
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'actividades' => $actividades
+        ));
+
+    }
+
+    public function aprobarActividad($idActividad){
+        ProtocoloRepository::getInstance()->cambiarEstadoActividad($idActividad, 'Aprobado');
+        $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
+        $view = new ActividadView();
+
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'actividades' => $actividades,
+            'mensaje' => 'Actividad Aprobada!'
+        ));
+    }
+
+    public function desaprobarActividad($idActividad){
+        ProtocoloRepository::getInstance()->cambiarEstadoActividad($idActividad, 'Desaprobado');
+        $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
+        $view = new ActividadView();
+
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'actividades' => $actividades,
+            'mensaje' => 'Actividad Desaprobada!'
+        ));
+    }
+
     public function configurarProtocolos(){
         $view = new ConfiguracionProtocolos();
 

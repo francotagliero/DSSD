@@ -116,8 +116,8 @@ class ProtocoloRepository extends PDORepository{
     }
 
     public function altaActividad($nombre, $idProtocolo){
-        $query = "INSERT INTO actividades (id_protocolo, nombre) VALUES (?, ?);";
-        $args = array($idProtocolo, $nombre);
+        $query = "INSERT INTO actividades (nombre, id_protocolo) VALUES (?, ?);";
+        $args = array($nombre, $idProtocolo);
         return $this->queryArgs($query, $args);
 
     }
@@ -156,6 +156,20 @@ class ProtocoloRepository extends PDORepository{
         $lista = $this->queryList($consulta, $args, $mapper);
 
         return $lista;
+    }
+
+    public function getActividades($idProtocolo){
+
+        $query = "SELECT * FROM actividades WHERE id_protocolo = ".$idProtocolo;
+        $actividades = $this->query($query);
+        return $actividades->fetchAll();
+    }
+
+    public function cambiarEstadoActividad($idActividad, $estado){
+        $query = "UPDATE actividades SET estado = :estado WHERE id_actividad = :id_actividad";
+
+        $args = array('estado' => $estado, 'id_actividad' => $idActividad);
+        return $this->queryArgs($query, $args);
     }
 
 

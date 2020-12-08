@@ -42,6 +42,8 @@
                     <a href="./?action=ejecutar&n={{ protocolo.getIdProtocolo }}" type="button" class="btn btn-primary btn-sm">Ejecutar</a>
                 {% elseif protocolo.getPuntaje == 0 %}
                     <a href="./?action=determinar_resultado&n={{ protocolo.getIdProtocolo }}" type="button" class="btn btn-primary btn-sm">Determinar resultado</a>
+                {% elseif protocolo.getEstado == 'completado' %}
+                    <a href="./?action=resolverActividades&n={{ protocolo.getIdProtocolo }}" type="button" class="btn btn-primary btn-sm">Resolver Actividades</a>
                 {% endif %}
             </td>
         </tr>
