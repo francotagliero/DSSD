@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 07-12-2020 a las 21:00:58
+-- Tiempo de generación: 08-12-2020 a las 14:02:25
 -- Versión del servidor: 5.7.31
 -- Versión de PHP: 7.3.21
 
@@ -31,8 +31,20 @@ DROP TABLE IF EXISTS `actividades`;
 CREATE TABLE IF NOT EXISTS `actividades` (
   `id_actividad` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
-  PRIMARY KEY (`id_actividad`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_protocolo` int(11) NOT NULL,
+  `estado` varchar(255) NOT NULL DEFAULT 'config',
+  PRIMARY KEY (`id_actividad`),
+  KEY `restric` (`id_protocolo`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `actividades`
+--
+
+INSERT INTO `actividades` (`id_actividad`, `nombre`, `id_protocolo`, `estado`) VALUES
+(7, 'acti1', 22, 'Aprobado'),
+(8, 'acti2', 22, 'config'),
+(9, 'acti3', 22, 'config');
 
 -- --------------------------------------------------------
 
@@ -115,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `protocolos` (
   PRIMARY KEY (`id_protocolo`),
   KEY `protocolo_responsable` (`id_responsable`),
   KEY `protocolo_proyecto` (`id_proyecto`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `protocolos`
@@ -134,9 +146,9 @@ INSERT INTO `protocolos` (`id_protocolo`, `nombre`, `id_responsable`, `fecha_ini
 (10, 'protocolo_a', 4, '2020-12-24', '2020-12-10', 1, 0, 8, 'pendiente', 1, 0),
 (11, 'protocolo_b', 4, '2020-12-11', '2020-12-11', 1, 0, 8, 'pendiente', 1, 0),
 (12, 'protocolo_c', 3, '2020-12-01', '2020-12-10', 1, 6, 8, 'pendiente', 1, 0),
-(13, 'protocolo_a', 2, '2020-12-07', '2020-12-09', 1, 0, 42, 'pendiente', 1, 0),
-(14, 'protocolo_b', 2, '2020-12-08', '2020-12-10', 2, 0, 42, 'pendiente', 0, 0),
-(15, 'protocolo_c', 2, '2020-12-15', '2020-12-18', 2, 0, 42, 'pendiente', 1, 0);
+(22, 'protocolo_a', 2, '2020-12-08', '2020-12-09', 1, 9, 45, 'completado', 1, 0),
+(23, 'protocolo_b', 2, '2020-12-09', '2020-12-10', 2, 0, 45, 'pendiente', 0, 0),
+(24, 'protocolo_c', 2, '2020-12-11', '2020-12-11', 2, 0, 45, 'pendiente', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -157,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `proyectos` (
   `orden` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_proyecto`),
   KEY `proyecto_responsable` (`id_responsable`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `proyectos`
@@ -167,7 +179,7 @@ INSERT INTO `proyectos` (`id_proyecto`, `nombre`, `fecha_inicio`, `fecha_fin`, `
 (5, 'vacuna_covid', '2020-12-01', '2020-12-05', 5, NULL, 0, 'configuracion', 1),
 (7, 'vacuna_sarampion', '2020-12-06', '2020-12-12', 1, NULL, 0, '', 1),
 (8, 'vacuna_ebola', '2020-12-13', '2020-12-19', 5, NULL, 0, 'configuracion', 1),
-(42, 'vacuna_gg', '2020-12-20', '2020-12-30', 5, 10001, 0, 'ejecucion', 2);
+(45, 'vacuna_gg', '2020-12-08', '2020-12-10', 5, 11003, 0, 'ejecucion', 1);
 
 -- --------------------------------------------------------
 
@@ -202,6 +214,12 @@ INSERT INTO `usuario` (`id`, `username`, `password`, `email`, `is_active`, `role
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `actividades`
+--
+ALTER TABLE `actividades`
+  ADD CONSTRAINT `restric` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolos` (`id_protocolo`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `actividades_protocolos`
