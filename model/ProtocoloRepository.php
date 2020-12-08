@@ -159,10 +159,15 @@ class ProtocoloRepository extends PDORepository{
     }
 
     public function getActividades($idProtocolo){
-
-        $query = "SELECT * FROM actividades WHERE id_protocolo = ".$idProtocolo;
+        $query = "SELECT * FROM actividades WHERE estado = 'config' AND id_protocolo = ".$idProtocolo;
         $actividades = $this->query($query);
         return $actividades->fetchAll();
+    }
+
+    public function getIdProtocoloByActividad($idActividad){
+        $query = "SELECT id_protocolo FROM actividades WHERE id_actividad = ".$idActividad;
+        $actividades = $this->query($query);
+        return $actividades->fetch();
     }
 
     public function cambiarEstadoActividad($idActividad, $estado){

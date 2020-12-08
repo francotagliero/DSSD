@@ -92,8 +92,11 @@ class ProtocoloController{
     }
 
     public function aprobarActividad($idActividad){
+        $idProtocolo = ProtocoloRepository::getInstance()->getIdProtocoloByActividad($idActividad);
+        
         ProtocoloRepository::getInstance()->cambiarEstadoActividad($idActividad, 'Aprobado');
-        $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
+        $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo[0]);
+
         $view = new ActividadView();
 
         $view->show(array(
@@ -104,8 +107,10 @@ class ProtocoloController{
     }
 
     public function desaprobarActividad($idActividad){
+        $idProtocolo = ProtocoloRepository::getInstance()->getIdProtocoloByActividad($idActividad);
+
         ProtocoloRepository::getInstance()->cambiarEstadoActividad($idActividad, 'Desaprobado');
-        $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
+        $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo[0]);
         $view = new ActividadView();
 
         $view->show(array(
