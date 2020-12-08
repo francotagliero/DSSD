@@ -59,6 +59,8 @@ if (isset($_GET["action"])){
         case 'ejecutar': { ProtocoloController::getInstance()->ejecutarProtocolo($_GET["n"]); break; }
 
         case 'determinar_resultado': { ProtocoloController::getInstance()->determinarResultado($_GET["n"]); break; }
+        
+        //case 'ejecutar_protocolo': { ProtocoloController::getInstance()->ejecutarProtocoloResponsable($_GET["n"]); break; }
 
 
         /* PROYECTO */

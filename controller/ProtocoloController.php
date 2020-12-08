@@ -39,6 +39,45 @@ class ProtocoloController{
         
     }
 
+    public function ejecutarProtocolo($idProtocolo){
+
+        ProtocoloRepository::getInstance()->ejecutarProtocolo($idProtocolo); //cambia el estado a ejecutado, del protocoloo
+
+        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProyecto);
+
+        $idProyecto = $protocolo[0]['id_proyecto'];
+
+        $case = ProyectoRepository::getInstance()->getIdCase($idProyecto);
+
+        $caseId = $case[0]['case_id'];
+
+        $uri = 'API/bpm/task?f=caseId='.$caseId;
+
+        $request = RequestController::doTheRequest('GET', $uri);
+
+        $taskId = $request['data'][0]->id; //EL idTask DEL DETERMINAR PROTOCOLO A EJECUTAR!!!!!
+
+        $idUser = RequestController::getUserIdDos($client, $this->sesion->getSesion('user_bonita') ); //idUser de bonita del usuario logeado en la appWeb
+
+        $request = RequestController::asignarTarea($client, $taskId, $idUser); //El responsable se asigna a si mismo la DETERMINAR PROTOCOLO A EJECUTAR
+
+        //QUE HACEMO PA?
+
+        $uri = 'API/bpm/userTask/'.$taskId.'/execution';
+        $request = RequestController::doTheRequest('POST', $uri);
+
+        $view = new ProtocoloView();
+
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
+
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'hecho'=> $this->sesion->getSesion('id_proceso'),
+            'protocolos' => $protocolos
+        ));
+
+    }
+
     public function configurarProtocolos(){
         $view = new ConfiguracionProtocolos();
 
@@ -72,34 +111,6 @@ class ProtocoloController{
         echo json_encode(array('valor' => 'protocoloActualizado', 'id_protocolo' => $_POST['id_protocolo'], 'id_responsable' => $_POST['id_responsable']) );
     }
 
-    public function ejecutarProtocolo($id){
-
-        ProtocoloRepository::getInstance()->ejecutarProtocolo($id); //cambia el estado a ejecutado, del protocoloo
-
-        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($id);
-
-        $idProyecto = $protocolo[0]['id_proyecto'];
-
-        $case = ProyectoRepository::getInstance()->getIdCase($idProyecto);
-        $caseId = $case[0]['case_id'];
-        $uri = 'API/bpm/task?f=caseId='.$caseId;
-        $request = RequestController::doTheRequest('GET', $uri);
-
-        $taskId = $request['data'][0]->id;
-        $uri = 'API/bpm/userTask/'.$taskId.'/execution';
-        $request = RequestController::doTheRequest('POST', $uri);
-
-        $view = new ProtocoloView();
-
-        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
-
-        $view->show(array(
-            'username' => $this->sesion->getSesion('user_bonita'),
-            'hecho'=> $this->sesion->getSesion('id_proceso'),
-            'protocolos' => $protocolos
-        ));
-
-    }
 
     public function determinarResultado($id){
 
