@@ -31,9 +31,16 @@ class ProtocoloController{
 
         $protocolos = ProtocoloRepository::getInstance()->getProtocolosResponsable($this->sesion->getSesion('id_user_bd') );
 
+        //NECESITA TRAERME EL PROYECTO!
+        $proyecto = ProyectoRepository::getInstance()->getProyecto($protocolos[0]->getIdProyecto() ); //ACA ESTAMOS TENIENDO EN CUENTA 1 SOLO PROYECTO!
+        //Despues hay que darle la posibilidad al responsable de elejir entre dos proyectos (instanciados)...y que en base a esa eleccion traer los protocolos y 
+        //seguir todo el mismo flujo de ejecucion!
+        //var_dump($proyecto);
+
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
             'hecho'=> $this->sesion->getSesion('id_proceso'),
+            'proyecto' => $proyecto,
             'protocolos' => $protocolos
         ));
         
@@ -41,9 +48,11 @@ class ProtocoloController{
 
     public function ejecutarProtocolo($idProtocolo){
 
+        $client = GuzzleController::getGuzzleClient();
+
         ProtocoloRepository::getInstance()->ejecutarProtocolo($idProtocolo); //cambia el estado a ejecutado, del protocoloo
 
-        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProyecto);
+        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
 
         $idProyecto = $protocolo[0]['id_proyecto'];
 
@@ -51,31 +60,60 @@ class ProtocoloController{
 
         $caseId = $case[0]['case_id'];
 
+        /*
+
         $uri = 'API/bpm/task?f=caseId='.$caseId;
 
         $request = RequestController::doTheRequest('GET', $uri);
 
-        $taskId = $request['data'][0]->id; //EL idTask DEL DETERMINAR PROTOCOLO A EJECUTAR!!!!!
+        $taskId = $request['data'][0]->id; //EL idTask DEL DETERMINAR PROTOCOLO A EJECUTAR!!!!!*/
+
+        $idTask = RequestController::obtenerTarea($client, $caseId);
 
         $idUser = RequestController::getUserIdDos($client, $this->sesion->getSesion('user_bonita') ); //idUser de bonita del usuario logeado en la appWeb
 
-        $request = RequestController::asignarTarea($client, $taskId, $idUser); //El responsable se asigna a si mismo la DETERMINAR PROTOCOLO A EJECUTAR
-
+        $request = RequestController::asignarTarea($client, $idTask, $idUser); //El responsable se asigna a si mismo la DETERMINAR PROTOCOLO A EJECUTAR
         //QUE HACEMO PA?
 
-        $uri = 'API/bpm/userTask/'.$taskId.'/execution';
-        $request = RequestController::doTheRequest('POST', $uri);
+        //MODIFICAMOS LA VARIABLE DE PROCESO tipoProtocolo (remoto=0 o local=1) y la variable cantProtocolos (=0 finaliza la instancia y notifica al jefe)
 
-        $view = new ProtocoloView();
+        $tipoProtocolo = $protocolo[0]['es_local'];
 
-        $protocolos = ProtocoloRepository::getInstance()->getProtocolos();
+        $data = array(
+            "type" => "java.lang.Integer", 
+            "value" => $tipoProtocolo
+        );
+        $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/tipoProtocolo', $data);   
+        //return $response;
+
+        $cantProtocolos = 3;
+
+        $dataa = array(
+            "type" => "java.lang.Integer", 
+            "value" => $cantProtocolos
+        );
+        $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataa);
+
+        /*
+        $uri = 'API/bpm/userTask/'.$idTask.'/execution';
+        $request = RequestController::doTheRequest('POST', $uri);*/
+        $request = RequestController::ejecutarTarea($client, $idTask);
+
+        $view = new ActividadView();
+
+        //$protocolos = ProtocoloRepository::getInstance()->getProtocolos();
+        $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
 
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
             'hecho'=> $this->sesion->getSesion('id_proceso'),
-            'protocolos' => $protocolos
+            'actividades' => $actividades
         ));
 
+    }
+
+    public function finalizar_resolver_actividades($idProtocolo){
+        
     }
 
     public function resolverActividades($idProtocolo){

@@ -7,54 +7,52 @@
 {% block main %}
 	<section class="container">
 
-        {% if protocolos %}
-      <h1>Protocolos</h1>
-        <table class="table">
-      <thead>
-        <tr>
-            <th scope="col">Titulo</th>
-            <th scope="col">Fecha Inicio</th>
-            <th scope="col">Fecha Fin</th>
-            <th scope="col">Modo ejecucion</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Puntaje</th>
-            <th scope="col">Orden</th>
-            <th scope="col">Accion</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for protocolo in protocolos %}
-        <tr>
-            <td>{{protocolo.nombre}}</td>
-            <td>{{protocolo.getFechaInicio}}</td>
-            <td>{{protocolo.getFechaFin}}</td>
-            <td> {% if protocolo.getEsLocal == 1 %} 
-                    <span class="label label-primary">Local</span>
-                {% else %} 
-                    <span class="label label-warning">Remoto</span>
-                {% endif %}
-            </td>
-            <td>{{protocolo.getEstado}}</td>
-            <td>{{protocolo.getPuntaje}}</td>
-            <td>{{protocolo.getOrden}}</td>
-            <td>
-                {% if protocolo.getEstado == 'pendiente' %}
-                    <a href="./?action=ejecutar&n={{ protocolo.getIdProtocolo }}" type="button" class="btn btn-primary btn-sm">Ejecutar</a>
-                {% elseif protocolo.getPuntaje == 0 %}
-                    <a href="./?action=determinar_resultado&n={{ protocolo.getIdProtocolo }}" type="button" class="btn btn-primary btn-sm">Determinar resultado</a>
-                {% elseif protocolo.getEstado == 'completado' %}
-                    <a href="./?action=resolverActividades&n={{ protocolo.getIdProtocolo }}" type="button" class="btn btn-primary btn-sm">Resolver Actividades</a>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-      <div class="alert alert-success" role="alert">
-        No hay protocolos cargados.
-      </div>
-  {% endif %}
+        {% if proyecto.estado == 'ejecucion' %}
+          <h1>Protocolos</h1>
+            <table class="table">
+          <thead>
+            <tr>
+                <th scope="col">Titulo</th>
+                <th scope="col">Fecha Inicio</th>
+                <th scope="col">Fecha Fin</th>
+                <th scope="col">Modo ejecucion</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Puntaje</th>
+                <th scope="col">Orden</th>
+                <th scope="col">Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for protocolo in protocolos %}
+            <tr>
+                <td>{{protocolo.nombre}}</td>
+                <td>{{protocolo.getFechaInicio}}</td>
+                <td>{{protocolo.getFechaFin}}</td>
+                <td> {% if protocolo.getEsLocal == 1 %} 
+                        <span class="label label-primary">Local</span>
+                    {% else %} 
+                        <span class="label label-warning">Remoto</span>
+                    {% endif %}
+                </td>
+                <td>{{protocolo.getEstado}}</td>
+                <td>{{protocolo.getPuntaje}}</td>
+                <td>{{protocolo.getOrden}}</td>
+                <td>
+                    {% if protocolo.getEstado == 'pendiente' %}
+                        <a href="./?action=ejecutar&n={{ protocolo.getIdProtocolo }}" type="button" class="btn btn-primary btn-sm">Ejecutar</a>
+                    {% else %}
+                        <a href="#" type="button" class="btn btn-primary btn-sm" disabled>Ejecutar</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+          <div class="alert alert-success" role="alert">
+            En espera de que el Jefe tome decision con respecto a un protocolo!
+          </div>
+      {% endif %}
   </section>
 
 {% endblock %}

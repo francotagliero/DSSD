@@ -29,6 +29,8 @@
         {% endfor %}
       </tbody>
     </table>
+
+    <a href="./?action=finalizar_actividades&p={{ activida.id_protocolo }}" type="button" class="btn btn-success" data-dismiss="modal" style="float: right; margin-left: 10px">Finalizar resolver actividades</a>
     {% else %}
       <div class="alert alert-success" role="alert">
         No hay actividades cargados.
@@ -42,6 +44,7 @@
 
       </div>
     {% endif %}
+    
   </section>
 
 {% endblock %}
