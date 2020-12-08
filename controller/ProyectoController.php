@@ -167,6 +167,20 @@ class ProyectoController{
         $idTask = RequestController::obtenerTarea($client, $caseId);
 
         $request = RequestController::ejecutarTarea($client, $idTask);
+
+        $stmt = ProyectoRepository::getInstance()->getProyectos($this->sesion->getSesion('id_user_bd'));
+
+        $view = new ProyectoView();
+
+        $stmt = ProyectoRepository::getInstance()->getProyectos($this->sesion->getSesion('id_user_bd'));
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'rol' => $this->sesion->getSesion('rol'),
+            'proyectos' => $stmt,
+            'isLogged' => $this->isLogged())
+        );
+
+
     
     }
 
