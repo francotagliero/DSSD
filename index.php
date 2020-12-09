@@ -51,7 +51,7 @@ if (isset($_GET["action"])){
 
         case 'configuracion_protocolos': { ProtocoloController::getInstance()->configurarProtocolos(); break; }
 
-        case 'tomar_decision': { ProtocoloController::getInstance()->tomarDecision(); break; }
+        case 'tomar_decision': { ProtocoloController::getInstance()->tomarDecisgetProtocolosion($_GET["p"]); break; }
 
         case 'reiniciarProtocolo': { ProtocoloController::getInstance()->reiniciarProtocolo($_GET['id']);break;}
 

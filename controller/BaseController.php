@@ -60,7 +60,7 @@ class BaseController {
             $cookieJar = new SessionCookieJar('MiCookie', true);
             $client = new Client([
                 // Base URI is used with relative requests
-                'base_uri' => 'http://localhost:12310/bonita/',
+                'base_uri' => 'http://localhost:8080/bonita/',
                 // You can set any number of default request options.
                 'timeout'  => 4.0,
                 'cookies' => $cookieJar
@@ -79,7 +79,7 @@ class BaseController {
             //crear LA SESION!
             $this->sesion->setSesion('user_bonita', $usuario);
             $this->sesion->setSesion('password_bonita', $password);
-            $this->sesion->setSesion('base_uri_bonita', 'http://localhost:12310/bonita/');
+            $this->sesion->setSesion('base_uri_bonita', 'http://localhost:8080/bonita/');
             $this->sesion->setSesion('X-Bonita-API-Token', $token->getValue());
             $this->sesion->setSesion('id_user_bd', $resultado[0]->getId() );
             $this->sesion->setSesion('logged', true);
@@ -123,7 +123,7 @@ class BaseController {
         $cookieJar = new SessionCookieJar('MiCookie', true);
         $client = new Client([
             // Base URI is used with relative requests
-            'base_uri' => 'http://localhost:12310/bonita/',
+            'base_uri' => 'http://localhost:8080/bonita/',
             // You can set any number of default request options.
             'timeout'  => 4.0,
             'cookies' => $cookieJar
@@ -251,7 +251,7 @@ class BaseController {
 
         $user = 'walter.bates';
         $password = 'bpm';
-        $base_uri = 'http://localhost:12310/bonita/';
+        $base_uri = 'http://localhost:8080/bonita/';
 
         
             //Creo una cookie jar para almacenar las cookies que me va a devolver Bonita luego del request del loginservice
@@ -271,7 +271,7 @@ class BaseController {
                 ]
             ]);
 
-            $aca = $client->request('GET', 'http://localhost:12310/bonita/API/bpm/process?s=Proceso');
+            $aca = $client->request('GET', 'http://localhost:8080/bonita/API/bpm/process?s=Proceso');
 
             //Almaceno el token de Bonita en una variable de sesion para utilizarla en los requests futuros
             $token = $cookieJar->getCookieByName('X-Bonita-API-Token');
@@ -350,8 +350,6 @@ class BaseController {
         $response['success'] = true;
         $response['data'] = json_decode($tareas);
         $caseId = $response['data']->caseId; #Obtengo id de la instancia
-
-        print_r($caseId);die(); 
     
             
             

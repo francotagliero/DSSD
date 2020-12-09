@@ -30,8 +30,7 @@ class ProtocoloController{
         $view = new ProtocoloView();
 
         $protocolos = ProtocoloRepository::getInstance()->getProtocolosResponsable($this->sesion->getSesion('id_user_bd') );
-        print_r($protocolos);
-        die();
+
         //NECESITA TRAERME EL PROYECTO!
         //$proyecto = ProyectoRepository::getInstance()->getProyecto($protocolos[0]->getIdProyecto() ); //ACA ESTAMOS TENIENDO EN CUENTA 1 SOLO PROYECTO!
         //Despues hay que darle la posibilidad al responsable de elejir entre dos proyectos (instanciados)...y que en base a esa eleccion traer los protocolos y 
@@ -40,7 +39,6 @@ class ProtocoloController{
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
             'hecho'=> $this->sesion->getSesion('id_proceso'),
-            'proyecto' => $proyecto,
             'protocolos' => $protocolos
         ));
         

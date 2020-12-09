@@ -29,8 +29,8 @@
                         <td>
                             {% if proyecto.estado == 'configuracion' %}
                                 <a href="./?action=agregarProtocolo&p={{ proyecto.idProyecto }}" type="button" class="btn btn-primary btn-sm">Configurar</a>
-                                {% else %}
-                                <a href="#" type="button" class="btn btn-primary btn-sm">Tomar decision</a>
+                            {% elseif proyecto.estado == 'tomar_decision' %}
+                                <a href="./?action=tomar_decision&p={{ proyecto.idProyecto }}" type="button" class="btn btn-primary btn-sm">Tomar decision</a>
                             {% endif %}
                         </td>
                     </tr>
