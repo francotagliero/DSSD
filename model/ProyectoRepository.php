@@ -80,5 +80,12 @@ class ProyectoRepository extends PDORepository{
         return $this->queryArgs($query, $args);
     }
 
+    public function actualizarOrden($id, $orden){
+        $query = "SELECT * FROM protocolos WHERE estado='pendiente' AND id_proyecto = ".$id." AND orden = ".$orden;
+        $protocolos = $this->query($query);
+        return $protocolos->fetchAll();
+
+    }
+
    
 }

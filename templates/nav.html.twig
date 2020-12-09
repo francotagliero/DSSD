@@ -1,15 +1,32 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                {% if username is not empty %}
+                    <a href="#" class="nav-link">{{ rol|upper }}</a>
+                {% else %}
+                    <a href="./?action=home" class="nav-link">AppWEB</a>
+                {% endif %}
+            </li>
+            {% if rol == 'jefe' %}
+                <li class="nav-item">
+                    <a href="./?action=proyectos" class="nav-link">Proyectos</a>
+                </li>
+                <li class="nav-item">
+                    <a href="./?action=protocolos" class="nav-link">Protocolos</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="./?action=protocolos" class="nav-link">Protocolos</a>
+                </li>
+            {% endif %}
 
-    <div class="col-md-1" >
-        {% if username is not empty %}
-            <a href="./?action=proyectos" class="navbar-brand">Proyectos</a>
-        {% else %}
-            <a href="./?action=home" class="navbar-brand">AppWEB</a>
-        {% endif %}
+
+        </ul>
     </div>
 
-    <div class="col-md-10" >
+    <div class="col-md-6" style="margin-right: 75px;">
     
         <div class="collapse navbar-collapse justify-content-md-end" id="usuario">
             <ul class="nav navbar-nav navbar-left">

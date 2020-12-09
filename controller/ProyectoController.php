@@ -25,10 +25,16 @@ class ProyectoController{
     }
 
     public function nuevoProyecto(){
+
+        if ($this->sesion->getSesion('rol') == 'responsable'){
+            header("Location:./?action=protocolos");
+        }
+
         $view = new ProyectoView();
 
         $view->nuevo(array(
-            'username' => $this->sesion->getSesion('user_bonita')
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'rol' => $this->sesion->getSesion('rol')
         ));
     }
 
@@ -75,6 +81,10 @@ class ProyectoController{
 
     public function getProyectos(){
         $view = new ProyectoView();
+
+        if ($this->sesion->getSesion('rol') == 'responsable'){
+            header("Location:./?action=protocolos");
+        }
 
         $stmt = ProyectoRepository::getInstance()->getProyectos($this->sesion->getSesion('id_user_bd'));
         $view->show(array(

@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main %}
+    {% set id_protocolo = '' %}
 	<section class="container">
     {% if mensaje %}
       <div class="alert alert-success" role="alert">
@@ -25,6 +26,7 @@
       </thead>
       <tbody>
         {% for actividad in actividades %}
+            {% set id_protocolo = actividad.id_protocolo %}
         <tr>
             <td>{{actividad.nombre}}</td>
             <td>{{actividad.estado}}</td>
@@ -51,7 +53,7 @@
       </div>
   {% endif %}
     
-    <a href="./?action=finalizar_actividades&p={{ activida.id_protocolo }}" type="button" class="btn btn-success" data-dismiss="modal" style="float: right; margin-left: 10px">Finalizar resolver actividades</a>
+    <a href="./?action=finalizar_actividades&p={{ id_protocolo }}" type="button" class="btn btn-success" data-dismiss="modal" style="float: right; margin-left: 10px">Finalizar resolver actividades</a>
   </section>
 
 {% endblock %}

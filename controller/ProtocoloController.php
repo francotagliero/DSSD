@@ -38,7 +38,8 @@ class ProtocoloController{
         //var_dump($proyecto);
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
-            'hecho'=> $this->sesion->getSesion('id_proceso'),
+            //'hecho'=> $this->sesion->getSesion('id_proceso'),
+            'rol' => $this->sesion->getSesion('rol'),
             'protocolos' => $protocolos
         ));
         
@@ -57,6 +58,8 @@ class ProtocoloController{
         $case = ProyectoRepository::getInstance()->getIdCase($idProyecto);
 
         $caseId = $case[0]['case_id'];
+
+        $ordenProtocolo = $protocolo[0]['orden'];
 
         /*
 
@@ -97,6 +100,10 @@ class ProtocoloController{
         $request = RequestController::doTheRequest('POST', $uri);*/
         $request = RequestController::ejecutarTarea($client, $idTask);
 
+        //ACTUALIZAR ORDEN PROYECTO
+        $res = count(ProyectoRepository::getInstance()->actualizarOrden($idProyecto, $ordenProtocolo));
+
+
         $view = new ActividadView();
 
         //$protocolos = ProtocoloRepository::getInstance()->getProtocolos();
@@ -104,7 +111,7 @@ class ProtocoloController{
 
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
-            'hecho'=> $this->sesion->getSesion('id_proceso'),
+            //'hecho'=> $this->sesion->getSesion('id_proceso'),
             'actividades' => $actividades
         ));
 
@@ -147,6 +154,7 @@ class ProtocoloController{
 
         ProtocoloRepository::getInstance()->cambiarEstadoActividad($idActividad, 'Desaprobado');
         $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo[0]);
+
         $view = new ActividadView();
 
         $view->show(array(

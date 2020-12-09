@@ -151,9 +151,9 @@ class ProtocoloRepository extends PDORepository{
                     proyectos.id_responsable as proyecto_id_responsable,
                     proyectos.case_id as proyecto_case_id,
                     proyectos.estado as proyecto_estado,
-                    proyectos.orden as proyectos_orden
+                    proyectos.orden as proyecto_orden
                 FROM protocolos 
-                INNER JOIN proyectos ON proyectos.id_proyecto = protocolos.id_proyecto AND proyectos.orden = protocolos.orden 
+                INNER JOIN proyectos ON proyectos.id_proyecto = protocolos.id_proyecto 
                 WHERE protocolos.borrado <> 1 AND proyectos.borrado <> 1 AND proyectos.case_id IS NOT NULL AND protocolos.id_responsable =".$idResponsable;
 
         //$args = array('idResponsable' => $idResponsable);
