@@ -131,35 +131,17 @@ class ProtocoloRepository extends PDORepository{
     }
 
     public function getProtocolosResponsable($idResponsable){
-        $consulta = "SELECT protocolos.id_protocolo, protocolos.nombre, protocolos.id_responsable, protocolos.fecha_inicio, protocolos.fecha_fin, protocolos.orden, protocolos.es_local, protocolos.puntaje, protocolos.id_proyecto, protocolos.estado, protocolos.borrado FROM protocolos INNER JOIN proyectos ON proyectos.id_proyecto = protocolos.id_proyecto AND proyectos.orden = protocolos.orden WHERE protocolos.id_responsable = :idResponsable AND protocolos.borrado <> 1 AND proyectos.borrado <> 1 AND proyectos.case_id IS NOT NULL";
+        $consulta = "SELECT * FROM protocolos INNER JOIN proyectos ON proyectos.id_proyecto = protocolos.id_proyecto AND proyectos.orden = protocolos.orden WHERE protocolos.borrado <> 1 AND proyectos.borrado <> 1 AND proyectos.case_id IS NOT NULL AND protocolos.id_responsable =".$idResponsable;
 
-        $args = array('idResponsable' => $idResponsable);
+        //$args = array('idResponsable' => $idResponsable);
 
-        $mapper = function($elemento) {
-            $protocolo = new Protocolo(
-            $elemento['id_protocolo'],
-            $elemento['nombre'],
-            $elemento['id_responsable'],
-            $elemento['fecha_inicio'],
-            $elemento['fecha_fin'],
-            $elemento['orden'],
-            $elemento['es_local'],
-            $elemento['puntaje'],
-            $elemento['id_proyecto'],
-            $elemento['estado'],
-            $elemento['borrado']
-            );
+        $stm = $this->query($consulta);
+        return $stm->fetchAll();
 
-            return $protocolo;
-        };
-
-        $lista = $this->queryList($consulta, $args, $mapper);
-
-        return $lista;
     }
 
     public function getActividades($idProtocolo){
-        $query = "SELECT * FROM actividades WHERE estado = 'config' AND id_protocolo = ".$idProtocolo;
+        $query = "SELECT * FROM actividades WHERE id_protocolo = ".$idProtocolo;
         $actividades = $this->query($query);
         return $actividades->fetchAll();
     }
