@@ -81,30 +81,34 @@ class ProtocoloRepository extends PDORepository{
         $protocolos = $this->query($query);
 
         return $protocolos->fetchAll();
-        }
+    }
 
-        public function reiniciarProtocolo($id){
-            $query = "UPDATE protocolos SET estado = :estado, puntaje = :puntaje WHERE id_protocolo = :id_protocolo";
-     
-             $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_protocolo' => $id);
-              return $this->queryArgs($query, $args);
-             
-         }
-     
-        public function terminarProtocolo($id){
-            $query = "UPDATE protocolos SET estado = :estado WHERE id_protocolo = :id_protocolo";
+    public function reiniciarProtocolo($id){
+        $query = "UPDATE protocolos SET estado = :estado, puntaje = :puntaje WHERE id_protocolo = :id_protocolo";
+        $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_protocolo' => $id);
+        $this->queryArgs($query, $args);
 
-            $args = array('estado' => 'terminado', 'id_protocolo' => $id);
-        return $this->queryArgs($query, $args);
-        }
-
-        public function reiniciarProyecto($idProyecto){
-            $query = "UPDATE protocolos SET estado = :estado, puntaje = :puntaje WHERE id_proyecto = :id_proyecto";
-
-            $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_proyecto' => $idProyecto);
+        $query = "UPDATE actividades SET estado = :estado WHERE id_protocolo = :id_protocolo";
+        $args = array('estado' => 'config', 'id_protocolo' => $id);
         return $this->queryArgs($query, $args);
 
-        }
+    }
+
+    public function terminarProtocolo($id){
+        $query = "UPDATE protocolos SET estado = :estado WHERE id_protocolo = :id_protocolo";
+
+        $args = array('estado' => 'terminado', 'id_protocolo' => $id);
+    return $this->queryArgs($query, $args);
+    }
+
+    public function reiniciarProyecto($idProyecto){
+        $query = "UPDATE proyectos SET estado = :estado WHERE id_proyecto = :id_proyecto";
+
+        $args = array('estado' => 'ejecucion', 'id_proyecto' => $idProyecto);
+
+        return $this->queryArgs($query, $args);
+
+    }
 
     public function altaProtocolo($nombre, $responsable, $fechaInicio, $fechaFin, $orden, $idProyecto, $esLocal){
         $query = "INSERT INTO protocolos (nombre, id_responsable, fecha_inicio, fecha_fin, orden, puntaje, id_proyecto, estado, es_local, borrado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";

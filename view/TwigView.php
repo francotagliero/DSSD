@@ -12,7 +12,11 @@ abstract class TwigView {
 
 			//Twig_Autoloader::register();
 			$loader = new Twig_Loader_Filesystem('./templates');
+
 			self::$twig = new Twig_Environment($loader);
+
+            self::$twig->addExtension(new Twig_Extensions_Extension_Date());
+
 		}
 		return self::$twig;
 	}

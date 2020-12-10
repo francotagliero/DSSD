@@ -1,0 +1,104 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    | Monitor
+{% endblock %}
+
+{% block main %}
+    <div class="col-md-7 offset-5">
+        <a href="#" type="button" class="btn btn-primary btn-xs boton-tareas">Tareas</a>
+        <a href="#" type="button" class="btn btn-primary btn-xs boton-archivadas">Tareas archivadas</a>
+    </div>
+    <div class="col-md-10 offset-1 task">
+        {% if tasks %}
+            <h1>Tareas</h1>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Nombre tarea</th>
+                    <th scope="col">Tipo tarea</th>
+                    <th scope="col">Prioridad</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Id caso</th>
+                    <th scope="col">Id tarea</th>
+                    <th scope="col">Fecha ultimo cambio estado</th>
+                    <th scope="col">Fecha ultima actualizacion</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.displayName }}</td>
+                        <td>{{ task.type }}</td>
+                        <td>{{ task.priority }}</td>
+                        <td>{{ task.state }}</td>
+                        <td>{{ task.caseId }}</td>
+                        <td>{{ task.id }}</td>
+                        <td>{{ task.reached_state_date|date('d-m-yy H:i') }}</td>
+                        <td>{{ task.last_update_date|date('d-m-yy H:i') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    <div class="col-md-10 offset-1 archived-task">
+        {% if archivedTask %}
+            <h1>Tareas archivadas</h1>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Nombre tarea</th>
+                    <th scope="col">Tipo tarea</th>
+                    <th scope="col">Prioridad</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Id caso</th>
+                    <th scope="col">Id tarea</th>
+                    <th scope="col">Fecha asignacion</th>
+                    <th scope="col">Fecha archivada</th>
+                    <th scope="col">Tiempo transcurrido</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for arch in archivedTask %}
+                    <tr>
+                        <td>{{ arch.displayName }}</td>
+                        <td>{{ arch.type }}</td>
+                        <td>{{ arch.priority }}</td>
+                        <td>{{ arch.state }}</td>
+                        <td>{{ arch.caseId }}</td>
+                        <td>{{ arch.id }}</td>
+                        <td>{{ arch.assigned_date|date('d-m-yy H:i') }}</td>
+                        <td>{{ arch.archivedDate|date('d-m-yy H:i') }}</td>
+                        <td class="tiempo">{{ arch.assigned_date|time_diff(arch.archivedDate) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.archived-task').hide();
+        $('.boton-archivadas').on('click', function(){
+            $('.archived-task').show();
+            $('.task').hide();
+        });
+        $('.boton-tareas').on('click', function(){
+            $('.archived-task').hide();
+            $('.task').show();
+        });
+        $( ".tiempo" ).each(function() {
+            $( this ).html($( this ).html().replace('minutes ago', 'minutos'));
+        });
+    </script>
+{% endblock %}
+
+

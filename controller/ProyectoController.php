@@ -110,6 +110,11 @@ class ProyectoController{
         $view = new ProtocoloView();
         if(ProtocoloController::getInstance()->esJefe()){
             ProtocoloRepository::getInstance()->reiniciarProyecto($id);
+
+            $protocolos = ProtocoloRepository::getInstance()->getProtocolosProyecto($id);
+            foreach ($protocolos as $protocolo){
+                ProtocoloRepository::getInstance()->reiniciarProtocolo($protocolo->getIdProtocolo());
+            }
             $mensaje='Proyecto reiniciado.';
             ProtocoloController::getInstance()->mostrarProtocolos($mensaje);
         } else {

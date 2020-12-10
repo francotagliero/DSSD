@@ -14,6 +14,7 @@ require_once('controller/AccessController.php');
 require_once('controller/RequestController.php');
 require_once('controller/SesionController.php');
 require_once('controller/ProyectoController.php');
+require_once('controller/MonitorController.php');
 
 /* CLASS */
 require_once('class/Usuario.php');
@@ -35,6 +36,7 @@ require_once('view/ProyectoView.php');
 require_once('view/ConfiguracionProtocolos.php');
 require_once('view/Backend.php');
 require_once('view/ActividadView.php');
+require_once('view/MonitorView.php');
 
 
 if (isset($_GET["action"])){
@@ -51,7 +53,7 @@ if (isset($_GET["action"])){
 
         case 'configuracion_protocolos': { ProtocoloController::getInstance()->configurarProtocolos(); break; }
 
-        case 'tomar_decision': { ProtocoloController::getInstance()->tomarDecisgetProtocolosion($_GET["p"]); break; }
+        case 'tomar_decision': { ProtocoloController::getInstance()->tomarDecision(); break; }
 
         case 'reiniciarProtocolo': { ProtocoloController::getInstance()->reiniciarProtocolo($_GET['id']);break;}
 
@@ -99,6 +101,10 @@ if (isset($_GET["action"])){
         case 'instanciacion': { BaseController::getInstance()->instanciacion(); break; }
 
         case 'backend': { BaseController::getInstance()->backend(); break; }
+
+
+        /* MONITOR */
+        case 'monitor': { MonitorController::getInstance()->getTasks(); break; }
 
         default: { BaseController::getInstance()->login(); break; }
     }

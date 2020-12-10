@@ -34,11 +34,7 @@ class BaseController {
         }
         else{
 
-            $view = new Backend();
-            $view->show(array(
-                'rol' => $this->sesion->getSesion('rol'),
-                'username' => $this->sesion->getSesion('user_bonita')
-            ));
+            ProyectoController::getInstance()->getProyectos();
         }
 
 

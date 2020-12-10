@@ -2,25 +2,26 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                {% if username is not empty %}
+            {% if username is not empty %}
+                <li class="nav-item active">
                     <a href="#" class="nav-link">{{ rol|upper }}</a>
+                </li>
+                {% if rol == 'jefe' %}
+                    <li class="nav-item">
+                        <a href="./?action=proyectos" class="nav-link">Proyectos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="./?action=protocolos" class="nav-link">Protocolos</a>
+                    </li>
                 {% else %}
-                    <a href="./?action=home" class="nav-link">AppWEB</a>
+                    <li class="nav-item">
+                        <a href="./?action=protocolos" class="nav-link">Protocolos</a>
+                    </li>
                 {% endif %}
-            </li>
-            {% if rol == 'jefe' %}
-                <li class="nav-item">
-                    <a href="./?action=proyectos" class="nav-link">Proyectos</a>
-                </li>
-                <li class="nav-item">
-                    <a href="./?action=protocolos" class="nav-link">Protocolos</a>
-                </li>
             {% else %}
-                <li class="nav-item">
-                    <a href="./?action=protocolos" class="nav-link">Protocolos</a>
-                </li>
+                <a href="./?action=home" class="nav-link">AppWEB</a>
             {% endif %}
+
 
 
         </ul>
@@ -42,6 +43,9 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ username }}</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown">
                             <a class="dropdown-item" href="./?action=backend">Backend</a>
+                            {% if rol == 'jefe' %}
+                                <a class="dropdown-item" href="./?action=monitor">Monitor</a>
+                            {% endif %}
                             <a class="dropdown-item" href="./?action=logout">Cerrar sesión</a>
                         </div>
                     {% endif %}

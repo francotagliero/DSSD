@@ -110,6 +110,7 @@ class ProtocoloController{
         $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
 
         $view->show(array(
+            'rol' => $this->sesion->getSesion('rol'),
             'username' => $this->sesion->getSesion('user_bonita'),
             //'hecho'=> $this->sesion->getSesion('id_proceso'),
             'actividades' => $actividades
@@ -230,12 +231,13 @@ class ProtocoloController{
         if($this->getInstance()->esJefe()){
 
             $protocolos = ProtocoloRepository::getInstance()->getProtocolosDesaprobados($this->sesion->getSesion('id_user_bd'));
-            $array = array('username' => $this->sesion->getSesion('user_bonita'),'protocolos' => $protocolos);
+            $array = array('username' => $this->sesion->getSesion('user_bonita'),'protocolos' => $protocolos,'rol' => $this->sesion->getSesion('rol'));
+
 
             $view->TomarDecision($array);
             
         } else {
-            $view->mensaje(array('mensaje' => 'No tiene permiso'));
+            $view->mensaje(array('mensaje' => 'No tiene permiso','rol' => $this->sesion->getSesion('rol')));
         }
         
     }
