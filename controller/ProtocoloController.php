@@ -61,82 +61,43 @@ class ProtocoloController{
 
         $tipoProtocolo = (int)$protocolo[0]['es_local'];
 
-        var_dump($caseId);
-        var_dump($idProtocolo);
-
-        /*
-
-        $uri = 'API/bpm/task?f=caseId='.$caseId;
-
-        $request = RequestController::doTheRequest('GET', $uri);
-
-        $taskId = $request['data'][0]->id; //EL idTask DEL DETERMINAR PROTOCOLO A EJECUTAR!!!!!*/
-
         $idTask = RequestController::obtenerTarea($client, $caseId);
 
-        $idUser = RequestController::getUserIdDos($client, $this->sesion->getSesion('user_bonita') ); //idUser de bonita del usuario logeado en la appWeb
+        $idUser = RequestController::getUserIdDos($client, $this->sesion->getSesion('user_bonita') );
 
-        $request = RequestController::asignarTarea($client, $idTask, $idUser); //El responsable se asigna a si mismo la DETERMINAR PROTOCOLO A EJECUTAR
-        //QUE HACEMO PA?
+        RequestController::asignarTarea($client, $idTask, $idUser);
 
-        //MODIFICAMOS LA VARIABLE DE PROCESO tipoProtocolo (remoto=0 o local=1) y la variable cantProtocolos (=0 finaliza la instancia y notifica al jefe)
+        $cantProtocolosPendiente = count(ProtocoloRepository::getInstance()->cantProtocolosProyectoPendientes($idProyecto) );
 
-        $cantProtocolosPendiente = count(ProtocoloRepository::getInstance()->cantProtocolosProyectoPendientes($idProyecto) ); //HACER LA CONSULTA SQL PARA HACER ESTO DINAMICO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //
         $dataa = array(
             "type" => "java.lang.Integer", 
             "value" => $cantProtocolosPendiente
         );
-        $responseCantProtocolos = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataa);
 
-        var_dump($cantProtocolosPendiente);
-        var_dump($tipoProtocolo);
-        var_dump($responseCantProtocolos);
+        RequestController::setCaseVariable($client, $caseId, $dataa);
+
+        //RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataa);
        
         $dataTipoProtocolo = array(
             "type" => "java.lang.Integer", 
             "value" => $tipoProtocolo
         );
-        $responseTipoProtocolo = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/tipoProtocolo', $dataTipoProtocolo);   
-        //return $response;
-        var_dump($responseTipoProtocolo);
-        
 
-        /*
-        $uri = 'API/bpm/userTask/'.$idTask.'/execution';
-        $request = RequestController::doTheRequest('POST', $uri);*/
-        $request = RequestController::ejecutarTarea($client, $idTask);
+        RequestController::setCaseVariable($client, $caseId, $dataTipoProtocolo);
+        //RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/tipoProtocolo', $dataTipoProtocolo);
+
+        RequestController::ejecutarTarea($client, $idTask);
 
         ProtocoloRepository::getInstance()->ejecutarProtocolo($idProtocolo); //cambia el estado a ejecutado, del protocoloo
-
-        //Quedan para ejecutar protocolos de orden $ordenProtocolo? (estado = pendiente)
-        //$cant = count(ProyectoRepository::getInstance()->actualizarOrden($idProyecto, $ordenProtocolo) );
-
-        /*
-        if($cantProtocolosPendiente > 0){
-            if($cant == 0){ 
-                //Actualizar el orden del proyecto
-                ProyectoRepository::getInstance()->cambiarOrden($idProyecto, $ordenProtocolo + 1);
-            }
-        }else{
-            $dataaa = array(
-                "type" => "java.lang.Integer", 
-                "value" => $cantProtocolosPendiente
-            );
-            $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataaa);
-        }*/
         
-        //CAMBIAMOS EL ESTADO DEL PROYECTO A EJECUTADO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         ProyectoRepository::getInstance()->cambiarEstado($idProyecto);
 
         $view = new ActividadView();
 
-        //$protocolos = ProtocoloRepository::getInstance()->getProtocolos();
         $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
 
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
-            //'hecho'=> $this->sesion->getSesion('id_proceso'),
             'actividades' => $actividades
         ));
 

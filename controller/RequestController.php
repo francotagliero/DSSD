@@ -160,6 +160,21 @@ class RequestController {
         return $response;
     }
 
+    public static function setCaseVariable($client, $caseId, $data){
+        $request = $client->request('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos',
+            ['headers' => [
+                'X-Bonita-API-Token' => GuzzleController::getToken()
+            ],
+                'json' => [
+                    'type' => 'java.lang.Integer',
+                    'value'=> $data
+                ]
+            ]);
+        $tareas = $request->getBody();
+        $response['success'] = true;
+        $response['data'] = json_decode($tareas);
+    }
+
 
 
 }
