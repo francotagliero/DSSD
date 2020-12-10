@@ -87,5 +87,32 @@ class ProyectoRepository extends PDORepository{
 
     }
 
+    public function cambiarOrden($idProyecto, $orden){
+        $query = "UPDATE proyectos SET orden = :orden WHERE id_proyecto = :id_proyecto";
+
+        $args = array('orden' => $orden, 'id_proyecto' => $idProyecto);
+        return $this->queryArgs($query, $args);
+    }
+    
+    public function cambiarEstadoConfiguracion($idProyecto){
+        $query = "UPDATE proyectos SET estado = :estado WHERE id_proyecto = :id_proyecto";
+
+        $args = array('estado' => 'configuracion', 'id_proyecto' => $idProyecto);
+        return $this->queryArgs($query, $args);
+    }
+
+    public function cambiarEstadoTerminado($idProyecto){
+        $query = "UPDATE proyectos SET estado = :estado WHERE id_proyecto = :id_proyecto";
+
+        $args = array('estado' => 'terminado', 'id_proyecto' => $idProyecto);
+        return $this->queryArgs($query, $args);
+    }
+
+    public function cambiarEstadoNotificado($idProyecto){
+        $query = "UPDATE proyectos SET estado = :estado WHERE id_proyecto = :id_proyecto";
+
+        $args = array('estado' => 'notificado', 'id_proyecto' => $idProyecto);
+        return $this->queryArgs($query, $args);
+    }
    
 }

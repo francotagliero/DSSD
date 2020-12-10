@@ -79,6 +79,49 @@ class ProyectoController{
         }
     }
 
+
+    public function notificarJefe($idProtocolo){
+        $client = GuzzleController::getGuzzleClient();
+        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
+
+        $idProyecto = $protocolo[0]['id_proyecto'];
+        //$ordenProtocolo = $protocolo[0]['orden'];
+
+        $case = ProyectoRepository::getInstance()->getIdCase($idProyecto);
+
+        $caseId = $case[0]['case_id'];
+        
+        $idTask = RequestController::obtenerTarea($client, $caseId);
+        $idUser = RequestController::getUserIdDos($client, $this->sesion->getSesion('user_bonita') ); //idUser de bonita del usuario logeado en la appWeb
+        $request = RequestController::asignarTarea($client, $idTask, $idUser);
+
+        $dataProtocolosPendientesCero = array(
+            "type" => "java.lang.Integer", 
+            "value" => 0
+        );
+        $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataProtocolosPendientesCero);
+
+
+        $request = RequestController::ejecutarTarea($client, $idTask);
+
+        //MODIFICAR EL ESTADO DEL PROYECTO A 'Notificado'
+        ProyectoRepository::getInstance()->cambiarEstadoNotificado($idProyecto);
+
+        //MUESTRO LA VISTA!!
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolosResponsable($this->sesion->getSesion('id_user_bd') );
+
+        $view = new ProtocoloView();
+
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'hecho'=> 'Proyecto terminado y Jefe notificado!',
+            'rol' => $this->sesion->getSesion('rol'),
+            'protocolos' => $protocolos
+        ));
+
+
+    }
+
     public function getProyectos(){
         $view = new ProyectoView();
 
@@ -173,7 +216,6 @@ class ProyectoController{
     }
 
     public function finalizar_configuracion($idProyecto){
-        ProyectoRepository::getInstance()->cambiarEstado($idProyecto);
 
         $proyecto = ProyectoRepository::getInstance()->getProyecto($idProyecto);
 

@@ -1,0 +1,36 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+	| Protocolos
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <h1>Determinar resultado protocolo</h1>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Protocolo</th>
+                        <th scope="col">Estado protocolo</th>
+                        <th scope="col">Puntaje</th>
+                        <th scope="col">Accion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for protocolo in protocolos %}
+                        <tr>
+                            <td>{{protocolo.nombre}}</td>
+                            <td>{{protocolo.estado}}</td>
+                            <td>{{protocolo.puntaje}}</td>
+                            <td>
+                                <a href="./?action=aprobarProtocolo&n={{ protocolo.id_protocolo }}" type="button" class="btn btn-success btn-sm">Aprobar</a>
+                                <a href="#" type="button" class="btn btn-danger btn-sm">Desaprobar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{% endblock %}

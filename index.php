@@ -37,6 +37,7 @@ require_once('view/ConfiguracionProtocolos.php');
 require_once('view/Backend.php');
 require_once('view/ActividadView.php');
 require_once('view/MonitorView.php');
+require_once('view/DeterminarResultadoView.php');
 
 
 if (isset($_GET["action"])){
@@ -70,6 +71,10 @@ if (isset($_GET["action"])){
         case 'desaprobarActividad': { ProtocoloController::getInstance()->desaprobarActividad($_GET["id"]); break; }
 
         case 'finalizar_actividades': { ProtocoloController::getInstance()->finalizar_resolver_actividades($_GET["p"]); break; }
+        
+        case 'aprobarProtocolo': { ProtocoloController::getInstance()->aprobarProtocolo($_GET["n"]); break; }
+
+        case 'notificarJefe': { ProyectoController::getInstance()->notificarJefe($_GET["n"]); break; }
         
         //case 'ejecutar_protocolo': { ProtocoloController::getInstance()->ejecutarProtocoloResponsable($_GET["n"]); break; }
 

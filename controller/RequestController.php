@@ -80,7 +80,7 @@ class RequestController {
 
     public static function getUserIdDos($client, $username){
 
-        $request = $client->request('GET', 'API/identity/user??p=0&c=10&o=lastname%20ASC&s='.$username.'&f=enabled%3dtrue',
+        $request = $client->request('GET', 'API/identity/user??p=0&c=10&o=userName%20ASC&s='.$username.'&f=enabled%3dtrue',
             [
                 'headers' => [
                     'X-Bonita-API-Token' => GuzzleController::getToken()

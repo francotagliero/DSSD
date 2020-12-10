@@ -186,6 +186,42 @@ class ProtocoloRepository extends PDORepository{
         return $this->queryArgs($query, $args);
     }
 
+    public function cantProtocolosProyecto($idProyecto){
+        $query = "SELECT * FROM protocolos WHERE id_proyecto = ".$idProyecto;
+        $protocolos = $this->query($query);
+        return $protocolos->fetchAll();
+    }
+
+    public function cantProtocolosProyectoPendientes($idProyecto){
+        $query = "SELECT * FROM protocolos WHERE estado = 'pendiente' AND id_proyecto = ".$idProyecto;
+        $protocolos = $this->query($query);
+        return $protocolos->fetchAll();
+    }
+
+    public function terminarEjecucionLocalProtocolo($idProtocolo){
+        $query = ("UPDATE protocolos SET estado = 'completado' WHERE id_protocolo = ".$idProtocolo);
+        $this->query($query);
+        return true;
+    }
+
+    public function getActividadesAprobadas($idProtocolo){
+        $query = "SELECT * FROM actividades WHERE estado = 'Aprobado' AND id_protocolo = ".$idProtocolo;
+        $actividades = $this->query($query);
+        return $actividades->fetchAll();
+    }
+
+    public function setPuntajeProtocolo($idProtocolo, $puntaje){
+        $query = ("UPDATE protocolos SET puntaje = :puntaje WHERE id_protocolo = :id_protocolo");
+        $args = array('puntaje' => $puntaje, 'id_protocolo' => $idProtocolo);
+        $this->queryArgs($query, $args);
+        return true;
+    }
+
+    public function aprobarProtocolo($idProtocolo){
+        $query = ("UPDATE protocolos SET estado = 'terminado' WHERE id_protocolo = ".$idProtocolo);
+        $this->query($query);
+        return true;
+    }
 
    
 }

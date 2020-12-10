@@ -33,7 +33,7 @@
                         <td>{{protocolo.protocolo_nombre}}</td>
                         <td>{{protocolo.protocolo_fecha_inicio}}</td>
                         <td>{{protocolo.protocolo_fecha_fin}}</td>
-                        <td> {% if protocolo.protocolo_estado == 1 %}
+                        <td> {% if protocolo.protocolo_es_local == 1 %}
                                 <span class="label label-primary">Local</span>
                             {% else %}
                                 <span class="label label-warning">Remoto</span>
@@ -43,8 +43,12 @@
                         <td>{{protocolo.protocolo_puntaje}}</td>
                         <td>{{protocolo.protocolo_orden}}</td>
                         <td>
-                            {% if protocolo.protocolo_estado == 'pendiente' and protocolo.proyecto_estado == 'ejecucion' and protocolo.protocolo_orden == protocolo.proyecto_orden %}
+                            {% if protocolo.protocolo_estado == 'pendiente' and protocolo.proyecto_estado == 'configuracion' and protocolo.protocolo_orden == protocolo.proyecto_orden %}
                                 <a href="./?action=ejecutar&n={{ protocolo.protocolo_id }}" type="button" class="btn btn-primary btn-sm">Ejecutar</a>
+                            {% elseif protocolo.proyecto_estado == 'terminado'%}
+                                <a href="./?action=notificarJefe&n={{ protocolo.protocolo_id }}" type="button" class="btn btn-warning btn-sm">Notificar resultados al Jefe de proyecto</a>
+                            {% elseif protocolo.proyecto_estado == 'notificado'%}
+                                <a href="./?action=notificarJefe&n={{ protocolo.protocolo_id }}" type="button" class="btn btn-warning btn-sm disabled">Notificar resultados al Jefe de proyecto</a>
                             {% else %}
                                 <a href="#" type="button" class="btn btn-primary btn-sm disabled">Ejecutar</a>
                             {% endif %}
