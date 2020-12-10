@@ -15,7 +15,7 @@ abstract class TwigView {
 
 			self::$twig = new Twig_Environment($loader);
 
-            self::$twig->addExtension(new Twig_Extensions_Extension_Date());
+            //self::$twig->addExtension(new Twig_Extensions_Extension_Date());
 
 		}
 		return self::$twig;

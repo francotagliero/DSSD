@@ -99,7 +99,11 @@ class ProyectoController{
             "type" => "java.lang.Integer", 
             "value" => 0
         );
-        $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataProtocolosPendientesCero);
+        $variable = 'cantProtocolos';
+        $tipoData = 'Integer';
+        $data = 0;
+        $response = RequestController::setCaseVariable($caseId, $variable, $data, $tipoData);
+        //$response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataProtocolosPendientesCero);
 
 
         $request = RequestController::ejecutarTarea($client, $idTask);

@@ -14,7 +14,7 @@ require_once('controller/AccessController.php');
 require_once('controller/RequestController.php');
 require_once('controller/SesionController.php');
 require_once('controller/ProyectoController.php');
-require_once('controller/MonitorController.php');
+require_once('controller/CloudController.php');
 
 /* CLASS */
 require_once('class/Usuario.php');
@@ -36,7 +36,6 @@ require_once('view/ProyectoView.php');
 require_once('view/ConfiguracionProtocolos.php');
 require_once('view/Backend.php');
 require_once('view/ActividadView.php');
-require_once('view/MonitorView.php');
 require_once('view/DeterminarResultadoView.php');
 
 
@@ -47,6 +46,12 @@ if (isset($_GET["action"])){
         /* CLOUD */
         case 'cloud': { BaseController::getInstance()->cloud(); break; }
 
+        case 'loginCloud': { CloudController::getInstance()->loginCloud(); break; } // login cloud.
+
+        case 'iniciarProtocoloCloud': { CloudController::getInstance()->iniciarProtocoloCloud(); break; } //iniciar Protocolo cloud.
+
+        case 'consultarProtocoloCloud': { CloudController::getInstance()->consultarProtocoloCloud(); break; } //consultar estado protocolo Cloud.
+
         /* PROTOCOLO */
         case 'protocolos': { ProtocoloController::getInstance()->getProtocolos(); break; }
 
@@ -54,7 +59,7 @@ if (isset($_GET["action"])){
 
         case 'configuracion_protocolos': { ProtocoloController::getInstance()->configurarProtocolos(); break; }
 
-        case 'tomar_decision': { ProtocoloController::getInstance()->tomarDecision(); break; }
+        case 'tomar_decision': { ProtocoloController::getInstance()->tomarDecisgetProtocolosion($_GET["p"]); break; }
 
         case 'reiniciarProtocolo': { ProtocoloController::getInstance()->reiniciarProtocolo($_GET['id']);break;}
 
@@ -71,7 +76,7 @@ if (isset($_GET["action"])){
         case 'desaprobarActividad': { ProtocoloController::getInstance()->desaprobarActividad($_GET["id"]); break; }
 
         case 'finalizar_actividades': { ProtocoloController::getInstance()->finalizar_resolver_actividades($_GET["p"]); break; }
-        
+
         case 'aprobarProtocolo': { ProtocoloController::getInstance()->aprobarProtocolo($_GET["n"]); break; }
 
         case 'notificarJefe': { ProyectoController::getInstance()->notificarJefe($_GET["n"]); break; }
@@ -106,10 +111,6 @@ if (isset($_GET["action"])){
         case 'instanciacion': { BaseController::getInstance()->instanciacion(); break; }
 
         case 'backend': { BaseController::getInstance()->backend(); break; }
-
-
-        /* MONITOR */
-        case 'monitor': { MonitorController::getInstance()->getTasks(); break; }
 
         default: { BaseController::getInstance()->login(); break; }
     }
