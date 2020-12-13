@@ -69,7 +69,7 @@ class ProtocoloRepository extends PDORepository{
     }
 
     public function setPuntaje($id, $puntaje){
-        $query = ("UPDATE protocolos SET estado = 'finalizado', puntaje = :puntaje WHERE id_protocolo = :id_protocolo");
+        $query = ("UPDATE protocolos SET estado = 'completado', puntaje = :puntaje WHERE id_protocolo = :id_protocolo");
         $args = array('puntaje' => $puntaje, 'id_protocolo' => $id);
         $this->queryArgs($query, $args);
         return true;
@@ -88,6 +88,8 @@ class ProtocoloRepository extends PDORepository{
         $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_protocolo' => $id);
         $this->queryArgs($query, $args);
 
+        //OJO CON LAS ACTIVIDADES!!!
+
         $query = "UPDATE actividades SET estado = :estado WHERE id_protocolo = :id_protocolo";
         $args = array('estado' => 'config', 'id_protocolo' => $id);
         return $this->queryArgs($query, $args);
@@ -101,6 +103,7 @@ class ProtocoloRepository extends PDORepository{
     return $this->queryArgs($query, $args);
     }
 
+    //HAY QUE ARREAGLAR!!!
     public function reiniciarProyecto($idProyecto){
         $query = "UPDATE proyectos SET estado = :estado WHERE id_proyecto = :id_proyecto";
 
@@ -221,6 +224,18 @@ class ProtocoloRepository extends PDORepository{
         $query = ("UPDATE protocolos SET estado = 'terminado' WHERE id_protocolo = ".$idProtocolo);
         $this->query($query);
         return true;
+    }
+
+    public function setProtocoloRemotoEjecutado($idProtocolo){
+        $query = "INSERT INTO protocolos_ejecutados (id_protocolo_ejecutado_relacion) VALUES (?);";
+        $args = array($idProtocolo);
+        return $this->queryArgs($query, $args);
+    }
+
+    public function getUltimoProtocoloRemotoEjecutado(){
+        $query = "SELECT protocolos_ejecutados.id_protocolo_ejecutado_relacion FROM protocolos_ejecutados INNER JOIN (SELECT max(id_protocolo_ejecutado) as cantidad, id_protocolo_ejecutado_relacion FROM protocolos_ejecutados) AS hh ON protocolos_ejecutados.id_protocolo_ejecutado = hh.cantidad";
+        $protocolo = $this->query($query);
+        return $protocolo->fetchAll();
     }
 
    

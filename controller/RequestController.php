@@ -160,7 +160,7 @@ class RequestController {
         return $response;
     }
 
-    public static function setCaseVariable($caseId, $variable, $data, $tipoData){
+    public static function setCaseVariable($caseId, $variable, $data){
 
     	/*
         #############################################################
@@ -189,6 +189,31 @@ class RequestController {
     
         $response['success'] = true;
         $response['data'] = json_decode($tareas);
+    }
+
+    public static function getCaseVariable($caseId, $variable){
+
+    	/*
+        #############################################################
+            Seteo la variable del proceso de la instancia ($caseId)
+            Se tiene que hacer 1 vez por cada variable a setear
+        #############################################################    
+        */
+        $client = GuzzleController::getGuzzleClient();  
+    	$request = $client->request('GET', '/bonita/API/bpm/caseVariable/'.$caseId."/".$variable,
+            [
+                'headers' => [
+                    'X-Bonita-API-Token' => GuzzleController::getToken(),
+                   
+                ]
+        ]);
+        $tareas = $request->getBody();
+        $json = json_decode($tareas);
+    
+        $response['success'] = true;
+        $obj = json_decode($tareas);
+        
+        return $obj->value;
     }
 
 

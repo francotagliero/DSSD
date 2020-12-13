@@ -35,7 +35,8 @@ class ProtocoloController{
         //$proyecto = ProyectoRepository::getInstance()->getProyecto($protocolos[0]->getIdProyecto() ); //ACA ESTAMOS TENIENDO EN CUENTA 1 SOLO PROYECTO!
         //Despues hay que darle la posibilidad al responsable de elejir entre dos proyectos (instanciados)...y que en base a esa eleccion traer los protocolos y 
         //seguir todo el mismo flujo de ejecucion!
-        //var_dump($proyecto);
+        //var_dump($this->sesion->getSesion('tokencloud') );
+
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
             //'hecho'=> $this->sesion->getSesion('id_proceso'),
@@ -45,8 +46,8 @@ class ProtocoloController{
         
     }
 
-    public function ejecutarProtocolo($idProtocolo){
-
+    public function ejecutarProtocolo($idProtocolo){    
+        
         $client = GuzzleController::getGuzzleClient();
 
         $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
@@ -104,51 +105,88 @@ class ProtocoloController{
         //return $response;
         var_dump($responseTipoProtocolo);
         */
-        $response = RequestController::setCaseVariable($caseId, 'tipoProtocolo', $tipoProtocolo, 'Integer');
+        $response = RequestController::setCaseVariable($caseId, 'tipoProtocolo', $tipoProtocolo);
+        $response = RequestController::setCaseVariable($caseId, 'cantProtocolos', $cantProtocolosPendiente);
 
 
         /*
         $uri = 'API/bpm/userTask/'.$idTask.'/execution';
         $request = RequestController::doTheRequest('POST', $uri);*/
         $request = RequestController::ejecutarTarea($client, $idTask);
+        
 
         ProtocoloRepository::getInstance()->ejecutarProtocolo($idProtocolo); //cambia el estado a ejecutado, del protocoloo
 
         //Quedan para ejecutar protocolos de orden $ordenProtocolo? (estado = pendiente)
         //$cant = count(ProyectoRepository::getInstance()->actualizarOrden($idProyecto, $ordenProtocolo) );
 
-        
-        if($cantProtocolosPendiente > 0){
-            if($cant == 0){ 
-                /*
-                //Actualizar el orden del proyecto
-                ProyectoRepository::getInstance()->cambiarOrden($idProyecto, $ordenProtocolo + 1);
-            }*/
-        }
-        else{
-            $response = RequestController::setCaseVariable($caseId, 'cantProtocolos', 0);/*
-            $dataaa = array(
-                "type" => "java.lang.Integer", 
-                "value" => $cantProtocolosPendiente
-            );
-            $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataaa);*/
-        }
-        
         //CAMBIAMOS EL ESTADO DEL PROYECTO A EJECUTADO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         ProyectoRepository::getInstance()->cambiarEstado($idProyecto);
 
-        $view = new ActividadView();
+        //SI ES LOCAL EL PROTOCOLO!!
+       if($tipoProtocolo == 1){
 
-        //$protocolos = ProtocoloRepository::getInstance()->getProtocolos();
-        $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
+            $view = new ActividadView();
+
+            //$protocolos = ProtocoloRepository::getInstance()->getProtocolos();
+            $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
+
+            $view->show(array(
+                'username' => $this->sesion->getSesion('user_bonita'),
+                //'hecho'=> $this->sesion->getSesion('id_proceso'),
+                'actividades' => $actividades
+            ));
+       }else{
+            //Agregar el id del protocolo remoto a la variable de proceso Bonita "idProtocoloRemoto"
+            //$this->sesion->setSesion('id_protocolo_remoto', $idProtocolo);
+            //$response = RequestController::setCaseVariable($caseId, 'idProtocoloRemoto', $idProtocolo);
+            //var_dump(RequestController::getCaseVariable($caseId, 'cantProtocolos') );
+            //$this->sesion->setSesion('id_protocolo_remoto', $idProtocolo);
+
+            //AGREGAR EN LA BD el id del protocolo REMOTO que va a ser ejecutado por el CLOUD!!!!! asi desde CloudController puedo acceder al idProtocolo
+            ProtocoloRepository::getInstance()->setProtocoloRemotoEjecutado($idProtocolo);
+            
+            //AGREGA EL PROTOCOLO REMOTO A LA TABLA protocolos ejecutados (SOLO REMOTOS)
+            $protocolo = ProtocoloRepository::getInstance()->getUltimoProtocoloRemotoEjecutado();
+            //var_dump($protocolo[0][0]);
+
+            $view = new ProtocoloView();
+
+            $protocolos = ProtocoloRepository::getInstance()->getProtocolosResponsable($this->sesion->getSesion('id_user_bd') );
+
+            //NECESITA TRAERME EL PROYECTO!
+            //$proyecto = ProyectoRepository::getInstance()->getProyecto($protocolos[0]->getIdProyecto() ); //ACA ESTAMOS TENIENDO EN CUENTA 1 SOLO PROYECTO!
+            //Despues hay que darle la posibilidad al responsable de elejir entre dos proyectos (instanciados)...y que en base a esa eleccion traer los protocolos y 
+            //seguir todo el mismo flujo de ejecucion!
+            //var_dump($proyecto);
+            $view->show(array(
+                'username' => $this->sesion->getSesion('user_bonita'),
+                //'hecho'=> $this->sesion->getSesion('id_proceso'),
+                'rol' => $this->sesion->getSesion('rol'),
+                'protocolos' => $protocolos
+            ));
+
+       }
+          
+        
+        
+
+        
+    }
+
+    public function determinarRemoto(){
+        $idProtocoloRemoto = $this->sesion->getSesion('id_protocolo_remoto');
+
+        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocoloRemoto);
+
+        $view = new DeterminarResultadoView();
 
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
-            //'hecho'=> $this->sesion->getSesion('id_proceso'),
-            'actividades' => $actividades
+            'protocolos' => $protocolo
         ));
 
-        }
+
     }
 
     public function finalizar_resolver_actividades($idProtocolo){
@@ -211,6 +249,12 @@ class ProtocoloController{
 
         $caseId = $case[0]['case_id'];
 
+        $idTask = RequestController::obtenerTarea($client, $caseId);
+
+        $idUser = RequestController::getUserIdDos($client, $this->sesion->getSesion('user_bonita') ); //idUser de bonita del usuario logeado en la appWeb
+
+        $request = RequestController::asignarTarea($client, $idTask, $idUser);
+
         //Volver a poner el PROYECTO en estado CONFIGURACION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         ProyectoRepository::getInstance()->cambiarEstadoConfiguracion($idProyecto);
 
@@ -224,14 +268,16 @@ class ProtocoloController{
             //$cantProtocolosPendiente = count(ProtocoloRepository::getInstance()->cantProtocolosProyecto($idProyecto) );
             //MODIFICAR LA VARIABLE DE PROCESO cantProtocolos!
             
+            /*
             $dataaa = array(
                 "type" => "java.lang.Integer", 
                 "value" => 0
             );
-            $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataaa);
+            $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataaa);*/
 
-
+            $response = RequestController::setCaseVariable($caseId, 'cantProtocolos', 0);
             //HAY que modificar el estado del proyecto en estado TERMINADO!!!!
+            
             ProyectoRepository::getInstance()->cambiarEstadoTerminado($idProyecto);
 
 
@@ -246,20 +292,17 @@ class ProtocoloController{
             }
         }
 
-        $idTask = RequestController::obtenerTarea($client, $caseId);
-
-        $idUser = RequestController::getUserIdDos($client, $this->sesion->getSesion('user_bonita') ); //idUser de bonita del usuario logeado en la appWeb
-
-        $request = RequestController::asignarTarea($client, $idTask, $idUser);
-
         //MODIFICO LA variable del proceso BONITA! resultadoProtocolo en 1 ( Aprobado = 1 )
         $resultadoProtocolo = 1;
 
+        /*
         $datae = array(
             "type" => "java.lang.Integer", 
             "value" => $resultadoProtocolo
         );
-        $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/resultadoProtocolo', $datae);
+        $response = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/resultadoProtocolo', $datae);*/
+
+        $response = RequestController::setCaseVariable($caseId, 'resultadoProtocolo', $resultadoProtocolo);
 
         //EJECUTO LA TAREA BONITA "Determinar resultado"
         $request = RequestController::ejecutarTarea($client, $idTask);
@@ -383,16 +426,16 @@ class ProtocoloController{
         return  false;
     }
 
-    public function TomarDecision(){
+    public function tomarDecision($idProyecto){
         $view = new ProtocoloView();
 
-        if($this->getInstance()->esJefe()){
+        if($this->getInstance()->esJefe() ){
 
             $protocolos = ProtocoloRepository::getInstance()->getProtocolosDesaprobados($this->sesion->getSesion('id_user_bd'));
-            $array = array('username' => $this->sesion->getSesion('user_bonita'),'protocolos' => $protocolos,'rol' => $this->sesion->getSesion('rol'));
+            $array = array('username' => $this->sesion->getSesion('user_bonita'),'protocolos' => $protocolos,'rol' => $this->sesion->getSesion('rol') );
 
 
-            $view->TomarDecision($array);
+            $view->tomarDecision($array);
             
         } else {
             $view->mensaje(array('mensaje' => 'No tiene permiso','rol' => $this->sesion->getSesion('rol')));
@@ -400,10 +443,13 @@ class ProtocoloController{
         
     }
 
-    public function reiniciarProtocolo($id){
+    public function reiniciarProtocolo($idProtocolo){
         $view = new ProtocoloView();
         if($this->getInstance()->esJefe()){
-            ProtocoloRepository::getInstance()->reiniciarProtocolo($id);
+
+            //FALTA TENER EN CUENTA LAS ACTIVIDADES, si es remoto no tiene !!!!!
+
+            ProtocoloRepository::getInstance()->reiniciarProtocolo($idProtocolo);
             $mensaje='Protocolo reiniciado.';
             $this->mostrarProtocolos($mensaje);
         } else {
@@ -411,10 +457,12 @@ class ProtocoloController{
         }
     }
 
-    public function terminarProtocolo($id){
+    public function terminarProtocolo($idProtocolo){
         $view = new ProtocoloView();
         if($this->getInstance()->esJefe()){
-            ProtocoloRepository::getInstance()->terminarProtocolo($id);
+
+            ProtocoloRepository::getInstance()->terminarProtocolo($idProtocolo);
+            
             $mensaje='Protocolo terminado.';
             $this->mostrarProtocolos($mensaje);
         } else {
@@ -424,9 +472,11 @@ class ProtocoloController{
 
     public function mostrarProtocolos($mensaje){
         $view = new ProtocoloView();
+
         $protocolos = ProtocoloRepository::getInstance()->getProtocolosDesaprobados($this->sesion->getSesion('id_user_bd'));
+
         $array = array('username' => $this->sesion->getSesion('user_bonita'),'protocolos' => $protocolos, 'mensaje' => $mensaje);
-        $view->TomarDecision($array);
+        $view->tomarDecision($array);
     }
 }
 

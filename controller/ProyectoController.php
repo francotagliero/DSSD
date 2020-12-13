@@ -143,24 +143,29 @@ class ProyectoController{
 
     }
 
-    public function cancelarProyecto($id) {
+    public function cancelarProyecto($idProyecto) {
         $view = new ProtocoloView();
         if(ProtocoloController::getInstance()->esJefe()){
-            ProyectoRepository::getInstance()->cancelarProyecto($id);
-            ProtocoloRepository::getInstance()->cancelarProtocolos($id);
+
+            ProyectoRepository::getInstance()->cancelarProyecto($idProyecto);
+
+            ProtocoloRepository::getInstance()->cancelarProtocolos($idProyecto);
+
             $mensaje='Proyecto cancelado.';
             ProtocoloController::getInstance()->mostrarProtocolos($mensaje);
         }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
     }
 
-    public function reiniciarProyecto($id){
+    public function reiniciarProyecto($idProyecto){
         $view = new ProtocoloView();
         if(ProtocoloController::getInstance()->esJefe()){
-            ProtocoloRepository::getInstance()->reiniciarProyecto($id);
+            ProtocoloRepository::getInstance()->reiniciarProyecto($idProyecto); // ARREGLAR EL REINICIARPROYECTO! tiene que cambiar el estado a "configuracion"!
 
-            $protocolos = ProtocoloRepository::getInstance()->getProtocolosProyecto($id);
+            $protocolos = ProtocoloRepository::getInstance()->getProtocolosProyecto($idProyecto);
             foreach ($protocolos as $protocolo){
-                ProtocoloRepository::getInstance()->reiniciarProtocolo($protocolo->getIdProtocolo());
+
+                //Si es remoto consulta sin tener en cuenta las actividades... y si es local la consulta de las actividades!!
+                ProtocoloRepository::getInstance()->reiniciarProtocolo($protocolo->getIdProtocolo()); //cambia el estado de los protocolos
             }
             $mensaje='Proyecto reiniciado.';
             ProtocoloController::getInstance()->mostrarProtocolos($mensaje);

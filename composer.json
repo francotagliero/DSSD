@@ -10,6 +10,8 @@
         "twig/twig": "2.0",
         "guzzlehttp/guzzle": "7.0",
         "twbs/bootstrap": "^4.5",
-        "twig/extensions": "^1.5"
+        "twig/extensions": "^1.5",
+        "symfony/http-client": "^5.2",
+        "rmccue/requests": "^1.7"
     }
 }

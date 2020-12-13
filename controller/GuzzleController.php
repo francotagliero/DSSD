@@ -11,7 +11,7 @@ class GuzzleController
 {
     private static $user = 'walter.bates';
     private static $password = 'bpm';
-    private static $base_uri = 'http://localhost:8080/bonita/'; //8080
+    private static $base_uri = 'http://localhost:12310/bonita/'; //8080
     private static $cliente = null;
     private static $token = null;
 
