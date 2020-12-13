@@ -96,6 +96,13 @@ class ProtocoloRepository extends PDORepository{
 
     }
 
+    public function reiniciarProtocoloSinActividades($idProtocolo){
+
+        $query = "UPDATE protocolos SET estado = :estado, puntaje = :puntaje WHERE id_protocolo = :id_protocolo";
+        $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_protocolo' => $idProtocolo);
+        return $this->queryArgs($query, $args);
+    }
+
     public function terminarProtocolo($id){
         $query = "UPDATE protocolos SET estado = :estado WHERE id_protocolo = :id_protocolo";
 
@@ -107,7 +114,7 @@ class ProtocoloRepository extends PDORepository{
     public function reiniciarProyecto($idProyecto){
         $query = "UPDATE proyectos SET estado = :estado WHERE id_proyecto = :id_proyecto";
 
-        $args = array('estado' => 'ejecucion', 'id_proyecto' => $idProyecto);
+        $args = array('estado' => 'configuracion', 'id_proyecto' => $idProyecto);
 
         return $this->queryArgs($query, $args);
 

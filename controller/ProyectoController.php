@@ -144,15 +144,17 @@ class ProyectoController{
     }
 
     public function cancelarProyecto($idProyecto) {
-        $view = new ProtocoloView();
         if(ProtocoloController::getInstance()->esJefe()){
 
             ProyectoRepository::getInstance()->cancelarProyecto($idProyecto);
 
             ProtocoloRepository::getInstance()->cancelarProtocolos($idProyecto);
-
+            /*
+             * ejecuto la tarea, actualizo la variable de proceso bonita y muestro la vista de proyectos.
+             */
             $mensaje='Proyecto cancelado.';
-            ProtocoloController::getInstance()->mostrarProtocolos($mensaje);
+            ProyectoController::getInstance()->tomarDecisionAction($idProyecto, $mensaje, 1);
+
         }else { $view->mensaje(array('mensaje' => 'No tiene permiso')); }
     }
 
@@ -163,12 +165,24 @@ class ProyectoController{
 
             $protocolos = ProtocoloRepository::getInstance()->getProtocolosProyecto($idProyecto);
             foreach ($protocolos as $protocolo){
-
-                //Si es remoto consulta sin tener en cuenta las actividades... y si es local la consulta de las actividades!!
-                ProtocoloRepository::getInstance()->reiniciarProtocolo($protocolo->getIdProtocolo()); //cambia el estado de los protocolos
+                if($protocolo->getEsLocal() == 1 ){
+                    /*
+                     * Si el protocolo es local, ademas de reiniciar el protocolo tiene que reiniciar las actividades
+                     */
+                    ProtocoloRepository::getInstance()->reiniciarProtocolo($protocolo->getIdProtocolo()); //cambia el estado de los protocolos
+                }else{
+                    /*
+                     * Si es remoto, el protocolo no tiene actividades por ende, solo reinicia el protocolo.
+                     */
+                    ProtocoloRepository::getInstance()->reiniciarProtocoloSinActividades($protocolo->getIdProtocolo());
+                }
             }
             $mensaje='Proyecto reiniciado.';
-            ProtocoloController::getInstance()->mostrarProtocolos($mensaje);
+            /*
+             * ejecuto la tarea, actualizo la variable de proceso bonita y muestro la vista de proyectos.
+             */
+            ProyectoController::getInstance()->tomarDecisionAction($idProyecto, $mensaje, 0);
+            //ProtocoloController::getInstance()->mostrarProtocolos($mensaje);
         } else {
             $view->mensaje(array('mensaje' => 'No tiene permiso'));
         }
@@ -203,8 +217,6 @@ class ProyectoController{
         $idProtocolo = ProtocoloRepository::getInstance()->altaProtocolo($_POST['nombre'], $_POST['responsable'], $_POST['fechaInicio'], $_POST['fechaFin'], $_POST['orden'], $_POST['idProyecto'], $_POST['esLocal']);
 
         $actividades = $_POST['actividad'];
-
-        //var_dump($actividades);
 
         foreach ($actividades as $actividad) {
             ProtocoloRepository::getInstance()->altaActividad($actividad, $idProtocolo);
@@ -251,6 +263,39 @@ class ProyectoController{
 
 
     
+    }
+
+
+    public function tomarDecisionAction($idProyecto, $mensaje, $cancelado){
+        $view = new ProyectoView();
+
+        $proyecto = ProyectoRepository::getInstance()->getProyecto($idProyecto);
+
+        $caseId = $proyecto['case_id'];
+        
+        $client = GuzzleController::getGuzzleClient();
+
+        $idTask = RequestController::obtenerTarea($client, $caseId);
+
+        RequestController::ejecutarTarea($client, $idTask);
+
+        /*
+         * Actualizo la variable de proceso 'cancelarProyecto' segun la decision tomada.
+         */
+        RequestController::setCaseVariable($caseId, 'cancelarProyecto', $cancelado);
+
+        /*
+         * Muestro la vista de los proyectos con el mensaje.
+         */
+        $stmt = ProyectoRepository::getInstance()->getProyectos($this->sesion->getSesion('id_user_bd'));
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            'rol' => $this->sesion->getSesion('rol'),
+            'proyectos' => $stmt,
+            'isLogged' => $this->isLogged(),
+            'hecho' => $mensaje
+        ));
+
     }
 
 }

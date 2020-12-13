@@ -444,27 +444,58 @@ class ProtocoloController{
     }
 
     public function reiniciarProtocolo($idProtocolo){
-        $view = new ProtocoloView();
+        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
         if($this->getInstance()->esJefe()){
-
-            //FALTA TENER EN CUENTA LAS ACTIVIDADES, si es remoto no tiene !!!!!
-
-            ProtocoloRepository::getInstance()->reiniciarProtocolo($idProtocolo);
+            if($protocolo[0]['es_local'] == 1 ){
+                    /*
+                     * Si el protocolo es local, ademas de reiniciar el protocolo tiene que reiniciar las actividades
+                     */
+                    ProtocoloRepository::getInstance()->reiniciarProtocolo($idProtocolo); //cambia el estado del protocolo
+                }else{
+                    /*
+                     * Si es remoto, el protocolo no tiene actividades por ende, solo reinicia el protocolo.
+                     */
+                    ProtocoloRepository::getInstance()->reiniciarProtocoloSinActividades($idProtocolo);
+                }
+            /*
+             * ejecuto la tarea, actualizo la variable de proceso bonita y muestro la vista de proyectos.
+             */
             $mensaje='Protocolo reiniciado.';
-            $this->mostrarProtocolos($mensaje);
+            ProyectoController::getInstance()->tomarDecisionAction($protocolo[0]['id_proyecto'], $mensaje, 0);
         } else {
             $view->mensaje(array('mensaje' => 'No tiene permiso'));
         }
     }
 
     public function terminarProtocolo($idProtocolo){
-        $view = new ProtocoloView();
-        if($this->getInstance()->esJefe()){
 
+        if($this->getInstance()->esJefe()){
+            $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
+            $proyecto = ProyectoRepository::getInstance()->getProyecto($protocolo[0]['id_proyecto']);
             ProtocoloRepository::getInstance()->terminarProtocolo($idProtocolo);
-            
+            $cantProtocolosPendiente = count(ProtocoloRepository::getInstance()->cantProtocolosProyectoPendientes($protocolo[0]['id_proyecto']) );
+            if($cantProtocolosPendiente == 0){
+                $case = ProyectoRepository::getInstance()->getIdCase($protocolo[0]['id_proyecto']);
+                $caseId = $case[0]['case_id'];
+                $response = RequestController::setCaseVariable($caseId, 'cantProtocolos', 0);
+                ProyectoRepository::getInstance()->cambiarEstadoTerminado($idProyecto);
+            }else{
+                /*
+                 * Si NO quedan protocolos pendientes del orden actual INCREMENTO el orden del proyecto.
+                 */
+            $cantProtocolosPendientesOrdenActual = count(ProyectoRepository::getInstance()->actualizarOrden($idProyecto, $ordenProtocolo) );
+            if($cantProtocolosPendientesOrdenActual == 0){
+                ProyectoRepository::getInstance()->cambiarOrden($idProyecto, $ordenProtocolo+1);
+            }
+        }
+
+
+            /*
+             * ejecuto la tarea, actualizo la variable de proceso bonita y muestro la vista de proyectos.
+             */
             $mensaje='Protocolo terminado.';
-            $this->mostrarProtocolos($mensaje);
+            ProyectoController::getInstance()->tomarDecisionAction($protocolo[0]['id_proyecto'], $mensaje, 0);
+
         } else {
             $view->mensaje(array('mensaje' => 'No tiene permiso'));
         }
