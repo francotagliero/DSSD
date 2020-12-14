@@ -48,11 +48,11 @@ if (isset($_GET["action"])){
         /* CLOUD */
         case 'cloud': { BaseController::getInstance()->cloud(); break; }
 
-        case 'loginCloud': { CloudController::getInstance()->loginCloud(); break; } // login cloud.
+        case 'loginCloud': { CloudController::getInstance()->loginCloud($_GET["n"]); break; } // login cloud.
 
         case 'iniciarProtocoloCloud': { CloudController::getInstance()->iniciarProtocoloCloud(); break; } //iniciar Protocolo cloud.
 
-        case 'consultarProtocoloCloud': { CloudController::getInstance()->consultarProtocoloCloud(); break; } //consultar estado protocolo Cloud.
+        case 'consultarProtocoloCloud': { CloudController::getInstance()->consultarProtocoloCloud($_GET["n"]); break; } //consultar estado protocolo Cloud.
 
         /* PROTOCOLO */
         case 'protocolos': { ProtocoloController::getInstance()->getProtocolos(); break; }
@@ -81,9 +81,11 @@ if (isset($_GET["action"])){
 
         case 'aprobarProtocolo': { ProtocoloController::getInstance()->aprobarProtocolo($_GET["n"]); break; }
 
+        case 'desaprobarProtocolo': { ProtocoloController::getInstance()->desaprobarProtocolo($_GET["n"]); break; }
+
         case 'notificarJefe': { ProyectoController::getInstance()->notificarJefe($_GET["n"]); break; }
         
-        case 'determinarRemoto': { ProtocoloController::getInstance()->determinarRemoto(); break; }
+        case 'determinarRemoto': { ProtocoloController::getInstance()->determinarRemoto($_GET["n"]); break; }
         
         //case 'ejecutar_protocolo': { ProtocoloController::getInstance()->ejecutarProtocoloResponsable($_GET["n"]); break; }
 

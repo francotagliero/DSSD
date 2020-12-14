@@ -25,7 +25,7 @@
                             <td>{{protocolo.puntaje}}</td>
                             <td>
                                 <a href="./?action=aprobarProtocolo&n={{ protocolo.id_protocolo }}" type="button" class="btn btn-success btn-sm">Aprobar</a>
-                                <a href="#" type="button" class="btn btn-danger btn-sm">Desaprobar</a>
+                                <a href="./?action=desaprobarProtocolo&n={{ protocolo.id_protocolo }}" type="button" class="btn btn-danger btn-sm">Desaprobar</a>
                             </td>
                         </tr>
                     {% endfor %}

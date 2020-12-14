@@ -83,6 +83,13 @@ class ProtocoloRepository extends PDORepository{
         return $protocolos->fetchAll();
     }
 
+    public function getProtocolosDesaprobadosDos($idProyecto){
+        $query = "SELECT  protocolos.nombre, protocolos.id_protocolo, protocolos.id_proyecto, proyectos.nombre AS proyecto, protocolos.puntaje FROM proyectos INNER JOIN protocolos ON proyectos.id_proyecto = protocolos.id_proyecto WHERE protocolos.borrado <> 1 AND proyectos.borrado <> 1 AND protocolos.estado = 'desaprobado' AND proyectos.id_proyecto = ".$idProyecto;
+        $protocolos = $this->query($query);
+
+        return $protocolos->fetchAll();
+    }
+
     public function reiniciarProtocolo($id){
         $query = "UPDATE protocolos SET estado = :estado, puntaje = :puntaje WHERE id_protocolo = :id_protocolo";
         $args = array('estado' => 'pendiente', 'puntaje' => 0, 'id_protocolo' => $id);
@@ -243,6 +250,13 @@ class ProtocoloRepository extends PDORepository{
         $query = "SELECT protocolos_ejecutados.id_protocolo_ejecutado_relacion FROM protocolos_ejecutados INNER JOIN (SELECT max(id_protocolo_ejecutado) as cantidad, id_protocolo_ejecutado_relacion FROM protocolos_ejecutados) AS hh ON protocolos_ejecutados.id_protocolo_ejecutado = hh.cantidad";
         $protocolo = $this->query($query);
         return $protocolo->fetchAll();
+    }
+
+    public function desaprobarProtocolo($idProtocolo){
+        $query = "UPDATE protocolos SET estado = :estado WHERE id_protocolo = :id_protocolo";
+
+        $args = array('estado' => 'desaprobado', 'id_protocolo' => $idProtocolo);
+        return $this->queryArgs($query, $args);
     }
 
    

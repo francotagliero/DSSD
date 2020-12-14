@@ -27,7 +27,7 @@ class CloudController{
 
     }
 
-    public function loginCloud(){
+    public function loginCloud($idProtocolo){
         /*
          * Me guardo el token del cloud en una variable de sesion.
          */
@@ -59,7 +59,7 @@ class CloudController{
         //$caseId = $case[0]['case_id'];
         /*
          * Obtengo la tarea actual del proyecto
-         * http://localhost:8080/bonita/API/bpm/task?f=caseId=9
+         * http://localhost:12310/bonita/API/bpm/task?f=caseId=9
          */
         //$idTask = RequestController::obtenerTarea($client, $caseId);
 
@@ -70,15 +70,29 @@ class CloudController{
 
         /*
          * Asigno a la actividad ($idTask) el usuario que la va a ejecutar
-         * http://localhost:8080/bonita/API/bpm/userTask/idTask
+         * http://localhost:12310/bonita/API/bpm/userTask/idTask
          */
         //$request = RequestController::asignarTarea($client, $idTask, $idUser);
 
         /*
          * Ejecuto la tarea idTask
          */
-        //$request = RequestController::ejecutarTarea($client, $idTask);
+        //$request = RequestController::ejecutarTarea($client, $idTask  );
+        //print_r($_POST);
 
+        //$data = json_decode(file_get_contents('php://input'),1);
+        //print_r($data);
+
+
+
+        //$idProtocoloRemoto = $_POST["FirstName"];
+        //foreach (getallheaders() as $valueR => $valor) {
+            //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($valueR);
+            //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($valor);
+        //}
+        //return $idProtocoloRemoto;
+        //$idProtocoloRemoto = $this->sesion->getSesion('id_protocolo_remoto');
+        ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
 
     }
 
@@ -97,33 +111,75 @@ class CloudController{
         $request = RequestController::asignarTarea($client, $idTask, $idUser);
         $request = RequestController::ejecutarTarea($client, $idTask);
         */
-        //$idProtocoloRemoto = $this->sesion->getSesion('id_protocolo_remoto');
+        
         //$idProtocoloRemoto = RequestController::getCaseVariable($caseId, 'idProtocoloRemoto');
         //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo(69); //CAMBIO EL ESTADO DEL protocolo a COMPLETADO!!!!!
 
         //COMO INICIE EL PROTOCOLO le cambio el estado a completado!!!!!
-        $idProtocoloRemoto = ProtocoloRepository::getInstance()->getUltimoProtocoloRemotoEjecutado();
+        //$idProtocoloRemoto = ProtocoloRepository::getInstance()->getUltimoProtocoloRemotoEjecutado();
 
-        $idProtocolo = $idProtocoloRemoto[0][0];
+        //$idProtocolo = $idProtocoloRemoto[0][0];
 
-        ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
+        //$idProtocolo = RequestController::getCaseVariable($caseId, 'idProtocoloRemoto') 
+        //$idProtocoloRemoto = $_POST["n"];
+        //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocoloRemoto);
+
+        //print_r($_POST);
+
+        //$data = json_decode(file_get_contents('php://input'),1);
+        //print_r($data);
+
+
+
+        //$idProtocoloRemoto = $_POST["FirstName"];
+        //foreach (getallheaders() as $valueR => $valor) {
+           // ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($valueR);
+            //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($valor);
+        //}
+        
+        ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo(1);
         
 
 
 
     } 
 
-    public function consultarProtocoloCloud(){
+    public function consultarProtocoloCloud($idProtocolo){
+        //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
+        /*
+        foreach (getallheaders() as $valueR => $valor) {
+            ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($valueR);
+            ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($valor);
+            ProtocoloRepository::getInstance()->setPuntaje($idProtocolo, 7);//Setear un puntaje al protocolo ejecutado!!!!!
 
-        $idProtocoloRemoto = ProtocoloRepository::getInstance()->getUltimoProtocoloRemotoEjecutado();
+            $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
 
-        $idProtocolo = $idProtocoloRemoto[0][0];
+            //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
+
+            $idProyecto = $protocolo[0]['id_proyecto'];
+
+            $case = ProyectoRepository::getInstance()->getIdCase($idProyecto);
+
+            $caseId = $case[0]['case_id'];
+
+            $response = RequestController::setCaseVariable($caseId, 'resultadoCloud', 1);  
+        }/*
+
+        //$idProtocoloRemoto = ProtocoloRepository::getInstance()->getUltimoProtocoloRemotoEjecutado();
+        
+        //$idProtocolo = $idProtocoloRemoto[0][0];
+        //$idProtocoloRemoto = $_POST["id_remoto"];
+        //$idProtocolo = $idProtocoloRemoto;
 
         //PONER UN RANDOM QUE APRUEBE Y AVACES DESAPRUEBE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //Y TENER EN CUENTA QUE SI LA variable de proceso "resultadoCloud" es igual a 0 se vuelve a ejecutar la tarea "Consultar estado protocolo"
+        //Y TENER EN CUENTA QUE SI LA variable de proceso "resultadoCloud" es igual a 0 se vuelve a ejecutar la tarea "Consultar estado protocolo"*/
+
+        
         ProtocoloRepository::getInstance()->setPuntaje($idProtocolo, 7);//Setear un puntaje al protocolo ejecutado!!!!!
 
         $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
+
+        //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
 
         $idProyecto = $protocolo[0]['id_proyecto'];
 
@@ -131,7 +187,16 @@ class CloudController{
 
         $caseId = $case[0]['case_id'];
 
-        $response = RequestController::setCaseVariable($caseId, 'resultadoCloud', 1);   
+        $response = RequestController::setCaseVariable($caseId, 'resultadoCloud', 1);  
+
+        //print_r($_POST);
+
+        ////print_r($data);
+
+
+
+        //$idProtocoloRemoto = $_POST["FirstName"];
+        //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
 
 
         //PARA EL PUNTAJE RANDOM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

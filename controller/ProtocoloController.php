@@ -62,8 +62,8 @@ class ProtocoloController{
 
         $tipoProtocolo = (int)$protocolo[0]['es_local'];
 
-        var_dump($caseId);
-        var_dump($idProtocolo);
+        //var_dump($caseId);
+        //var_dump($idProtocolo);
 
         /*
 
@@ -92,8 +92,8 @@ class ProtocoloController{
         );
         $responseCantProtocolos = RequestController::doTheRequest('PUT', 'API/bpm/caseVariable/'.$caseId.'/cantProtocolos', $dataa);
         */
-        var_dump($cantProtocolosPendiente);
-        var_dump($tipoProtocolo);
+        //var_dump($cantProtocolosPendiente);
+        //var_dump($tipoProtocolo);
         //var_dump($responseCantProtocolos);
        
         /*
@@ -112,7 +112,7 @@ class ProtocoloController{
         /*
         $uri = 'API/bpm/userTask/'.$idTask.'/execution';
         $request = RequestController::doTheRequest('POST', $uri);*/
-        $request = RequestController::ejecutarTarea($client, $idTask);
+
         
 
         ProtocoloRepository::getInstance()->ejecutarProtocolo($idProtocolo); //cambia el estado a ejecutado, del protocoloo
@@ -125,7 +125,7 @@ class ProtocoloController{
 
         //SI ES LOCAL EL PROTOCOLO!!
        if($tipoProtocolo == 1){
-
+            $request = RequestController::ejecutarTarea($client, $idTask);
             $view = new ActividadView();
 
             //$protocolos = ProtocoloRepository::getInstance()->getProtocolos();
@@ -139,17 +139,17 @@ class ProtocoloController{
        }else{
             //Agregar el id del protocolo remoto a la variable de proceso Bonita "idProtocoloRemoto"
             //$this->sesion->setSesion('id_protocolo_remoto', $idProtocolo);
-            //$response = RequestController::setCaseVariable($caseId, 'idProtocoloRemoto', $idProtocolo);
-            //var_dump(RequestController::getCaseVariable($caseId, 'cantProtocolos') );
-            //$this->sesion->setSesion('id_protocolo_remoto', $idProtocolo);
+            $response = RequestController::setCaseVariable($caseId, 'idProtocoloRemoto', $idProtocolo);
+            //var_dump(RequestController::getCaseVariable($caseId, 'idProtocoloRemoto') );
+            //$this->sesion->setSesion('case_id', $caseId);
 
             //AGREGAR EN LA BD el id del protocolo REMOTO que va a ser ejecutado por el CLOUD!!!!! asi desde CloudController puedo acceder al idProtocolo
-            ProtocoloRepository::getInstance()->setProtocoloRemotoEjecutado($idProtocolo);
+            //ProtocoloRepository::getInstance()->setProtocoloRemotoEjecutado($idProtocolo);
             
             //AGREGA EL PROTOCOLO REMOTO A LA TABLA protocolos ejecutados (SOLO REMOTOS)
-            $protocolo = ProtocoloRepository::getInstance()->getUltimoProtocoloRemotoEjecutado();
+            //$protocolo = ProtocoloRepository::getInstance()->getUltimoProtocoloRemotoEjecutado();
             //var_dump($protocolo[0][0]);
-
+            $request = RequestController::ejecutarTarea($client, $idTask);//EMPIEZA A EJECUTAR EL PROCESO BONITAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
             $view = new ProtocoloView();
 
             $protocolos = ProtocoloRepository::getInstance()->getProtocolosResponsable($this->sesion->getSesion('id_user_bd') );
@@ -174,10 +174,10 @@ class ProtocoloController{
         
     }
 
-    public function determinarRemoto(){
-        $idProtocoloRemoto = $this->sesion->getSesion('id_protocolo_remoto');
+    public function determinarRemoto($idProtocolo){
+        //$idProtocoloRemoto = $this->sesion->getSesion('id_protocolo_remoto');
 
-        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocoloRemoto);
+        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
 
         $view = new DeterminarResultadoView();
 
@@ -323,6 +323,54 @@ class ProtocoloController{
 
     }
 
+    public function desaprobarProtocolo($idProtocolo){
+        $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
+
+        $client = GuzzleController::getGuzzleClient();
+        $idProyecto = $protocolo[0]['id_proyecto'];
+        $ordenProtocolo = $protocolo[0]['orden'];
+        $case = ProyectoRepository::getInstance()->getIdCase($idProyecto);
+        $caseId = $case[0]['case_id'];
+
+        //CAMBIAR EL ESTADO DEL PROYECTO A "tomar_decision"
+        ProyectoRepository::getInstance()->cambiarEstadoTomarDecision($idProyecto);
+        //CAMBIAR EL ESTADO DEL PROTOCOLO A "desaprobado"
+        ProtocoloRepository::getInstance()->desaprobarProtocolo($idProtocolo);
+
+
+        //CAMBIE EL VALOR de la variable de proceso resultadoProtocolo a 0 
+        $resultadoProtocolo = 0;
+        $response = RequestController::setCaseVariable($caseId, 'resultadoProtocolo', $resultadoProtocolo);
+
+        //AVANZAR EN EL PROCESO BONITA!
+        $idTask = RequestController::obtenerTarea($client, $caseId);
+
+        $idUser = RequestController::getUserIdDos($client, $this->sesion->getSesion('user_bonita') ); //idUser de bonita del usuario logeado en la appWeb
+
+        $request = RequestController::asignarTarea($client, $idTask, $idUser);
+
+        //EJECUTO LA TAREA BONITA "Determinar resultado"
+        $request = RequestController::ejecutarTarea($client, $idTask);
+
+
+        //MUESTRO LA VISTA!!!!!
+
+        $protocolos = ProtocoloRepository::getInstance()->getProtocolosResponsable($this->sesion->getSesion('id_user_bd') );
+
+        $view = new ProtocoloView();
+
+        $view->show(array(
+            'username' => $this->sesion->getSesion('user_bonita'),
+            //'hecho'=> $this->sesion->getSesion('id_proceso'),
+            'rol' => $this->sesion->getSesion('rol'),
+            'protocolos' => $protocolos
+        ));
+
+
+
+
+    }
+
     public function resolverActividades($idProtocolo){
         $actividades = ProtocoloRepository::getInstance()->getActividades($idProtocolo);
 
@@ -431,7 +479,9 @@ class ProtocoloController{
 
         if($this->getInstance()->esJefe() ){
 
-            $protocolos = ProtocoloRepository::getInstance()->getProtocolosDesaprobados($this->sesion->getSesion('id_user_bd'));
+            //$protocolos = ProtocoloRepository::getInstance()->getProtocolosDesaprobados($this->sesion->getSesion('id_user_bd'));
+            $protocolos = ProtocoloRepository::getInstance()->getProtocolosDesaprobadosDos($idProyecto);
+
             $array = array('username' => $this->sesion->getSesion('user_bonita'),'protocolos' => $protocolos,'rol' => $this->sesion->getSesion('rol') );
 
 
@@ -461,6 +511,10 @@ class ProtocoloController{
              * ejecuto la tarea, actualizo la variable de proceso bonita y muestro la vista de proyectos.
              */
             $mensaje='Protocolo reiniciado.';
+
+            //Y HAY QUE CAMBIAR EL ESTADO DEL PROYECTO A "configuracion"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            ProyectoRepository::getInstance()->cambiarEstadoConfiguracion($protocolo[0]['id_proyecto']);
+
             ProyectoController::getInstance()->tomarDecisionAction($protocolo[0]['id_proyecto'], $mensaje, 0);
         } else {
             $view->mensaje(array('mensaje' => 'No tiene permiso'));
@@ -494,6 +548,9 @@ class ProtocoloController{
              * ejecuto la tarea, actualizo la variable de proceso bonita y muestro la vista de proyectos.
              */
             $mensaje='Protocolo terminado.';
+            //Y HAY QUE CAMBIAR EL ESTADO DEL PROYECTO A "configuracion"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            ProyectoRepository::getInstance()->cambiarEstadoConfiguracion($protocolo[0]['id_proyecto']);
+
             ProyectoController::getInstance()->tomarDecisionAction($protocolo[0]['id_proyecto'], $mensaje, 0);
 
         } else {

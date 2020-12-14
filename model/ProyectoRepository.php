@@ -114,5 +114,12 @@ class ProyectoRepository extends PDORepository{
         $args = array('estado' => 'notificado', 'id_proyecto' => $idProyecto);
         return $this->queryArgs($query, $args);
     }
+
+    public function cambiarEstadoTomarDecision($idProyecto){
+        $query = "UPDATE proyectos SET estado = :estado WHERE id_proyecto = :id_proyecto";
+
+        $args = array('estado' => 'tomar_decision', 'id_proyecto' => $idProyecto);
+        return $this->queryArgs($query, $args);
+    }
    
 }

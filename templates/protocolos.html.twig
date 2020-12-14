@@ -51,9 +51,11 @@
                                 <a href="./?action=notificarJefe&n={{ protocolo.protocolo_id }}" type="button" class="btn btn-warning btn-sm disabled">Notificar resultados al Jefe de proyecto</a>
                             {% elseif protocolo.protocolo_es_local == 0 %}
                                 {% if protocolo.protocolo_estado == 'ejecutado' %}
-                                    <span class="label label-warning">El cloud esta ejecutando</span>
+                                    <span class="label label-warning">El cloud esta ejecutando <a href="./?action=protocolos" type="button" class="btn btn-warning btn-sm">Consultar Resultado</a></span>
                                 {% elseif protocolo.protocolo_estado == 'completado' %}
-                                    <a href="./?action=determinarRemoto" type="button" class="btn btn-warning btn-sm">Determinar Resultado del protocolo remoto</a>
+                                    <a href="./?action=determinarRemoto&n={{ protocolo.protocolo_id }}" type="button" class="btn btn-warning btn-sm">Determinar Resultado del protocolo remoto</a>
+                                    {% else %}
+                                        <a href="#" type="button" class="btn btn-primary btn-sm disabled">Ejecutar</a>
                                 {% endif %}
                             {% else %}
                                 <a href="#" type="button" class="btn btn-primary btn-sm disabled">Ejecutar</a>
