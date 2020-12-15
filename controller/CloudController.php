@@ -137,7 +137,7 @@ class CloudController{
             //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($valor);
         //}
         
-        ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo(1);
+        //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo(1);
         
 
 

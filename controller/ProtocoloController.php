@@ -526,30 +526,41 @@ class ProtocoloController{
         if($this->getInstance()->esJefe()){
             $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
             $proyecto = ProyectoRepository::getInstance()->getProyecto($protocolo[0]['id_proyecto']);
-            ProtocoloRepository::getInstance()->terminarProtocolo($idProtocolo);
+
+
+            ProtocoloRepository::getInstance()->terminarProtocolo($idProtocolo); //SETEO al protocolo en estado "terminado"
+
+
+
             $cantProtocolosPendiente = count(ProtocoloRepository::getInstance()->cantProtocolosProyectoPendientes($protocolo[0]['id_proyecto']) );
             if($cantProtocolosPendiente == 0){
                 $case = ProyectoRepository::getInstance()->getIdCase($protocolo[0]['id_proyecto']);
                 $caseId = $case[0]['case_id'];
                 $response = RequestController::setCaseVariable($caseId, 'cantProtocolos', 0);
+                $idProyecto = $protocolo[0]['id_proyecto'];
+
                 ProyectoRepository::getInstance()->cambiarEstadoTerminado($idProyecto);
             }else{
                 /*
                  * Si NO quedan protocolos pendientes del orden actual INCREMENTO el orden del proyecto.
                  */
-            $cantProtocolosPendientesOrdenActual = count(ProyectoRepository::getInstance()->actualizarOrden($idProyecto, $ordenProtocolo) );
-            if($cantProtocolosPendientesOrdenActual == 0){
-                ProyectoRepository::getInstance()->cambiarOrden($idProyecto, $ordenProtocolo+1);
-            }
-        }
 
+                //Y HAY QUE CAMBIAR EL ESTADO DEL PROYECTO A "configuracion"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                $idProyecto = $protocolo[0]['id_proyecto'];
+                $ordenProtocolo = $protocolo[0]['orden'];
+                ProyectoRepository::getInstance()->cambiarEstadoConfiguracion($protocolo[0]['id_proyecto']);
+
+                $cantProtocolosPendientesOrdenActual = count(ProyectoRepository::getInstance()->actualizarOrden($idProyecto, $ordenProtocolo) );
+                if($cantProtocolosPendientesOrdenActual == 0){
+                    ProyectoRepository::getInstance()->cambiarOrden($idProyecto, $ordenProtocolo+1);
+                }
+        }
 
             /*
              * ejecuto la tarea, actualizo la variable de proceso bonita y muestro la vista de proyectos.
              */
             $mensaje='Protocolo terminado.';
-            //Y HAY QUE CAMBIAR EL ESTADO DEL PROYECTO A "configuracion"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            ProyectoRepository::getInstance()->cambiarEstadoConfiguracion($protocolo[0]['id_proyecto']);
+            
 
             ProyectoController::getInstance()->tomarDecisionAction($protocolo[0]['id_proyecto'], $mensaje, 0);
 
