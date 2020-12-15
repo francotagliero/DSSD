@@ -59,6 +59,32 @@ class RequestController {
         return $response;
     }
 
+    public static function doTheRequestToCloud($method, $uri, $client, $token){
+        //var_dump('hola'.$token);
+        try{
+            $response = $client->request($method, $uri,
+                [
+                    'headers' => [
+                         'Authorization' => "Bearer {$token}"
+                    ]
+                ]);
+                $string = $response->getBody()->getContents();
+                $lastChar = substr($string, -1);
+            return $lastChar;
+        }catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $error = Psr7\str($e->getResponse());
+            } else {
+                $error = "No se puede conectar al cloud";
+            }
+
+            return $error;
+        }
+
+        return $request;
+        
+    }
+
     public static function getUserId($client){
         $request = $client->request('GET', '/bonita/API/identity/user??p=0&c=10&o=lastname%20ASC&s=bates&f=enabled%3dtrue',
             [
@@ -178,6 +204,37 @@ class RequestController {
                 'json'=> [
                     [
                         'type' => 'java.lang.Integer',
+                        'value'=> $data
+                    ]
+                                     
+                            
+                ]   
+        ]);
+        $tareas = $request->getBody();
+        $json = json_decode($tareas);
+    
+        $response['success'] = true;
+        $response['data'] = json_decode($tareas);
+    }
+
+    public static function setCaseVariableString($caseId, $variable, $data){
+
+    	/*
+        #############################################################
+            Seteo la variable del proceso de la instancia ($caseId)
+            Se tiene que hacer 1 vez por cada variable a setear
+        #############################################################    
+        */
+        $client = GuzzleController::getGuzzleClient();  
+    	$request = $client->request('PUT', '/bonita/API/bpm/caseVariable/'.$caseId."/".$variable,
+            [
+                'headers' => [
+                    'X-Bonita-API-Token' => GuzzleController::getToken(),
+                   
+                ],   
+                'json'=> [
+                    [
+                        'type' => 'java.lang.String',
                         'value'=> $data
                     ]
                                      

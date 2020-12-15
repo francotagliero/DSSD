@@ -48,9 +48,11 @@ if (isset($_GET["action"])){
         /* CLOUD */
         case 'cloud': { BaseController::getInstance()->cloud(); break; }
 
+        case 'cloudDos': { CloudController::getInstance()->loginCloudDos(); break; }
+
         case 'loginCloud': { CloudController::getInstance()->loginCloud($_GET["n"]); break; } // login cloud.
 
-        case 'iniciarProtocoloCloud': { CloudController::getInstance()->iniciarProtocoloCloud(); break; } //iniciar Protocolo cloud.
+        case 'iniciarProtocoloCloud': { CloudController::getInstance()->iniciarProtocoloCloud(($_GET["n"])); break; } //iniciar Protocolo cloud.
 
         case 'consultarProtocoloCloud': { CloudController::getInstance()->consultarProtocoloCloud($_GET["n"]); break; } //consultar estado protocolo Cloud.
 
