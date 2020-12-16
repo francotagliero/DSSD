@@ -5,9 +5,13 @@
 {% endblock %}
 
 {% block main %}
-    <div class="col-md-7 offset-5">
+    <div class="col-md-7 offset-4">
         <a href="#" type="button" class="btn btn-primary btn-xs boton-tareas">Tareas</a>
         <a href="#" type="button" class="btn btn-primary btn-xs boton-archivadas">Tareas archivadas</a>
+        <a href="#" type="button" class="btn btn-primary btn-xs boton-protocolos">Protocolos</a>
+        <a href="#" type="button" class="btn btn-primary btn-xs boton-proyectos">Proyectos</a>
+        <a href="#" type="button" class="btn btn-primary btn-xs boton-responsables">Responsables</a>
+        <a href="#" type="button" class="btn btn-primary btn-xs boton-jefes">Jefes</a>
     </div>
     <div class="col-md-10 offset-1 task">
         {% if tasks %}
@@ -35,12 +39,16 @@
                         <td>{{ task.state }}</td>
                         <td>{{ task.caseId }}</td>
                         <td>{{ task.id }}</td>
-                        <td>{{ task.reached_state_date|date('d-m-yy H:i') }}</td>
-                        <td>{{ task.last_update_date|date('d-m-yy H:i') }}</td>
+                        <td>{{ task.reached_state_date|date('d/m/yy H:i') }}</td>
+                        <td>{{ task.last_update_date|date('d/m/yy H:i') }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+        {% else %}
+            <div class="alert alert-success" role="alert" style="margin-top: 20px">
+                No hay tareas pendientes.
+            </div>
         {% endif %}
     </div>
 
@@ -71,14 +79,242 @@
                         <td>{{ arch.state }}</td>
                         <td>{{ arch.caseId }}</td>
                         <td>{{ arch.id }}</td>
-                        <td>{{ arch.assigned_date|date('d-m-yy H:i') }}</td>
-                        <td>{{ arch.archivedDate|date('d-m-yy H:i') }}</td>
+                        <td>{{ arch.assigned_date|date('d/m/yy H:i') }}</td>
+                        <td>{{ arch.archivedDate|date('d/m/yy H:i') }}</td>
                         <td class="tiempo">{{ arch.assigned_date|time_diff(arch.archivedDate) }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+        {% else %}
+            <div class="alert alert-success" role="alert" style="margin-top: 20px">
+                No hay tareas archivadas.
+            </div>
         {% endif %}
+    </div>
+
+
+    <div class="col-md-10 offset-1 protocolo">
+        <div class="row" style="margin-top: 20px">
+            <div class="col-md-3" style="margin-top: 10px">
+                <div class="card border-secondary mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-secondary text-center">Total protocolos</div>
+                    <div class="card-body text-secondary ">
+                        <h5 class="card-title text-center">{{ protocolos.total }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <div class="card border-warning mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-warning text-center">Protocolos pendientes</div>
+                    <div class="card-body text-warning ">
+                        <h5 class="card-title text-center">{{ protocolos.cant_pendiente }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <div class="card border-primary mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-primary text-center">Protocolos ejecutados</div>
+                    <div class="card-body text-primary ">
+                        <h5 class="card-title text-center">{{ protocolos.cant_ejecutado }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <div class="card border-success mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-success text-center">Protocolos completados</div>
+                    <div class="card-body text-success ">
+                        <h5 class="card-title text-center">{{ protocolos.cant_completado }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-10 offset-1" style="margin-top:20px;">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Proyecto</th>
+                        <th scope="col">Protocolo</th>
+                        <th scope="col">Fecha Inicio</th>
+                        <th scope="col">Fecha Fin</th>
+                        <th scope="col">Modo ejecucion</th>
+                        <th scope="col">Estado protocolo</th>
+                        <th scope="col">Puntaje</th>
+                        <th scope="col">Orden</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for protocolo in grillaProtocolos %}
+                        <tr>
+                            <td>{{protocolo.proyecto_nombre}}</td>
+                            <td>{{protocolo.protocolo_nombre}}</td>
+                            <td>{{protocolo.protocolo_fecha_inicio}}</td>
+                            <td>{{protocolo.protocolo_fecha_fin}}</td>
+                            <td> {% if protocolo.protocolo_es_local == 1 %}
+                                    <span class="label label-primary">Local</span>
+                                {% else %}
+                                    <span class="label label-warning">Remoto</span>
+                                {% endif %}
+                            </td>
+                            <td>{{protocolo.protocolo_estado}}</td>
+                            <td>{{protocolo.protocolo_puntaje}}</td>
+                            <td>{{protocolo.protocolo_orden}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-10 offset-1 proyectos">
+        <div class="row" style="margin-top: 20px">
+            <div class="col-md-2" style="margin-top: 10px">
+                <div class="card border-secondary mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-secondary text-center">Total proyectos</div>
+                    <div class="card-body text-secondary ">
+                        <h5 class="card-title text-center">{{ proyectos.total }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <div class="card border-warning mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-warning text-center">Proyectos pendientes</div>
+                    <div class="card-body text-warning ">
+                        <h5 class="card-title text-center">{{ proyectos.cant_pendiente }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <div class="card border-warning mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-warning text-center">Proyectos tomar decision</div>
+                    <div class="card-body text-warning ">
+                        <h5 class="card-title text-center">{{ proyectos.tomar_decision }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <div class="card border-primary mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-primary text-center">Proyectos ejecutados</div>
+                    <div class="card-body text-primary ">
+                        <h5 class="card-title text-center">{{ proyectos.cant_ejecutado }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <div class="card border-success mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-success text-center">Proyectos completados</div>
+                    <div class="card-body text-success ">
+                        <h5 class="card-title text-center">{{ proyectos.cant_completado }}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2" style="margin-top: 10px">
+                <div class="card border-success mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-success text-center">Proyectos notificados</div>
+                    <div class="card-body text-success ">
+                        <h5 class="card-title text-center">{{ proyectos.cant_notificado }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-10 offset-1" style="margin-top:20px;">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Titulo</th>
+                        <th scope="col">Fecha Inicio</th>
+                        <th scope="col">Fecha Fin</th>
+                        <th scope="col">Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for proyecto in grillaProyectos %}
+                        <tr>
+                            <td>{{ proyecto.nombre }}</td>
+                            <td>{{ proyecto.fecha_inicio }}</td>
+                            <td>{{ proyecto.fecha_fin }}</td>
+                            <td>{{ proyecto.estado }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-10 offset-1 responsables">
+        <div class="row">
+            <div class="col-md-10 offset-1" style="margin-top:20px;">
+                <h1>Ranking responsables</h1>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Total de protocolos asignados</th>
+                        <th scope="col">Protocolos completados</th>
+                        <th scope="col">Protocolos pendientes</th>
+                        <th scope="col">Protocolos ejecutados</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for responsable in responsableProtocolos %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ responsable.username }}</td>
+                            <td>{{ responsable.total }}</td>
+                            <td>{{ responsable.cant_completado }}</td>
+                            <td>{{ responsable.cant_pendiente }}</td>
+                            <td>{{ responsable.cant_ejecutado }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-10 offset-1 jefe">
+        <div class="row">
+            <div class="col-md-10 offset-1" style="margin-top:20px;">
+                <h1>Ranking jefes</h1>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Total de proyectos</th>
+                        <th scope="col">Proyectos completados</th>
+                        <th scope="col">Proyectos pendientes</th>
+                        <th scope="col">Proyectos ejecutados</th>
+                        <th scope="col">Proyectos notificados</th>
+                        <th scope="col">Proyectos tomar decision</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for jefe in jefeProyectos %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ jefe.username }}</td>
+                            <td>{{ jefe.total }}</td>
+                            <td>{{ jefe.cant_completado }}</td>
+                            <td>{{ jefe.cant_pendiente }}</td>
+                            <td>{{ jefe.cant_ejecutado }}</td>
+                            <td>{{ jefe.cant_notificado }}</td>
+                            <td>{{ jefe.tomar_decision }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
@@ -87,16 +323,65 @@
 {% block scripts %}
     <script>
         $('.archived-task').hide();
+        $('.proyectos').hide();
+        $('.protocolo').hide();
+        $('.jefe').hide();
+        $('.responsables').hide();
+
         $('.boton-archivadas').on('click', function(){
             $('.archived-task').show();
             $('.task').hide();
+            $('.protocolo').hide();
+            $('.jefe').hide();
+            $('.proyectos').hide();
+            $('.responsables').hide();
         });
         $('.boton-tareas').on('click', function(){
             $('.archived-task').hide();
             $('.task').show();
+            $('.protocolo').hide();
+            $('.jefe').hide();
+            $('.proyectos').hide();
+            $('.responsables').hide();
         });
+        $('.boton-jefes').on('click', function(){
+            $('.archived-task').hide();
+            $('.task').hide();
+            $('.protocolo').hide();
+            $('.jefe').show();
+            $('.proyectos').hide();
+            $('.responsables').hide();
+        });
+        $('.boton-protocolos').on('click', function(){
+            $('.archived-task').hide();
+            $('.task').hide();
+            $('.protocolo').show();
+            $('.jefe').hide();
+            $('.proyectos').hide();
+            $('.responsables').hide();
+        });
+        $('.boton-proyectos').on('click', function(){
+            $('.archived-task').hide();
+            $('.task').hide();
+            $('.protocolo').hide();
+            $('.jefe').hide();
+            $('.proyectos').show();
+            $('.responsables').hide();
+        });
+
+        $('.boton-responsables').on('click', function(){
+            $('.archived-task').hide();
+            $('.task').hide();
+            $('.protocolo').hide();
+            $('.jefe').hide();
+            $('.proyectos').hide();
+            $('.responsables').show();
+        });
+
         $( ".tiempo" ).each(function() {
             $( this ).html($( this ).html().replace('minutes ago', 'minutos'));
+            $( this ).html($( this ).html().replace('hours ago', 'horas'));
+            $( this ).html($( this ).html().replace('seconds ago', 'segundos'));
         });
     </script>
 {% endblock %}
