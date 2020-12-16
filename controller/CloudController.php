@@ -21,21 +21,28 @@ class CloudController{
     }
 
    
-    public function loginCloudDos(Request $request){
-        $idProtocolo = $request->headers['idProtocoloRemoto'];
-        ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
+    public function loginCloudDos(){
+        $token = BaseController::getInstance()->cloud();
+        //echo($token);die;
+       
+        $client = new \GuzzleHttp\Client();
+
+        $nroProy = rand(2,3);
+
+        $response = RequestController::doTheRequestToCloud('get',"https://dssd2020.herokuapp.com/web/consultarEstado/{$nroProy}/proyecto/1", $client, $token);
+        $resultado = ((int)$response);
+        //var_dump($response);
+        echo $response;
 
     }
 
-    public function loginCloud($idProtocolo){
+    public function loginCloud($idProtocoloRemoto){
         /*
          * Me guardo el token del cloud en una variable de sesion.
          */
 
-        
-        /*
         $token = BaseController::getInstance()->cloud();
-        $idProtocoloRemoto = RequestController::getCaseVariable($caseId, 'idProtocoloRemoto');
+        //$idProtocoloRemoto = RequestController::getCaseVariable($caseId, 'idProtocoloRemoto');
 
         $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocoloRemoto);
 
@@ -44,8 +51,10 @@ class CloudController{
         $case = ProyectoRepository::getInstance()->getIdCase($idProyecto);
 
         $caseId = $case[0]['case_id'];
-
-        RequestController::setCaseVariable($caseId, 'token', $token);
+        
+        //$response = RequestController::setCaseVariable($caseId, 'idProtocoloRemoto', 1); OK 
+        $response = RequestController::setCaseVariableString($caseId, 'token', $token);
+        //$response = RequestController::setCaseVariable($caseId, 'caseIdProyecto', $token);  
 
         //$this->sesion->setSesion('tokencloud', $token);*/
         
@@ -59,7 +68,7 @@ class CloudController{
         //$caseId = $case[0]['case_id'];
         /*
          * Obtengo la tarea actual del proyecto
-         * http://localhost:12310/bonita/API/bpm/task?f=caseId=9
+         * http://localhost:8080/bonita/API/bpm/task?f=caseId=9
          */
         //$idTask = RequestController::obtenerTarea($client, $caseId);
 
@@ -70,7 +79,7 @@ class CloudController{
 
         /*
          * Asigno a la actividad ($idTask) el usuario que la va a ejecutar
-         * http://localhost:12310/bonita/API/bpm/userTask/idTask
+         * http://localhost:8080/bonita/API/bpm/userTask/idTask
          */
         //$request = RequestController::asignarTarea($client, $idTask, $idUser);
 
@@ -92,11 +101,23 @@ class CloudController{
         //}
         //return $idProtocoloRemoto;
         //$idProtocoloRemoto = $this->sesion->getSesion('id_protocolo_remoto');
-        ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
+        ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocoloRemoto);
 
+        
+        //
+        //$client = new \GuzzleHttp\Client();
+
+        //$nroProy = rand(2,3);
+
+        //$response = RequestController::doTheRequestToCloud('get',"https://dssd2020.herokuapp.com/web/consultarEstado/{$nroProy}/proyecto/1", $client, $token);
+        //$resultado = ((int)$response);
+        //$response = RequestController::setCaseVariable($caseId, 'resultadoCloud', $resultado);
+        
     }
 
-    public function iniciarProtocoloCloud(){
+    public function iniciarProtocoloCloud($idProtocolo){
+        ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
+
         /*
         $client = new \GuzzleHttp\Client();
 
@@ -174,9 +195,6 @@ class CloudController{
         //PONER UN RANDOM QUE APRUEBE Y AVACES DESAPRUEBE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //Y TENER EN CUENTA QUE SI LA variable de proceso "resultadoCloud" es igual a 0 se vuelve a ejecutar la tarea "Consultar estado protocolo"*/
 
-        
-        ProtocoloRepository::getInstance()->setPuntaje($idProtocolo, 7);//Setear un puntaje al protocolo ejecutado!!!!!
-
         $protocolo = ProtocoloRepository::getInstance()->getProtocolo($idProtocolo);
 
         //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
@@ -187,7 +205,30 @@ class CloudController{
 
         $caseId = $case[0]['case_id'];
 
-        $response = RequestController::setCaseVariable($caseId, 'resultadoCloud', 1);  
+        //get getCaseVariable
+
+        
+        $client = new \GuzzleHttp\Client();
+
+        $token = RequestController::getCaseVariable($caseId, 'token');
+
+        $nroProtocolo = rand(2,3);
+
+        $response = RequestController::doTheRequestToCloud('get',"https://dssd2020.herokuapp.com/web/consultarEstado/{$nroProtocolo}/proyecto/1", $client, $token);
+        $resultado = ((int)$response); //CON ESTO...DE TODO EL STRING te quedas solo con el numero?.......
+
+
+
+        ProtocoloRepository::getInstance()->setPuntaje($idProtocolo, $resultado);//Setear un puntaje al protocolo ejecutado!!!!!
+
+
+
+        $response = RequestController::setCaseVariable($caseId, 'resultadoCloud', 1); 
+
+        //ProtocoloRepository::getInstance()->terminarEjecucionLocalProtocolo($idProtocolo);
+
+
+        //$response = RequestController::setCaseVariable($caseId, 'resultadoCloud', $resultado);  
 
         //print_r($_POST);
 

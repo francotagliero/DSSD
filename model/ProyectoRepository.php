@@ -121,5 +121,45 @@ class ProyectoRepository extends PDORepository{
         $args = array('estado' => 'tomar_decision', 'id_proyecto' => $idProyecto);
         return $this->queryArgs($query, $args);
     }
+
+    public function getProyectosUsuarios(){
+        $query = "SELECT
+                count(*) AS total,
+                SUM(CASE WHEN p.estado = 'terminado' THEN 1 ELSE 0 END) AS cant_completado, 
+                SUM(CASE WHEN p.estado = 'notificado' THEN 1 ELSE 0 END) AS cant_notificado, 
+                SUM(CASE WHEN p.estado = 'configuracion' THEN 1 ELSE 0 END) AS cant_pendiente, 
+                SUM(CASE WHEN p.estado = 'ejecutado' THEN 1 ELSE 0 END) AS cant_ejecutado, 
+                SUM(CASE WHEN p.estado = 'tomar_decision' THEN 1 ELSE 0 END) AS tomar_decision,
+                u.username 
+            FROM proyectos p 
+                LEFT JOIN usuario u on (p.id_responsable = u.id) 
+            GROUP BY u.username
+            ORDER BY cant_completado DESC";
+
+        $proyectos = $this->query($query);
+        return $proyectos->fetchAll();
+    }
+
+    public function getCantProyectos(){
+        $query = "SELECT 
+                    count(*) AS total,
+                    SUM(CASE WHEN p.estado = 'terminado' THEN 1 ELSE 0 END) AS cant_completado, 
+                    SUM(CASE WHEN p.estado = 'notificado' THEN 1 ELSE 0 END) AS cant_notificado, 
+                    SUM(CASE WHEN p.estado = 'configuracion' THEN 1 ELSE 0 END) AS cant_pendiente, 
+                    SUM(CASE WHEN p.estado = 'ejecutado' THEN 1 ELSE 0 END) AS cant_ejecutado, 
+                    SUM(CASE WHEN p.estado = 'tomar_decision' THEN 1 ELSE 0 END) AS tomar_decision 
+                FROM proyectos p";
+
+        $proyectos = $this->query($query);
+        return $proyectos->fetchAll();
+    }
+
+    public function getProyectosGrilla(){
+        $query = "SELECT * FROM proyectos";
+
+        $proyectos = $this->query($query);
+        return $proyectos->fetchAll();
+
+    }
    
 }

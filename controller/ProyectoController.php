@@ -47,7 +47,7 @@ class ProyectoController{
 
             /*
              * Instancio el proceso y obtengo el case_id del nuevo proyecto
-             * http://localhost:12310/bonita/API/bpm/process/5149425974540291037/instantiation
+             * http://localhost:8080/bonita/API/bpm/process/5149425974540291037/instantiation
             */
             $caseId = RequestController::instanciarProceso($client, $idProceso);
 
@@ -58,7 +58,7 @@ class ProyectoController{
 
             /*
              * Obtengo la tarea actual del proyecto
-             * http://localhost:12310/bonita/API/bpm/task?f=caseId=9
+             * http://localhost:8080/bonita/API/bpm/task?f=caseId=9
              */
             $idTask = RequestController::obtenerTarea($client, $caseId);
 
@@ -69,7 +69,7 @@ class ProyectoController{
 
             /*
              * Asigno a la actividad ($idTask) el usuario que la va a ejecutar
-             * http://localhost:12310/bonita/API/bpm/userTask/idTask
+             * http://localhost:8080/bonita/API/bpm/userTask/idTask
              */
             $request = RequestController::asignarTarea($client, $idTask, $idUser);
 

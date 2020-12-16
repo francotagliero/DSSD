@@ -14,7 +14,29 @@ class ProtocoloRepository extends PDORepository{
 
     public function getProtocolos(){
         
-        $query = "SELECT * FROM protocolos";
+        $query = "SELECT 
+                    protocolos.id_protocolo as protocolo_id, 
+                    protocolos.nombre as protocolo_nombre,
+                    protocolos.id_responsable as protocolo_responsable,
+                    protocolos.fecha_inicio as protocolo_fecha_inicio, 
+                    protocolos.fecha_fin as protocolo_fecha_fin, 
+                    protocolos.orden as protocolo_orden, 
+                    protocolos.puntaje as protocolo_puntaje,
+                    protocolos.id_proyecto as protocolo_id_proyecto, 
+                    protocolos.estado as protocolo_estado, 
+                    protocolos.es_local as protocolo_es_local, 
+                    
+                    proyectos.id_proyecto as proyecto_id,
+                    proyectos.nombre as proyecto_nombre,
+                    proyectos.fecha_inicio as proyecto_fecha_inicio,
+                    proyectos.fecha_fin as proyecto_fecha_fin,
+                    proyectos.id_responsable as proyecto_id_responsable,
+                    proyectos.case_id as proyecto_case_id,
+                    proyectos.estado as proyecto_estado,
+                    proyectos.orden as proyecto_orden
+                FROM protocolos 
+                INNER JOIN proyectos ON proyectos.id_proyecto = protocolos.id_proyecto 
+                WHERE protocolos.borrado <> 1 AND proyectos.borrado <> 1";
         $protocolos = $this->query($query);
         return $protocolos->fetchAll();
     }
@@ -257,6 +279,35 @@ class ProtocoloRepository extends PDORepository{
 
         $args = array('estado' => 'desaprobado', 'id_protocolo' => $idProtocolo);
         return $this->queryArgs($query, $args);
+    }
+
+    public function getProtocolosUsuarios(){
+        $query =
+            "SELECT
+                COUNT(*) as total, 
+                SUM(CASE WHEN p.estado = 'completado' THEN 1 ELSE 0 END) AS cant_completado, 
+                SUM(CASE WHEN p.estado = 'pendiente' THEN 1 ELSE 0 END) AS cant_pendiente, 
+                SUM(CASE WHEN p.estado = 'ejecutado' THEN 1 ELSE 0 END) AS cant_ejecutado, 
+                u.username 
+            FROM protocolos p 
+                LEFT JOIN usuario u on (p.id_responsable = u.id) 
+            GROUP BY u.username
+            ORDER BY cant_completado DESC";
+
+        $proyectos = $this->query($query);
+        return $proyectos->fetchAll();
+    }
+
+    public function getCantProtocolos(){
+        $query = "SELECT 
+                    count(*) AS total,
+                    SUM(CASE WHEN p.estado = 'completado' THEN 1 ELSE 0 END) AS cant_completado, 
+                    SUM(CASE WHEN p.estado = 'pendiente' THEN 1 ELSE 0 END) AS cant_pendiente, 
+                    SUM(CASE WHEN p.estado = 'ejecutado' THEN 1 ELSE 0 END) AS cant_ejecutado 
+                FROM protocolos p";
+
+        $proyectos = $this->query($query);
+        return $proyectos->fetchAll();
     }
 
    
