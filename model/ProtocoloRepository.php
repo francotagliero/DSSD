@@ -284,14 +284,12 @@ class ProtocoloRepository extends PDORepository{
     public function getProtocolosUsuarios(){
         $query =
             "SELECT
-                count(*) AS total,
-                SUM(CASE WHEN p.estado = 'terminado' THEN 1 ELSE 0 END) AS cant_completado, 
-                SUM(CASE WHEN p.estado = 'notificado' THEN 1 ELSE 0 END) AS cant_notificado, 
-                SUM(CASE WHEN p.estado = 'configuracion' THEN 1 ELSE 0 END) AS cant_pendiente, 
+                COUNT(*) as total, 
+                SUM(CASE WHEN p.estado = 'completado' THEN 1 ELSE 0 END) AS cant_completado, 
+                SUM(CASE WHEN p.estado = 'pendiente' THEN 1 ELSE 0 END) AS cant_pendiente, 
                 SUM(CASE WHEN p.estado = 'ejecutado' THEN 1 ELSE 0 END) AS cant_ejecutado, 
-                SUM(CASE WHEN p.estado = 'tomar_decision' THEN 1 ELSE 0 END) AS tomar_decision, 
                 u.username 
-            FROM proyectos p 
+            FROM protocolos p 
                 LEFT JOIN usuario u on (p.id_responsable = u.id) 
             GROUP BY u.username
             ORDER BY cant_completado DESC";
