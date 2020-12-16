@@ -148,7 +148,8 @@ class ProyectoRepository extends PDORepository{
                     SUM(CASE WHEN p.estado = 'notificado' THEN 1 ELSE 0 END) AS cant_notificado, 
                     SUM(CASE WHEN p.estado = 'configuracion' THEN 1 ELSE 0 END) AS cant_pendiente, 
                     SUM(CASE WHEN p.estado = 'ejecutado' THEN 1 ELSE 0 END) AS cant_ejecutado, 
-                    SUM(CASE WHEN p.estado = 'tomar_decision' THEN 1 ELSE 0 END) AS tomar_decision 
+                    SUM(CASE WHEN p.estado = 'tomar_decision' THEN 1 ELSE 0 END) AS tomar_decision,
+                    SUM(CASE WHEN p.estado = 'cancelado' THEN 1 ELSE 0 END) AS cant_cancelado 
                 FROM proyectos p";
 
         $proyectos = $this->query($query);

@@ -96,7 +96,7 @@
 
     <div class="col-md-10 offset-1 protocolo">
         <div class="row" style="margin-top: 20px">
-            <div class="col-md-3" style="margin-top: 10px">
+            <div class="col-md-2" style="margin-top: 10px">
                 <div class="card border-secondary mb-3" style="max-width: 18rem;">
                     <div class="card-header text-secondary text-center">Total protocolos</div>
                     <div class="card-body text-secondary ">
@@ -104,7 +104,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3" style="margin-top: 10px">
+            <div class="col-md-2" style="margin-top: 10px">
+                <div class="card border-danger mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-danger text-center">Protocolos cancelados</div>
+                    <div class="card-body text-danger ">
+                        <h5 class="card-title text-center">{{ protocolos.cant_cancelado }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
                 <div class="card border-warning mb-3" style="max-width: 18rem;">
                     <div class="card-header text-warning text-center">Protocolos pendientes</div>
                     <div class="card-body text-warning ">
@@ -112,7 +120,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3" style="margin-top: 10px">
+            <div class="col-md-2" style="margin-top: 10px">
                 <div class="card border-primary mb-3" style="max-width: 18rem;">
                     <div class="card-header text-primary text-center">Protocolos ejecutados</div>
                     <div class="card-body text-primary ">
@@ -120,7 +128,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3" style="margin-top: 10px">
+            <div class="col-md-2" style="margin-top: 10px">
                 <div class="card border-success mb-3" style="max-width: 18rem;">
                     <div class="card-header text-success text-center">Protocolos completados</div>
                     <div class="card-body text-success ">
@@ -180,6 +188,14 @@
                 </div>
             </div>
             <div class="col-md-2" style="margin-top: 10px">
+                <div class="card border-danger mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-danger text-center">Proyectos cancelados</div>
+                    <div class="card-body text-danger ">
+                        <h5 class="card-title text-center">{{ proyectos.cant_cancelado }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
                 <div class="card border-warning mb-3" style="max-width: 18rem;">
                     <div class="card-header text-warning text-center">Proyectos pendientes</div>
                     <div class="card-body text-warning ">
@@ -203,15 +219,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2" style="margin-top: 10px">
-                <div class="card border-success mb-3" style="max-width: 18rem;">
-                    <div class="card-header text-success text-center">Proyectos completados</div>
-                    <div class="card-body text-success ">
-                        <h5 class="card-title text-center">{{ proyectos.cant_completado }}</h5>
-                    </div>
-                </div>
-            </div>
-
             <div class="col-md-2" style="margin-top: 10px">
                 <div class="card border-success mb-3" style="max-width: 18rem;">
                     <div class="card-header text-success text-center">Proyectos notificados</div>
@@ -291,6 +298,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Total de proyectos</th>
+                        <th scope="col">Proyectos cancelados</th>
                         <th scope="col">Proyectos completados</th>
                         <th scope="col">Proyectos pendientes</th>
                         <th scope="col">Proyectos ejecutados</th>
@@ -304,6 +312,7 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ jefe.username }}</td>
                             <td>{{ jefe.total }}</td>
+                            <td>{{ jefe.cant_cancelado }}</td>
                             <td>{{ jefe.cant_completado }}</td>
                             <td>{{ jefe.cant_pendiente }}</td>
                             <td>{{ jefe.cant_ejecutado }}</td>
