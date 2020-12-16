@@ -54,9 +54,9 @@ class ProyectoRepository extends PDORepository{
     }
 
     public function cancelarProyecto($id){ 
-        $query = "UPDATE proyectos SET borrado = :borrado WHERE id_proyecto = :id_proyecto";
+        $query = "UPDATE proyectos SET estado = :estado WHERE id_proyecto = :id_proyecto";
 
-        $args = array('borrado' => 1, 'id_proyecto' => $id);
+        $args = array('estado' => 'cancelado', 'id_proyecto' => $id);
         return $this->queryArgs($query, $args);
     }
 
@@ -130,6 +130,7 @@ class ProyectoRepository extends PDORepository{
                 SUM(CASE WHEN p.estado = 'configuracion' THEN 1 ELSE 0 END) AS cant_pendiente, 
                 SUM(CASE WHEN p.estado = 'ejecutado' THEN 1 ELSE 0 END) AS cant_ejecutado, 
                 SUM(CASE WHEN p.estado = 'tomar_decision' THEN 1 ELSE 0 END) AS tomar_decision,
+                SUM(CASE WHEN p.estado = 'cancelado' THEN 1 ELSE 0 END) AS cant_cancelado,
                 u.username 
             FROM proyectos p 
                 LEFT JOIN usuario u on (p.id_responsable = u.id) 
