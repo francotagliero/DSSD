@@ -48,9 +48,6 @@ class MonitorController{
 
         $grillaProyectos = ProyectoRepository::getInstance()->getProyectosGrilla();
 
-        print_r($responsableProtocolos); die();
-
-
         $view->show(array(
             'username' => $this->sesion->getSesion('user_bonita'),
             'archivedTask' => $archivedTask['data'],
