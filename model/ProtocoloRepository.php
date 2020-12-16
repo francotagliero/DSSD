@@ -289,11 +289,12 @@ class ProtocoloRepository extends PDORepository{
                 SUM(CASE WHEN p.estado = 'pendiente' THEN 1 ELSE 0 END) AS cant_pendiente, 
                 SUM(CASE WHEN p.estado = 'ejecutado' THEN 1 ELSE 0 END) AS cant_ejecutado, 
                 SUM(CASE WHEN p.estado = 'cancelado' THEN 1 ELSE 0 END) AS cant_cancelado,
+                SUM(CASE WHEN p.estado = 'terminado' THEN 1 ELSE 0 END) AS cant_terminado, 
                 u.username 
             FROM protocolos p 
                 LEFT JOIN usuario u on (p.id_responsable = u.id) 
             GROUP BY u.username
-            ORDER BY cant_completado DESC";
+            ORDER BY cant_terminado DESC";
 
         $proyectos = $this->query($query);
         return $proyectos->fetchAll();
@@ -305,7 +306,8 @@ class ProtocoloRepository extends PDORepository{
                     SUM(CASE WHEN p.estado = 'completado' THEN 1 ELSE 0 END) AS cant_completado, 
                     SUM(CASE WHEN p.estado = 'pendiente' THEN 1 ELSE 0 END) AS cant_pendiente, 
                     SUM(CASE WHEN p.estado = 'ejecutado' THEN 1 ELSE 0 END) AS cant_ejecutado,
-                    SUM(CASE WHEN p.estado = 'cancelado' THEN 1 ELSE 0 END) AS cant_cancelado
+                    SUM(CASE WHEN p.estado = 'cancelado' THEN 1 ELSE 0 END) AS cant_cancelado,
+                    SUM(CASE WHEN p.estado = 'terminado' THEN 1 ELSE 0 END) AS cant_terminado
                 FROM protocolos p";
 
         $proyectos = $this->query($query);

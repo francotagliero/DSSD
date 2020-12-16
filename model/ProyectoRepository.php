@@ -135,7 +135,7 @@ class ProyectoRepository extends PDORepository{
             FROM proyectos p 
                 LEFT JOIN usuario u on (p.id_responsable = u.id) 
             GROUP BY u.username
-            ORDER BY cant_completado DESC";
+            ORDER BY cant_notificado DESC";
 
         $proyectos = $this->query($query);
         return $proyectos->fetchAll();

@@ -265,6 +265,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Total de protocolos asignados</th>
+                        <th scope="col">Protocolos terminados</th>
                         <th scope="col">Protocolos completados</th>
                         <th scope="col">Protocolos pendientes</th>
                         <th scope="col">Protocolos ejecutados</th>
@@ -276,6 +277,7 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ responsable.username }}</td>
                             <td>{{ responsable.total }}</td>
+                            <td>{{ responsable.cant_terminado }}</td>
                             <td>{{ responsable.cant_completado }}</td>
                             <td>{{ responsable.cant_pendiente }}</td>
                             <td>{{ responsable.cant_ejecutado }}</td>
