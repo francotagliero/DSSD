@@ -300,11 +300,11 @@
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Total de proyectos</th>
+                        <th scope="col">Proyectos terminados</th>
                         <th scope="col">Proyectos cancelados</th>
                         <th scope="col">Proyectos completados</th>
                         <th scope="col">Proyectos pendientes</th>
                         <th scope="col">Proyectos ejecutados</th>
-                        <th scope="col">Proyectos notificados</th>
                         <th scope="col">Proyectos tomar decision</th>
                     </tr>
                     </thead>
@@ -314,11 +314,11 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ jefe.username }}</td>
                             <td>{{ jefe.total }}</td>
+                            <td>{{ jefe.cant_notificado }}</td>
                             <td>{{ jefe.cant_cancelado }}</td>
                             <td>{{ jefe.cant_completado }}</td>
                             <td>{{ jefe.cant_pendiente }}</td>
                             <td>{{ jefe.cant_ejecutado }}</td>
-                            <td>{{ jefe.cant_notificado }}</td>
                             <td>{{ jefe.tomar_decision }}</td>
                         </tr>
                     {% endfor %}
