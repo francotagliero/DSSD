@@ -47,7 +47,7 @@ class ProyectoController{
 
             /*
              * Instancio el proceso y obtengo el case_id del nuevo proyecto
-             * http://localhost:8080/bonita/API/bpm/process/5149425974540291037/instantiation
+             * http://localhost:12310/bonita/API/bpm/process/5149425974540291037/instantiation
             */
             $caseId = RequestController::instanciarProceso($client, $idProceso);
 
@@ -58,7 +58,7 @@ class ProyectoController{
 
             /*
              * Obtengo la tarea actual del proyecto
-             * http://localhost:8080/bonita/API/bpm/task?f=caseId=9
+             * http://localhost:12310/bonita/API/bpm/task?f=caseId=9
              */
             $idTask = RequestController::obtenerTarea($client, $caseId);
 
@@ -69,7 +69,7 @@ class ProyectoController{
 
             /*
              * Asigno a la actividad ($idTask) el usuario que la va a ejecutar
-             * http://localhost:8080/bonita/API/bpm/userTask/idTask
+             * http://localhost:12310/bonita/API/bpm/userTask/idTask
              */
             $request = RequestController::asignarTarea($client, $idTask, $idUser);
 
@@ -161,7 +161,10 @@ class ProyectoController{
     public function reiniciarProyecto($idProyecto){
         $view = new ProtocoloView();
         if(ProtocoloController::getInstance()->esJefe()){
-            ProtocoloRepository::getInstance()->reiniciarProyecto($idProyecto); // ARREGLAR EL REINICIARPROYECTO! tiene que cambiar el estado a "configuracion"!
+            ProtocoloRepository::getInstance()->reiniciarProyecto($idProyecto); //cambiar el estado a "configuracion"!
+
+            //PONER EL ORDER DEL PROYECTO nuevamente en 1!!!!!!!!
+            ProyectoRepository::getInstance()->cambiarOrden($idProyecto, 1);
 
             $protocolos = ProtocoloRepository::getInstance()->getProtocolosProyecto($idProyecto);
             foreach ($protocolos as $protocolo){
